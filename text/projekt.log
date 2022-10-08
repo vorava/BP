@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  8 OCT 2022 22:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  8 OCT 2022 22:53
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -662,50 +662,50 @@ Package blindtext Warning: czech not defined, using English instead.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 25.
+(blindtext)                 on input line 26.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 28.
+(blindtext)                 on input line 29.
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.29 
+l.30 
       [3
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 31.
+(blindtext)                 on input line 32.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 35.
+(blindtext)                 on input line 36.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 38.
+(blindtext)                 on input line 39.
 
 <obrazky-figures/placeholder.pdf, id=158, 151.87993pt x 85.31876pt>
 File: obrazky-figures/placeholder.pdf Graphic file (type pdf)
 <use obrazky-figures/placeholder.pdf>
-Package pdftex.def Info: obrazky-figures/placeholder.pdf  used on input line 42.
+Package pdftex.def Info: obrazky-figures/placeholder.pdf  used on input line 43.
 (pdftex.def)             Requested size: 432.49377pt x 122.86668pt.
 [4] [5 <./obrazky-figures/placeholder.pdf>]
 Kapitola 3.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 54.
+(blindtext)                 on input line 55.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 57.
+(blindtext)                 on input line 58.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 60.
+(blindtext)                 on input line 61.
 
 [6
 
@@ -713,79 +713,79 @@ Package blindtext Warning: czech not defined, using English instead.
 Kapitola 4.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 69.
+(blindtext)                 on input line 70.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 72.
+(blindtext)                 on input line 73.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 75.
+(blindtext)                 on input line 76.
 
 [8
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 78.
+(blindtext)                 on input line 79.
 
 [9]
 Kapitola 5.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 87.
+(blindtext)                 on input line 88.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 90.
+(blindtext)                 on input line 91.
 
 File: obrazky-figures/placeholder.pdf Graphic file (type pdf)
 <use obrazky-figures/placeholder.pdf>
-Package pdftex.def Info: obrazky-figures/placeholder.pdf  used on input line 93.
+Package pdftex.def Info: obrazky-figures/placeholder.pdf  used on input line 94.
 (pdftex.def)             Requested size: 432.49377pt x 122.86668pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 99.
+(blindtext)                 on input line 100.
 
 [10
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 102.
+(blindtext)                 on input line 103.
 
 [11]
 Kapitola 6.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 109.
+(blindtext)                 on input line 110.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 109.
+(blindtext)                 on input line 110.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 109.
+(blindtext)                 on input line 110.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 109.
+(blindtext)                 on input line 110.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 109.
+(blindtext)                 on input line 110.
 
 [12
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 109.
+(blindtext)                 on input line 110.
 
 )
 No file projekt.bbl.
@@ -814,7 +814,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  73i,7n,77p,615b,554s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb>
-Output written on projekt.pdf (17 pages, 445314 bytes).
+Output written on projekt.pdf (17 pages, 445339 bytes).
 PDF statistics:
  242 PDF objects out of 1000 (max. 8388607)
  38 named destinations out of 1000 (max. 500000)
