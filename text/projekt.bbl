@@ -1,0 +1,77 @@
+\makeatletter
+\makeatother
+\begin{thebibliography}{1}
+
+\bibitem{MTCNN}
+{\em MTCNN} [online].
+\newblock {\small [cit. 2022-10-19]}.
+\newblock Dostupn{\'{e}} z: ~{\small\url{https://github.com/ipazc/mtcnn}}.
+
+\bibitem{TinaFace}
+{\em TinaFace: Strong but Simple Baseline for Face Detection} [online].
+\newblock {\small [cit. 2022-10-19]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://github.com/Media-Smart/vedadet/tree/main/configs/trainval/tinaface}}.
+
+\bibitem{faceRecognitionFrameworks}
+{\sc\bgroup}David Wanyonyi{\egroup}, T.~C.
+\newblock Open-Source Face Recognition Frameworks: A Review of the Landscape.
+\newblock Květen 2022, sv.~10.
+\newblock DOI: 10.1109/ACCESS.2022.3170037.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9762647}}.
+
+\bibitem{fdReview}
+{\sc\bgroup}Kumar{\egroup}, A., {\sc\bgroup}Kaur{\egroup}, A.
+  a~{\sc\bgroup}Kumar{\egroup}, M.
+\newblock Face detection techniques: a review.
+\newblock {\em Artificial Intelligence Review}.
+\newblock Aug 2019, sv.~52, č.~2, s.~927--948.
+\newblock DOI: 10.1007/s10462-018-9650-2.
+\newblock ISSN 1573-7462.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://doi.org/10.1007/s10462-018-9650-2}}.
+
+\bibitem{securityCamsWeb}
+{\sc\bgroup}Russo{\egroup}, A.~E.
+\newblock {\em Are Face Recognition Security Cameras Worth It?} [online].
+\newblock {\small [cit. 2022-10-18]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.aitimejournal.com/@alessandro.eric.russo/are-face-recognition-security-cameras-worth-it}}.
+
+\bibitem{securityCamsWeb2}
+{\sc\bgroup}Russo{\egroup}, A.~E.
+\newblock {\em Best Home Security Cameras with Face Recognition} [online].
+\newblock {\small [cit. 2022-10-18]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.aitimejournal.com/@alessandro.eric.russo/best-wifi-security-cameras-with-face-recognition}}.
+
+\bibitem{frReview}
+{\sc\bgroup}Saez{-}Trigueros{\egroup}, D., {\sc\bgroup}Meng{\egroup}, L.
+  a~{\sc\bgroup}Hartnett{\egroup}, M.
+\newblock Face Recognition: From Traditional to Deep Learning Methods.
+\newblock {\em CoRR}.
+\newblock 2018, abs/1811.00116.
+\newblock Dostupn{\'{e}} z: ~{\small\url{http://arxiv.org/abs/1811.00116}}.
+
+\bibitem{feature-based-fd-review}
+{\sc\bgroup}Sharifara{\egroup}, A., {\sc\bgroup}Mohd Rahim{\egroup}, M.~S.
+  a~{\sc\bgroup}Anisi{\egroup}, Y.
+\newblock A general review of human face detection including a study of neural
+  networks and Haar feature-based cascade classifier in face detection.
+\newblock In:~{\em 2014 International Symposium on Biometrics and Security
+  Technologies (ISBAST)}.
+\newblock 2014, s.~73--78.
+\newblock DOI: 10.1109/ISBAST.2014.7013097.
+
+\bibitem{suspectIdentification}
+{\sc\bgroup}V D{\egroup}, A.~K., {\sc\bgroup}Kumar{\egroup}, V.,
+  {\sc\bgroup}Subramanian{\egroup}, M., {\sc\bgroup}Vengatesan{\egroup}, K.
+  a~{\sc\bgroup}Ramakrishnan{\egroup}, M.
+\newblock Facial Recognition System for Suspect Identification Using a
+  Surveillance Camera.
+\newblock {\em Pattern Recognition and Image Analysis}.
+\newblock Červenec 2018, sv.~28, s.~410--420.
+\newblock DOI: 10.1134/S1054661818030136.
+
+\end{thebibliography}
