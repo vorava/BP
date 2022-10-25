@@ -1,6 +1,6 @@
 \makeatletter
 \makeatother
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{MTCNN}
 {\em MTCNN} [online].
@@ -31,6 +31,17 @@
 \newblock ISSN 1573-7462.
 \newblock Dostupn{\'{e}} z:
   ~{\small\url{https://doi.org/10.1007/s10462-018-9650-2}}.
+
+\bibitem{emotionDetector}
+{\sc\bgroup}Mehendale{\egroup}, N.
+\newblock Facial emotion recognition using convolutional neural networks
+  (FERC).
+\newblock {\em SN Applied Sciences}.
+\newblock Feb 2020, sv.~2, č.~3, s.~446.
+\newblock DOI: 10.1007/s42452-020-2234-1.
+\newblock ISSN 2523-3971.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://doi.org/10.1007/s42452-020-2234-1}}.
 
 \bibitem{securityCamsWeb}
 {\sc\bgroup}Russo{\egroup}, A.~E.

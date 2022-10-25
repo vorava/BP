@@ -6,22 +6,22 @@
 \contentsline {chapter}{\numberline {3}Detekce obličeje v reálných podmínkách}{5}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Detekce obličeje}{6}{section.3.1}%
 \contentsline {section}{\numberline {3.2}Problémy a omezení}{7}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Detektory nevyužívající neuronové sítě}{8}{section.3.3}%
-\contentsline {chapter}{\numberline {4}Neuronové sítě pro detekci obličeje}{9}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Neuronové sítě}{9}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Datasety}{9}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Detektory obličeje}{9}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Akcelerace detekce}{9}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{10}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Použité nástroje}{10}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{10}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{11}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{12}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Postup testování}{12}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Porovnání výsledků}{12}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Shrnutí}{13}{section.6.3}%
-\contentsline {chapter}{\numberline {7}Závěr}{14}{chapter.7}%
-\contentsline {chapter}{Literatura}{16}{chapter*.15}%
+\contentsline {section}{\numberline {3.3}Detektory nevyužívající neuronové sítě}{9}{section.3.3}%
+\contentsline {chapter}{\numberline {4}Neuronové sítě pro detekci obličeje}{10}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Neuronové sítě}{10}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Datasety}{10}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Detektory obličeje}{10}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Akcelerace detekce}{10}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{11}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Použité nástroje}{11}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{11}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{12}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{13}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Postup testování}{13}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Porovnání výsledků}{13}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Shrnutí}{14}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Závěr}{15}{chapter.7}%
+\contentsline {chapter}{Literatura}{17}{chapter*.17}%
 \ttl@starttoc {chapters@1}
-\contentsline {chapter}{\numberline {A}Priloha}{17}{appendix.A}%
+\contentsline {chapter}{\numberline {A}Priloha}{18}{appendix.A}%
 \contentsfinish 

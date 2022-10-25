@@ -86,7 +86,7 @@ volně dostupné na webu GitHub.com.
 
 \chapter{Detekce obličeje v reálných podmínkách}
 \label{kapitola:detekce_obličeje}
-Detekce obličeje (anglicky face detection) \cite{fdReview, frReview} je technologie, která umožňuje v digitálním obrázku lokalizovat lidský obličej. 
+Detekce obličeje (anglicky face detection) \cite{fdReview, frReview} je technologie, která umožňuje v digitálním obrázku lokalizovat lidský obličej. Detekce obličeje patří do skupiny technologií HCI (Human--Computer interaction).
 Detekovat obličej je poměrně jednoduchý úkol pro lidi, ale zároveň se jedná o relativně náročný úkol pro počítače.
 Detekce obličeje je výchozím bodem pro další algoritmy analyzující lidský obličej, jako je například (v závorce za pojmem následuje anglický překlad):
 \begin{itemize}
@@ -114,11 +114,11 @@ Následující podkapitoly se zabývají principem fungování detekce obličeje
 Detekci obličeje lze rozdělit do několika přístupů, vědecké práce na toto téma se liší a nelze jasně říci zda to či ono dělení je jediné korektní.
 
 Dle \cite{fdReview} existují 2 různé přístupy k hledání tváří v obrázcích, a to \textbf{přístup založený na vlastnostech} (anglicky feature based approach) a \textbf{přístup založený na obrázku} (anglicky image based approach). 
-\textbf{Přístup založený na vlastnostech} nepoužívá přímo k detekci obličeje umělou inteligenci a neuronové sítě. Využívá vlastností obličeje jako takového (rysy, pozice očí, uší, obočí\dots).
-Naproti tomu \textbf{obrazový přístup} uplatňuje schopnosti neuronových sítí a umělé inteligence k natrénování modelu neuronové sítě a následné přímé detekci pomocí tohoto modelu.
+\textbf{Přístup založený na vlastnostech} nepoužívá přímo k detekci obličeje umělou inteligenci a neuronové sítě. Využívá vlastností obličeje jako takového (rysy, pozice očí, uší, obočí, barvu kůže\dots). Efektivita tohoto přístupu se snižuje s výskyty problémů popsaných v sekci \ref{sekce:problemy}, protože může docházet například k zakrytí nebo špatné viditelnosti některých vlastností obličeje.
+
+Naproti tomu \textbf{obrazový přístup} uplatňuje schopnosti neuronových sítí a umělé inteligence k natrénování modelu neuronové sítě a následné přímé detekci pomocí tohoto modelu. 
 
 Podle \cite{feature-based-fd-review} lze rozdělit metody detekce obličeje do 4 základních kategorií (viz obrázek \ref{fddeleni}) a 2 zvláštních kategorií (Haarovy vlastnosti a umělá inteligence).
-
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.9}{\includegraphics{obrazky-figures/fddeleni.png}}
@@ -127,17 +127,27 @@ Podle \cite{feature-based-fd-review} lze rozdělit metody detekce obličeje do 4
   \end{center}
 \end{figure}
 
+\textbf{Feature-based methods} (metody založené na vlastnostech) opět pracují s vlastnostmi obličeje. Vyhledávají v obraze rysy obličeje, což může výrazně ztížit či znemožnit neviditelnost některých rysů. Výhodou těchto metod je rychlost v porovnání s ostatními metodami.
+
+\textbf{Appearance-based methods} (metody založené na vzhledu/obrázku) využívají klasifikace vlastností tváře do 2 tříd v podobrázku celého obrázku. Klasifikátory podle nichž se daná metoda rozhoduje, zda se jedná o tvář či nikoli, mají různé váhy, metoda postupuje od slabých klasifikátorů k silnějším.
+
+Metody založené na znalostech (\textbf{Knowledge-based mathods}) se uplatňují při detekci obličeje v obrázku s čelnitým/komplexním pozadím. Znalosti které k detekci pomáhají jsou například ty, že obličej má 2 uši, jeden nos, jedny ústa nebo vzdálenosti mezi jednotlivými rysy obličeje.
+
+\textbf{Templatematching} (šablonování, maskování) aplikuje na obrázek předem danou ma-sku obličeje a snaží se detekovat obličej pomocí postupného maskování. Tato metoda je snadná na implementaci, jejím nedostatkem je však závislost na přímém pohledu tváře na obrázku.
+
+Haarovy vlastnosti a budou popsány později.
 Detekce pracující na principu rozpoznávání vlastností v obraze jsou popsány v sekci 
 \ref{sekce:detektory_bez_neuronovych_siti}, 
-detekce s využitím obrazového přístupu popisuje sekce \ref{sekce:detektory_s_neuronovymi_sitemi}.
+detektory s využitím neuronových sítí popisuje sekce \ref{sekce:detektory_s_neuronovymi_sitemi}.
 
 
 
 \section{Problémy a omezení}
+\label{sekce:problemy}
 Algoritmy pro detekci obličejů čelí několika výzvám a omezením spojených s ne vždy perfektním zobrazením obličeje v obrázku. Lidské obličeje na fotografiích a obrázcích mohou být částečně zakryté (např. sluneční brýle), mohou být pořízené za nevhodných světelných podmínek (např. zastínění části tváře) nebo mohou nabývat nedostatečné kvality (nízké rozlišení).
 
 Jelikož tedy vstupní obrázek detekce obličeje nemusí být vždy ideální, nemusí být obličej vždy správně detekován.
-V této sekci jsou popsány některé problémy \cite{feature-based-fd-review}, které mohou bránit v úspěšné detekci. Minimalizace dopadu těchto jevů na detekci je klíčem k navýšení uspěšnosti detekce. Mezi problémy a omezení (viz obrázek \ref{fdproblems}) pro detekci patří pozice hlavy, zakrytí části/částí obličeje, špatně osvětlená scéna nebo výraz tváře.
+V této sekci jsou popsány některé problémy \cite{feature-based-fd-review, fdReview}, které mohou bránit v úspěšné detekci. Minimalizace dopadu těchto jevů na detekci je klíčem k navýšení uspěšnosti detekce. Mezi problémy a omezení (viz obrázek \ref{fdproblems}) pro detekci patří pozice hlavy, zakrytí části/částí obličeje, špatně osvětlená scéna nebo výraz tváře.
 
 \begin{figure}[H]
   \begin{center}
@@ -148,30 +158,46 @@ V této sekci jsou popsány některé problémy \cite{feature-based-fd-review}, 
 \end{figure}
 
 \subsection*{Pozice hlavy}
-
-\subsection*{Výraz tváře}
-
-\subsection*{Orientace obrázku}
-
-\subsection*{Špatné světelné podmínky}
+Hlava může být na fotografii různě natočena, takže obličej nemusí být zachycen v přímém pohledu do kamery, ale může být zaznamenán z profilu nebo ze šikma (poloprofil) jako na obrázku \ref{fdproblems} část (a).
 
 \subsection*{Zakrytí části obličeje}
+Výsledek detekce může být ovlivněn i zakrytím části obličeje (rukou, brýlemi, vlasy, šátkem apod.).
+
+\subsection*{Výraz tváře}
+Výraz lidského obličeje mohou ovlivnit emoce a nálady. Detektor zabývající se detekcí a rozpoznáváním emocí \cite{emotionDetector} dosahuje přesnosti 96 \%.
+
+\subsection*{Orientace obrázku}
+Problémem pro detekci může být různá orientace obrázku (vzhůru nohama, zrcadlově otočený, natočený do strany apod.). Na obrázek je tak nutno aplikovat některé tranformační operace pro zarovnání.
+
 
 \subsection*{Nedostatečně výkonná detekce}
+Velmi důležitým faktorem při detekci obličejů, zvláště v real-timových aplikacích, je rychlost detekce. Pokud má algoritmu vysokou účinnost, ale je příliš pomalý pro vybranou aplikaci, stává se nepoužitelným. Zrychlováním detekčních algoritmů se zabývá několik vědeckých studií.
 
 \subsection*{Příliš členité pozadí} 
+Pokud se v o brázku nachází příliš mnoho objektů, může dojít ke snížení přesnosti a rychlosti detekce.
 
 \subsection*{Přílišný počet obličejů v obrázku}
-
-\subsection*{Barva kůže}
-zdroj 7 z citace \cite{feature-based-fd-review}
+Výskyt velkého počtu obličejů v jednom obrázku, často překrývajících se, může představovat výzvu pro detekční algoritmus. 
 
 \subsection*{Nízké rozlišení}
+Obrázky a fotografie s nízkým rozlišením nemusejí obsahovat dostatek informace nutné ke správnemu detekování tváře.
+
+\subsection*{Špatné světelné podmínky}
+Na detekci mohou mít vliv světelné podmínky panující při pořizování zkoumané fotografie či videa. Aspekty jež světlo ovlivňuje jsou mj. jas, kontrast, barvy, stíny, ostrost. Tato práce se zabývá detekcí obličejů v záznamech, v nichž některý z těchto faktorů omezuje detekci.
+
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.8}{\includegraphics{obrazky-figures/illuminationexample.png}}
+  \label{illuminationexample}
+  \caption{Příklad stejného obličeje vyfoceného při různých světelných podmínkách. Převzato z \cite{feature-based-fd-review}}
+  \end{center}
+\end{figure}
 
 \section{Detektory nevyužívající neuronové sítě}
 \label{sekce:detektory_bez_neuronovych_siti}
 
-
+\subsection*{Detektory zaměřující se na špatné světelené podmínky}
 
 %%%%%%%%%%%%%%%%%%%
 %         KaPITOLA
@@ -180,7 +206,13 @@ zdroj 7 z citace \cite{feature-based-fd-review}
 
 \section{Neuronové sítě}
 
+\subsection*{Model neuronu}
+
+\subsection*{Aktivační funkce}
+
 \section{Datasety}
+
+
 
 \section{Detektory obličeje}
 \label{sekce:detektory_s_neuronovymi_sitemi}

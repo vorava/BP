@@ -22,6 +22,7 @@ Warning--empty journal in faceRecognitionFrameworks
 Warning--empty edition in faceRecognitionFrameworks
 Warning--empty number in faceRecognitionFrameworks
 Warning--empty edition in fdReview
+Warning--empty edition in emotionDetector
 Warning--empty year in securityCamsWeb
 Warning--empty year and revised in securityCamsWeb
 Warning--empty year in securityCamsWeb2
@@ -32,45 +33,45 @@ Warning--empty editor and organization in feature-based-fd-review
 Warning--empty isbn and issn in feature-based-fd-review
 Warning--empty edition in suspectIdentification
 Warning--empty number in suspectIdentification
-You've used 9 entries,
+You've used 10 entries,
             3946 wiz_defined-function locations,
-            875 strings with 7086 characters,
-and the built_in function-call counts, 4524 in all, are:
-= -- 328
-> -- 168
-< -- 27
-+ -- 88
-- -- 74
-* -- 257
-:= -- 592
-add.period$ -- 34
-call.type$ -- 9
-change.case$ -- 58
-chr.to.int$ -- 30
-cite$ -- 29
-duplicate$ -- 277
-empty$ -- 570
-format.name$ -- 34
-if$ -- 1060
+            887 strings with 7307 characters,
+and the built_in function-call counts, 5043 in all, are:
+= -- 364
+> -- 180
+< -- 31
++ -- 91
+- -- 76
+* -- 289
+:= -- 666
+add.period$ -- 40
+call.type$ -- 10
+change.case$ -- 63
+chr.to.int$ -- 36
+cite$ -- 31
+duplicate$ -- 310
+empty$ -- 638
+format.name$ -- 36
+if$ -- 1187
 int.to.chr$ -- 0
-int.to.str$ -- 9
+int.to.str$ -- 10
 missing$ -- 0
-newline$ -- 64
-num.names$ -- 14
-pop$ -- 127
+newline$ -- 73
+num.names$ -- 16
+pop$ -- 137
 preamble$ -- 1
-purify$ -- 39
+purify$ -- 42
 quote$ -- 0
-skip$ -- 198
+skip$ -- 218
 stack$ -- 0
-substring$ -- 168
-swap$ -- 55
-text.length$ -- 18
+substring$ -- 192
+swap$ -- 63
+text.length$ -- 19
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 18
-warning$ -- 20
-while$ -- 31
-width$ -- 10
-write$ -- 117
-(There were 20 warnings)
+type$ -- 20
+warning$ -- 21
+while$ -- 37
+width$ -- 12
+write$ -- 134
+(There were 21 warnings)

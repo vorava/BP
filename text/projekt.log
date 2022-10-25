@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  24 OCT 2022 16:15
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  25 OCT 2022 18:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -681,107 +681,113 @@ Package pdftex.def Info: obrazky-figures/fdexample.png  used on input line 107.
  [5
 
 ]
-<obrazky-figures/fddeleni.png, id=217, 329.43076pt x 178.86826pt>
+<obrazky-figures/fddeleni.png, id=218, 329.43076pt x 178.86826pt>
 File: obrazky-figures/fddeleni.png Graphic file (type png)
 <use obrazky-figures/fddeleni.png>
 Package pdftex.def Info: obrazky-figures/fddeleni.png  used on input line 124.
 (pdftex.def)             Requested size: 329.42995pt x 178.86781pt.
  [6 <./obrazky-figures/fdexample.png> <./obrazky-figures/fddeleni.png>]
-<obrazky-figures/fdproblems.png, id=232, 673.51625pt x 470.75874pt>
+<obrazky-figures/fdproblems.png, id=234, 673.51625pt x 470.75874pt>
 File: obrazky-figures/fdproblems.png Graphic file (type png)
 <use obrazky-figures/fdproblems.png>
-Package pdftex.def Info: obrazky-figures/fdproblems.png  used on input line 144.
+Package pdftex.def Info: obrazky-figures/fdproblems.png  used on input line 154.
 (pdftex.def)             Requested size: 673.5146pt x 470.7576pt.
- [7 <./obrazky-figures/fdproblems.png>] [8]
+ [7] [8 <./obrazky-figures/fdproblems.png>]
+<obrazky-figures/illuminationexample.png, id=255, 432.4155pt x 111.41624pt>
+File: obrazky-figures/illuminationexample.png Graphic file (type png)
+<use obrazky-figures/illuminationexample.png>
+Package pdftex.def Info: obrazky-figures/illuminationexample.png  used on input line 191.
+(pdftex.def)             Requested size: 432.41444pt x 111.41597pt.
+ [9 <./obrazky-figures/illuminationexample.png>]
 Kapitola 4.
-[9
+[10
 
 ]
 Kapitola 5.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 202.
+(blindtext)                 on input line 234.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 205.
+(blindtext)                 on input line 237.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 208.
+(blindtext)                 on input line 240.
 
-[10
+[11
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 211.
+(blindtext)                 on input line 243.
 
-[11]
+[12]
 Kapitola 6.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 220.
+(blindtext)                 on input line 252.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 223.
+(blindtext)                 on input line 255.
 
-<obrazky-figures/placeholder.pdf, id=270, 151.87993pt x 85.31876pt>
+<obrazky-figures/placeholder.pdf, id=285, 151.87993pt x 85.31876pt>
 File: obrazky-figures/placeholder.pdf Graphic file (type pdf)
 <use obrazky-figures/placeholder.pdf>
-Package pdftex.def Info: obrazky-figures/placeholder.pdf  used on input line 226.
+Package pdftex.def Info: obrazky-figures/placeholder.pdf  used on input line 258.
 (pdftex.def)             Requested size: 432.49377pt x 122.86668pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 232.
+(blindtext)                 on input line 264.
 
-[12
+[13
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 235.
+(blindtext)                 on input line 267.
 
-[13 <./obrazky-figures/placeholder.pdf>]
+[14 <./obrazky-figures/placeholder.pdf>]
 Kapitola 7.
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 242.
+(blindtext)                 on input line 274.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 242.
+(blindtext)                 on input line 274.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 242.
+(blindtext)                 on input line 274.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 242.
+(blindtext)                 on input line 274.
 
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 242.
+(blindtext)                 on input line 274.
 
-[14
+[15
 
 ]
 
 Package blindtext Warning: czech not defined, using English instead.
-(blindtext)                 on input line 242.
+(blindtext)                 on input line 274.
 
-) (projekt.bbl [15]
+) (projekt.bbl [16]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 8.
  (C:\Users\vojta\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ))
 \c@ttl@toc@chapters=\count347
- (prilohy.tex [16
+ (prilohy.tex [17
 
 ]
 Příloha A.
@@ -789,27 +795,27 @@ Příloha A.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
- [17
+ [18
 
 ] (projekt.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `projekt.out' has not changed.
-(rerunfilecheck)             Checksum: 1F92D1331C88370897787554CF6CF85E;4067.
+(rerunfilecheck)             Checksum: 4E4A7C0C8AFB9E2EF63D670617EDC667;4067.
  ) 
 Here is how much of TeX's memory you used:
- 16244 strings out of 475385
- 263315 string characters out of 2776907
- 632356 words of memory out of 3000000
- 37149 multiletter control sequences out of 15000+600000
+ 16259 strings out of 475385
+ 263716 string characters out of 2776907
+ 633497 words of memory out of 3000000
+ 37158 multiletter control sequences out of 15000+600000
  548987 words of font info for 91 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,7n,77p,615b,562s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 73i,8n,77p,615b,562s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
-Output written on projekt.pdf (20 pages, 1791308 bytes).
+Output written on projekt.pdf (21 pages, 1961352 bytes).
 PDF statistics:
- 360 PDF objects out of 1000 (max. 8388607)
- 70 named destinations out of 1000 (max. 500000)
- 249 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 378 PDF objects out of 1000 (max. 8388607)
+ 75 named destinations out of 1000 (max. 500000)
+ 254 words of extra memory for PDF output out of 10000 (max. 10000000)
 
