@@ -100,7 +100,7 @@ Detekce obličeje je výchozím bodem pro další algoritmy analyzující lidsk�
 
 Samotná detekce obličeje se v realném prostředí využívá například v oblasti fotografování (automatické ostření na tvář), marketingu (zjišťování zájmu zákazníku o produkty podle počtu výskytu obličejů) nebo bezpečnosti (bezpečnostní kamery a systémy).
 
-Následující podkapitoly se zabývají principem fungování detekce obličeje v reálných podmínkách a problémy a omezeními, které se v běžném světě vyskytují a detekce by si s nimi měla umět poradit (špatné světelné podmínky, příliš členité pozadí, přílišný počet obličejů v obrázku, barva kůže, nízké rozlišení atd.). Na konci této kapitoly se nachází popis algoritmů a detektorů, které ke svému fungování nepoužívají žádným způsobem neuronové sítě.
+Následující podkapitoly se zabývají principem fungování detekce obličeje v reálných podmínkách a problémy a omezeními, které se v běžném světě vyskytují a detekce by si s nimi měla umět poradit (špatné světelné podmínky, příliš členité pozadí, přílišný počet obličejů v obrázku, barva kůže, nízké rozlišení atd.). Na konci této kapitoly se nachází popis algoritmů a detektorů, které ke svému fungování nepoužívají přímým způsobem neuronové sítě.
 
 \begin{figure}[H]
   \begin{center}
@@ -194,10 +194,75 @@ Na detekci mohou mít vliv světelné podmínky panující při pořizování zk
   \end{center}
 \end{figure}
 
-\section{Detektory nevyužívající neuronové sítě}
+\section{Detektory obličejů}
 \label{sekce:detektory_bez_neuronovych_siti}
+Existuje několik různých přístupů k detekci obličeje. Tato sekce se zaměřuje na detekci s využitím detektorů nezaložených primárně na neuronových sítích (neuronová síť není použita vůbec, nebo není použita k přímé detekci). Detektory obličeje využívající principy neuronových sítí k přímé detekci budou popsány v další kapitole.
 
-\subsection*{Detektory zaměřující se na špatné světelené podmínky}
+\subsection*{Local Binary Patterns}
+Algoritmus využívající \textbf{lokální binární vzory} (anglicky Local Binary Patterns -- dále jen LBP) pro popis struktury/textury obrázku má mnoho aplikací \cite{localBinaryPatterns}. Jedná se o jeden z nejvýkonnějších algoritmů pro popis textur v obrázcích. LBP algoritmus má vysokou účinnost detekce (89 \%) \cite{localBinaryPatternsTests} a nízkou výpočetní náročnost.
+LBP pracuje s černobílými (anglicky gray-scale) obrázky a v originální verzi funguje tak, že každému pixelu přiřadí binární číselnou hodnotu, vypočítanou dle hodnot pixelů v 3 $\times$ 3 okolí daného pixelu. Každý tento pixel v okolí je ohodnocen buď 1 nebo 0 v závislosti na tom, zda jeho hodnota překročila stanovený práh (anglicky threshold), kterým je hodnota prostředního pixelu (obrázek \ref{lbp}).
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.8}{\includegraphics{obrazky-figures/lbp.png}}
+  \label{lbp}
+  \caption{Ukázka ohodnocení pixelu algoritmem LBP. Převzato z \cite{localBinaryPatterns}}
+  \end{center}
+\end{figure}
+
+Algoritmus byl později vylepšen tak, aby uměl pracovat s různě velkým okolím, které navíc nemusí mít čtvercový tvar. Používané okolí ve tvaru kružnice je popsáno dvojicí $(P, R)$, kde $P$ je počet vzorkovacích bodů a $R$ je poloměr kružnice. Další vylepšení LBP algoritmu se týkalo definování tzv. uniformních vzorů (anglicky uniform patterns). Tyto vzory jsou ty vzory v nichž se vyskytují nejvýše 2 přechody z 1 na 0 a opačně. Příkladem uniformního vzoru na okolí $(8, 2)$ je 11100000 (1 přechod), či 00111000 (2 přechody). 
+
+Lokální primitiva (obrázek \ref{lbpprimitives}) a histogramy vytvořené z takto získaných hodnot se využívají například k detekci obličejů.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.8}{\includegraphics{obrazky-figures/lbpPrimitives.png}}
+  \label{lbpprimitives}
+  \caption{Lokální primitiva detekované algoritmem LBP. Převzato z \cite{localBinaryPatternsTests}}
+  \end{center}
+\end{figure}
+
+\subsection*{Viola--Jones algoritmus}
+Algoritmus \textbf{Viola--Jones} \cite{violaJonesArticle, violaJones}, někdy také nazývaný \textbf{Haar Cascades}, je obecně technika pro detekci objektů, vytvořená před vynalezením metody hlubokého učení. Používá se k detekci obličejů, částí těla, očí, úst atd. Dosahuje přesnosti detekce kolem 90 \% \cite{violaJones}. 
+
+Princip fungování algoritmu spočívá v detekci hran a čár (obecně vlastností) v černobílém obrázku (hodnoty pixelů jsou na intervalu $<0; 1>$). Vybere se jedna z vlastností (některé z nich zobrazuje obrázek \ref{haarfeatures}) a vypočítá se průměrná hodnota pixelů ve všech obdélnících (obdélníky jsou dva, tři nebo čtyři). Rozdíl těchto hodnot pak určuje zda se jedná o hranu, čáru tzn. zda je daná vlastnost detekována. Pokud například budeme hledat vlastnost \emph{b)} z obrázku \ref{haarfeatures} a vypočtený rozdíl hodnot je blízký 1, detekce byla úspěšná (viz ukázka v obrázku \ref{haarexample}).
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.6}{\includegraphics{obrazky-figures/haarfeatures.png}}
+  \label{haarfeatures}
+  \caption{Haarovy vlastnosti. Převzato z \cite{violaJonesArticle}
+  a) horizontální hrana; b) horizontální hrana; c) horizontální čára d) diagonála e) vertikální čára}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.4}{\includegraphics{obrazky-figures/haarexample.png}}
+  \label{haarexample}
+  \caption{Příklad výpočtu detekce hrany dle vlastnosti b) z obrázku \ref{haarfeatures}. Bílý obdélník je nahrazen červeným pro lepší viditelnost.}
+  \end{center}
+\end{figure}
+
+Algoritmus postupně prochází celý obrázek a hledá výskyt některé z vlastností. Toto procházení u obrázků s velkým počtem znamená enormní výpočetní nároky, protože je potřeba vždy počítat s hodnotami všech dotčených pixelů. Proto Viola a Jones \cite{violaJones} navrli
+vylepšení nazvané anglicky \textbf{Integral Image}. To spočívá v tom, že všechny pixely stačí projít pouze 1x, a každý tento pixel lze ohodnotit sumou hodnot pixelů směrem nalevo a nahoru (důsledkem je, že pixel s nejnižším ohodnocení se nachází v levém horním rohu a pixel s nejvyšším ohodnocením v pravém dolním rohu). Následný výpočet průměrné hodnoty ukazuje obrázek \ref{integralimage}. 
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.7}{\includegraphics{obrazky-figures/integralimage.png}}
+  \label{integralimage}
+  \caption{Ukázka výpočtu hodnoty obdélníku v Haarově vlastnosti za pomoci vylepšení \textbf{Integral Image}. Převzato z \cite{violaJonesArticle}.}
+  \end{center}
+\end{figure}
+
+Jelikož Haarových vlastností může být velké množství, bylo vybráno 6000 nejvíce vyhovujících, které se k detekci obličejů používají. Detekce je rozdělena na několik etap, v každé etapě je vyhledáván v části obrázku výskyt několika vlastností (počet s každou etapou roste), pokud se vyhledání nezdaří, není již dále daná část obrázku prohledávána. 
+
+
+
+\section{Detektory zaměřující se na špatné světelené podmínky}
+Tématem této práce je detekce obličeje ve špatných světelných podmínkách. Detekcí za těchto okolností se zabývala řada prací a bylo vytvořeno několik detektorů \cite{}. V této sekci jsou popsány metody a algoritmy zobírající se touto problematikou, včetně jejich úspěšnosti detekce při stanovených podmínkách.
+
+
 
 %%%%%%%%%%%%%%%%%%%
 %         KaPITOLA
@@ -217,6 +282,8 @@ Na detekci mohou mít vliv světelné podmínky panující při pořizování zk
 \section{Detektory obličeje}
 \label{sekce:detektory_s_neuronovymi_sitemi}
 
+\subsection*{Detektory zaměřující se na špatné světelené podmínky}
+
 \section{Akcelerace detekce}
 
 \subsection*{Intel Neural Compute Stick 2}
@@ -231,16 +298,16 @@ Na detekci mohou mít vliv světelné podmínky panující při pořizování zk
 
 \chapter{Implementace algoritmu pro akceleraci detekce obličeje}
 \label{kapitola:implementace}
-\todo{\blindtext}
+
 
 \section{Použité nástroje}
-\todo{\blindtext}
+
 
 \section{Trénování neuronové sítě}
-\todo{\blindtext}
+
 
 \section{Detekce obličejů natrénovanou sítí}
-\todo{\blindtext}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -249,26 +316,19 @@ Na detekci mohou mít vliv světelné podmínky panující při pořizování zk
 
 \chapter{Porovnání výkonnosti řešení s existujícími detektory}
 \label{kapitola:porovnani_vykonnosti}
-\todo{\blindtext}
+
 
 \section{Postup testování}
-\todo{\blindtext}
-\begin{figure*}[h]\centering
-  \centering
-  \includegraphics[width=\linewidth,height=1.7in]{obrazky-figures/placeholder.pdf}\\[1pt]
-  \label{TODO}
-  \caption{TODO}
-\end{figure*}
+
 
 \section{Porovnání výsledků}
-\todo{\blindtext}
+
 
 \section{Shrnutí}
-\todo{\blindtext}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA 6
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Závěr}
 \label{kapitola:zaver}
-\todo{\Blindtext}

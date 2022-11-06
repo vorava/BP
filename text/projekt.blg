@@ -18,9 +18,14 @@ Warning--empty year in MTCNN
 Warning--empty year and revised in MTCNN
 Warning--empty year in TinaFace
 Warning--empty year and revised in TinaFace
+Warning--empty edition in localBinaryPatterns
+Warning--empty year in violaJonesArticle
+Warning--empty year and revised in violaJonesArticle
 Warning--empty journal in faceRecognitionFrameworks
 Warning--empty edition in faceRecognitionFrameworks
 Warning--empty number in faceRecognitionFrameworks
+Warning--empty editor and organization in localBinaryPatternsTests
+Warning--empty isbn and issn in localBinaryPatternsTests
 Warning--empty edition in fdReview
 Warning--empty edition in emotionDetector
 Warning--empty year in securityCamsWeb
@@ -33,45 +38,47 @@ Warning--empty editor and organization in feature-based-fd-review
 Warning--empty isbn and issn in feature-based-fd-review
 Warning--empty edition in suspectIdentification
 Warning--empty number in suspectIdentification
-You've used 10 entries,
+Warning--empty editor and organization in violaJones
+Warning--empty isbn and issn in violaJones
+You've used 14 entries,
             3946 wiz_defined-function locations,
-            887 strings with 7307 characters,
-and the built_in function-call counts, 5043 in all, are:
-= -- 364
-> -- 180
-< -- 31
-+ -- 91
-- -- 76
-* -- 289
-:= -- 666
-add.period$ -- 40
-call.type$ -- 10
-change.case$ -- 63
-chr.to.int$ -- 36
-cite$ -- 31
-duplicate$ -- 310
-empty$ -- 638
-format.name$ -- 36
-if$ -- 1187
+            916 strings with 8456 characters,
+and the built_in function-call counts, 7210 in all, are:
+= -- 525
+> -- 256
+< -- 39
++ -- 118
+- -- 98
+* -- 420
+:= -- 945
+add.period$ -- 55
+call.type$ -- 14
+change.case$ -- 95
+chr.to.int$ -- 46
+cite$ -- 42
+duplicate$ -- 438
+empty$ -- 919
+format.name$ -- 58
+if$ -- 1711
 int.to.chr$ -- 0
-int.to.str$ -- 10
+int.to.str$ -- 14
 missing$ -- 0
-newline$ -- 73
-num.names$ -- 16
-pop$ -- 137
+newline$ -- 100
+num.names$ -- 24
+pop$ -- 188
 preamble$ -- 1
-purify$ -- 42
+purify$ -- 64
 quote$ -- 0
-skip$ -- 218
+skip$ -- 313
 stack$ -- 0
-substring$ -- 192
-swap$ -- 63
-text.length$ -- 19
+substring$ -- 306
+swap$ -- 90
+text.length$ -- 23
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 20
-warning$ -- 21
-while$ -- 37
-width$ -- 12
-write$ -- 134
-(There were 21 warnings)
+type$ -- 28
+warning$ -- 28
+while$ -- 51
+width$ -- 16
+write$ -- 185
+(There were 28 warnings)
