@@ -25,6 +25,7 @@
 \newif\ifoneside   \let\ifoneside\iftrue
 \newif\ifphdsummary   \let\ifphdsummary\iffalse
 
+
 %-----------------------------------------------------------------------------
 % Parametry tridy (odkomentovani zakomentovanych na vlastni nebezpeci)
 % Class parameters (uncommenting of commented one is only on your own risk)

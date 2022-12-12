@@ -12,15 +12,15 @@
 \contentsline {section}{\numberline {4.1}Neuronové sítě}{14}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Datasety}{17}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Detektory obličeje}{19}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Akcelerace detekce}{19}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{20}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Použité nástroje}{20}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{20}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{20}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{21}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Postup testování}{21}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Porovnání výsledků}{21}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Shrnutí}{21}{section.6.3}%
-\contentsline {chapter}{\numberline {7}Závěr}{22}{chapter.7}%
-\contentsline {chapter}{\numberline {A}Priloha}{23}{appendix.A}%
+\contentsline {section}{\numberline {4.4}Akcelerace detekce}{21}{section.4.4}%
+\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{22}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Použité nástroje}{22}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{22}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{22}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{23}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Postup testování}{23}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Porovnání výsledků}{23}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Shrnutí}{23}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Závěr}{24}{chapter.7}%
+\contentsline {chapter}{\numberline {A}Priloha}{25}{appendix.A}%
 \contentsfinish 

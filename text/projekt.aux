@@ -94,7 +94,6 @@
 \citation{hog2}
 \newlabel{integralimage}{{3.9}{12}{Viola--Jones algoritmus}{figure.3.9}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.9}{\ignorespaces Ukázka výpočtu hodnoty obdélníku v Haarově vlastnosti za pomoci vylepšení \textbf  {Integral Image}. Převzato z \cite  {violaJonesArticle}.}}{12}{figure.3.9}\protected@file@percent }
-\citation{}
 \newlabel{hogexample}{{3.10}{13}{Histogram orientací gradientů}{figure.3.10}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3.10}{\ignorespaces Zleva výřez originálního obrázku převedený do šedotónové reprezentace, rozdělený obrázek na bloky, výstup metody HOG. Převzato z \cite  {hog2}.}}{13}{figure.3.10}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {3.4}Detektory zaměřující se na špatné světelené podmínky}{13}{section.3.4}\protected@file@percent }
@@ -105,6 +104,7 @@
 \@writefile{lot}{\addvspace {10\p@ }}
 \@writefile{toc}{\contentsline {section}{\numberline {4.1}Neuronové sítě}{14}{section.4.1}\protected@file@percent }
 \newlabel{sekce:NS}{{4.1}{14}{Neuronové sítě}{section.4.1}{}}
+\citation{deeplearningbook}
 \newlabel{vzorec:perceptron}{{4.1}{15}{Perceptron}{equation.4.1.1}{}}
 \newlabel{obrazek:perceptron}{{4.1}{15}{Perceptron}{figure.4.1}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Perceptron s N vstupy, biasem $x_0$ a aktivační funkcí $f$}}{15}{figure.4.1}\protected@file@percent }
@@ -113,46 +113,60 @@
 \citation{deeplearningbook}
 \newlabel{obrazek:nsexample}{{4.2}{16}{Spojování perceptronů}{figure.4.2}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Propojení vrstev perceptronů do neuronové sítě}}{16}{figure.4.2}\protected@file@percent }
-\citation{celebA}
+\newlabel{vzorec:mse}{{4.4}{16}{Chyby}{equation.4.1.4}{}}
+\citation{celeba}
 \newlabel{obrazek:fitting}{{4.3}{17}{Chyby}{figure.4.3}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Ukázka výstupu neuronové sítě při nedoučení, přeučení a dostatečně dobrém množství dat pro učení}}{17}{figure.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {4.2}Datasety}{17}{section.4.2}\protected@file@percent }
 \newlabel{sekce:datasety}{{4.2}{17}{Datasety}{section.4.2}{}}
 \citation{digiface1m}
 \citation{digiface1m}
+\citation{digiface1m}
 \citation{multipie}
 \citation{utkface}
+\citation{fdReviewNS}
 \newlabel{obrazek:celeba}{{4.4}{18}{Datasety lidských obličejů}{figure.4.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Příklady obličejů z datasetu CelebA}}{18}{figure.4.4}\protected@file@percent }
 \newlabel{obrazek:digiface}{{4.5}{18}{Datasety lidských obličejů}{figure.4.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Příklady vygenerovaných obličejů pod různými úhly a různým osvětlením \cite  {digiface1m}}}{18}{figure.4.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Příklady vygenerovaných obličejů pod různými úhly a různým osvětlením z datasetu DigiFace1M \cite  {digiface1m}}}{18}{figure.4.5}\protected@file@percent }
+\citation{cnnNlp}
+\citation{cnnCv}
+\citation{cnnIntro}
 \@writefile{toc}{\contentsline {section}{\numberline {4.3}Detektory obličeje}{19}{section.4.3}\protected@file@percent }
 \newlabel{sekce:NSdetektory}{{4.3}{19}{Detektory obličeje}{section.4.3}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Akcelerace detekce}{19}{section.4.4}\protected@file@percent }
-\newlabel{sekce:akcelerace}{{4.4}{19}{Akcelerace detekce}{section.4.4}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{20}{chapter.5}\protected@file@percent }
+\citation{cnnNlp}
+\citation{cnnCv}
+\newlabel{obrazek:principkonvoluce}{{4.6}{20}{Konvoluční neuronové sítě}{figure.4.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Princip konvoluce 2D obrázku s rozměry 3$\times $3 a filtru $2\times 2$}}{20}{figure.4.6}\protected@file@percent }
+\newlabel{obrazek:cnnpipeline}{{4.7}{20}{Konvoluční neuronové sítě}{figure.4.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Řetězec vrstev konvoluční neuronové sítě \cite  {cnnNlp}}}{20}{figure.4.7}\protected@file@percent }
+\newlabel{obrazek:cnnpooling}{{4.8}{21}{Konvoluční neuronové sítě}{figure.4.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Řetězec vrstev konvoluční neuronové sítě \cite  {cnnCv}}}{21}{figure.4.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Akcelerace detekce}{21}{section.4.4}\protected@file@percent }
+\newlabel{sekce:akcelerace}{{4.4}{21}{Akcelerace detekce}{section.4.4}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{22}{chapter.5}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{kapitola:implementace}{{5}{20}{Implementace algoritmu pro akceleraci detekce obličeje}{chapter.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.1}Použité nástroje}{20}{section.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{20}{section.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{20}{section.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{21}{chapter.6}\protected@file@percent }
+\newlabel{kapitola:implementace}{{5}{22}{Implementace algoritmu pro akceleraci detekce obličeje}{chapter.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Použité nástroje}{22}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{22}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{22}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{23}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{kapitola:porovnani_vykonnosti}{{6}{21}{Porovnání výkonnosti řešení s existujícími detektory}{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}Postup testování}{21}{section.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}Porovnání výsledků}{21}{section.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}Shrnutí}{21}{section.6.3}\protected@file@percent }
+\newlabel{kapitola:porovnani_vykonnosti}{{6}{23}{Porovnání výkonnosti řešení s existujícími detektory}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Postup testování}{23}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Porovnání výsledků}{23}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Shrnutí}{23}{section.6.3}\protected@file@percent }
 \bibstyle{bib-styles/Pysny/czplain}
 \bibdata{literatura}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Závěr}{22}{chapter.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Závěr}{24}{chapter.7}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{kapitola:zaver}{{7}{22}{Závěr}{chapter.7}{}}
+\newlabel{kapitola:zaver}{{7}{24}{Závěr}{chapter.7}{}}
 \ttl@writefile{ptc}{\ttl@starttoc{chapters@1}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {A}Priloha}{23}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {A}Priloha}{25}{appendix.A}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
 \ttl@finishall
-\gdef \@abspage@last{26}
+\gdef \@abspage@last{28}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  10 DEC 2022 20:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  12 DEC 2022 20:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -850,11 +850,7 @@ LaTeX Warning: Citation `hog2' on page 12 undefined on input line 274.
 
 LaTeX Warning: Citation `hog2' on page 12 undefined on input line 274.
 
-[12 <./obrazky-figures/integralimage.png>]
-
-LaTeX Warning: Citation `' on page 13 undefined on input line 280.
-
-[13 <./obrazky-figures/hogexample.png>]
+[12 <./obrazky-figures/integralimage.png>] [13 <./obrazky-figures/hogexample.png>]
 Kapitola 4.
 
 LaTeX Warning: Citation `deeplearningbook' on page 14 undefined on input line 293.
@@ -870,72 +866,109 @@ File: obrazky-figures/perceptron.png Graphic file (type png)
 <use obrazky-figures/perceptron.png>
 Package pdftex.def Info: obrazky-figures/perceptron.png  used on input line 314.
 (pdftex.def)             Requested size: 995.71758pt x 449.6789pt.
+
+
+LaTeX Warning: Citation `deeplearningbook' on page 15 undefined on input line 321.
+
 <obrazky-figures/nsexample.png, id=303, 1903.11pt x 957.5775pt>
 File: obrazky-figures/nsexample.png Graphic file (type png)
 <use obrazky-figures/nsexample.png>
 Package pdftex.def Info: obrazky-figures/nsexample.png  used on input line 342.
 (pdftex.def)             Requested size: 1903.10538pt x 957.57516pt.
- [15 <./obrazky-figures/perceptron.png>]
+[15 <./obrazky-figures/perceptron.png>]
 
 LaTeX Warning: Citation `deeplearningbook' on page 16 undefined on input line 349.
 
-
-LaTeX Warning: Reference `vzorec:mse' on page 16 undefined on input line 358.
-
-<obrazky-figures/fitting.png, id=319, 2250.4075pt x 991.705pt>
+<obrazky-figures/fitting.png, id=320, 2250.4075pt x 991.705pt>
 File: obrazky-figures/fitting.png Graphic file (type png)
 <use obrazky-figures/fitting.png>
-Package pdftex.def Info: obrazky-figures/fitting.png  used on input line 369.
+Package pdftex.def Info: obrazky-figures/fitting.png  used on input line 370.
 (pdftex.def)             Requested size: 2250.40204pt x 991.70259pt.
 [16 <./obrazky-figures/nsexample.png>]
 
-LaTeX Warning: Citation `celebA' on page 17 undefined on input line 381.
+LaTeX Warning: Citation `celeba' on page 17 undefined on input line 382.
 
-<obrazky-figures/celeba.png, id=330, 558.28575pt x 388.45125pt>
+<obrazky-figures/celeba.png, id=331, 558.28575pt x 388.45125pt>
 File: obrazky-figures/celeba.png Graphic file (type png)
 <use obrazky-figures/celeba.png>
-Package pdftex.def Info: obrazky-figures/celeba.png  used on input line 385.
+Package pdftex.def Info: obrazky-figures/celeba.png  used on input line 386.
 (pdftex.def)             Requested size: 558.28438pt x 388.45029pt.
 [17 <./obrazky-figures/fitting.png>]
 
-LaTeX Warning: Citation `digiface1m' on page 18 undefined on input line 391.
+LaTeX Warning: Citation `digiface1m' on page 18 undefined on input line 392.
 
-<obrazky-figures/digiface.png, id=339, 665.48625pt x 115.02975pt>
+<obrazky-figures/digiface.png, id=340, 665.48625pt x 115.02975pt>
 File: obrazky-figures/digiface.png Graphic file (type png)
 <use obrazky-figures/digiface.png>
-Package pdftex.def Info: obrazky-figures/digiface.png  used on input line 395.
+Package pdftex.def Info: obrazky-figures/digiface.png  used on input line 396.
 (pdftex.def)             Requested size: 665.48462pt x 115.02946pt.
 
-LaTeX Warning: Citation `digiface1m' on page 18 undefined on input line 397.
+LaTeX Warning: Citation `digiface1m' on page 18 undefined on input line 398.
 
 
-LaTeX Warning: Citation `multipie' on page 18 undefined on input line 401.
+LaTeX Warning: Citation `digiface1m' on page 18 undefined on input line 398.
 
 
-LaTeX Warning: Citation `utkface' on page 18 undefined on input line 403.
+LaTeX Warning: Citation `multipie' on page 18 undefined on input line 402.
 
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 403.
+
+LaTeX Warning: Citation `utkface' on page 18 undefined on input line 404.
+
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 405.
 (C:\Users\vojta\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-Overfull \hbox (2.81802pt too wide) in paragraph at lines 403--404
-\T1/lmr/m/n/10.95 mer£ní po-u-ºití. Data jsou po-drobn¥ ano-to-vány dle vzorce \T1/lmtt/m/n/10.95 [v¥k]_[pohlaví]_[rasa]_[datum
- []
 
-[18 <./obrazky-figures/celeba.png> <./obrazky-figures/digiface.png>] [19]
+LaTeX Warning: Citation `fdReviewNS' on page 18 undefined on input line 411.
+
+[18 <./obrazky-figures/celeba.png> <./obrazky-figures/digiface.png>]
+
+LaTeX Warning: Citation `cnnNlp' on page 19 undefined on input line 422.
+
+
+LaTeX Warning: Citation `cnnCv' on page 19 undefined on input line 422.
+
+
+LaTeX Warning: Citation `cnnIntro' on page 19 undefined on input line 422.
+
+<obrazky-figures/principkonvoluce.png, id=350, 1587.9325pt x 509.905pt>
+File: obrazky-figures/principkonvoluce.png Graphic file (type png)
+<use obrazky-figures/principkonvoluce.png>
+Package pdftex.def Info: obrazky-figures/principkonvoluce.png  used on input line 428.
+(pdftex.def)             Requested size: 1587.92863pt x 509.90375pt.
+[19]
+<obrazky-figures/cnnpipeline.png, id=357, 781.92125pt x 212.795pt>
+File: obrazky-figures/cnnpipeline.png Graphic file (type png)
+<use obrazky-figures/cnnpipeline.png>
+Package pdftex.def Info: obrazky-figures/cnnpipeline.png  used on input line 440.
+(pdftex.def)             Requested size: 781.91934pt x 212.79446pt.
+
+
+LaTeX Warning: Citation `cnnNlp' on page 20 undefined on input line 442.
+
+<obrazky-figures/cnnpooling.png, id=361, 1174.3875pt x 732.7375pt>
+File: obrazky-figures/cnnpooling.png Graphic file (type png)
+<use obrazky-figures/cnnpooling.png>
+Package pdftex.def Info: obrazky-figures/cnnpooling.png  used on input line 459.
+(pdftex.def)             Requested size: 1174.38464pt x 732.73572pt.
+
+LaTeX Warning: Citation `cnnCv' on page 20 undefined on input line 461.
+
+[20 <./obrazky-figures/principkonvoluce.png> <./obrazky-figures/cnnpipeline.png>] [21 <./obrazky-figures/cnnpooling.png (PNG copy)>]
 Kapitola 5.
-[20
+[22
 
 ]
 Kapitola 6.
-[21
+[23
 
 ]
 Kapitola 7.
 )
+
 No file projekt.bbl.
 \c@ttl@toc@chapters=\count347
-(prilohy.tex [22
+(prilohy.tex [24
 
 ]
 PÅ™Ã­loha A.
@@ -943,7 +976,7 @@ PÅ™Ã­loha A.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
- [23
+ [25
 
 ] (projekt.aux)
 
@@ -953,17 +986,17 @@ Package rerunfilecheck Info: File `projekt.out' has not changed.
 (rerunfilecheck)             Checksum: ECFA433C852C35C0550E877D14FACE64;4210.
  ) 
 Here is how much of TeX's memory you used:
- 16331 strings out of 475385
- 265744 string characters out of 2776907
- 631934 words of memory out of 3000000
- 37217 multiletter control sequences out of 15000+600000
+ 16361 strings out of 475385
+ 266590 string characters out of 2776907
+ 632141 words of memory out of 3000000
+ 37238 multiletter control sequences out of 15000+600000
  547483 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,10n,77p,771b,500s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 73i,10n,77p,821b,500s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
-Output written on projekt.pdf (26 pages, 4007726 bytes).
+Output written on projekt.pdf (28 pages, 4570512 bytes).
 PDF statistics:
- 443 PDF objects out of 1000 (max. 8388607)
- 93 named destinations out of 1000 (max. 500000)
- 304 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 467 PDF objects out of 1000 (max. 8388607)
+ 99 named destinations out of 1000 (max. 500000)
+ 319 words of extra memory for PDF output out of 10000 (max. 10000000)
 
