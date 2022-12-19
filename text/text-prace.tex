@@ -258,9 +258,26 @@ vylepšení nazvané anglicky \textbf{Integral Image}. To spočívá v tom, že 
 Jelikož Haarových vlastností může být velké množství, bylo vybráno 6000 nejvíce vyhovujících, které se k detekci obličejů používají. Detekce je rozdělena na několik etap, v každé etapě je vyhledáván v části obrázku výskyt několika vlastností (počet s každou etapou roste), pokud se vyhledání nezdaří, není již dále daná část obrázku prohledávána. 
 
 
+\subsection*{Histogram orientací gradientů}
+Metoda HOG (anglicky Histograms of Oriented Gradients) \cite{hog, hog2} používá k detekci obličejů či postav histogramy orientovaných přechodů v obrázku, rozděleném dle mřížky na několik bloků (často například 8$\times$8 nebo 4$\times$4 pixelů). Pro každý pixel v takovémto bloku jsou vypočítány hodnoty gradientů -- velikost (magnitude) a směr (direction). Tyto hodnoty jsou pak přiřazeny do jednoho či více sloupců v histogramu popisujícím celý blok.
+
+Tento histogram bývá rozdělen na 9 sloupců (rozmezí -- anglicky bin) vyjadřujících směr gradientu v úhlu na škále od 0$^\circ$ do 180$^\circ$, kdy každý sloupec odpovídá intervalu 20$^\circ$. Výslednému vektoru, který udává velikosti gradientů v jednotlivých úhlech se říká HOG deskriptor.
+
+HOG využívá pro zlepšení detekce při zhoršených světelných podmínkách normalizaci HOG deskriptorů. Tato normalizace je prováděna na vektorech 4 sousedících bloků. Pokud je tedy vektor složen z 9 hodnot, vypočítá se normalizační vektor z $9 \times 4 = 36$ hodnot.
+
+Výsledkem metody je obrázek (viz obrázek \ref{hogexample} reprezentovaný orientovanými gradienty, které umožňují detekovat osoby nebo obličeje.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.5}{\includegraphics{obrazky-figures/hogexample.png}}
+  \label{hogexample}
+  \caption{Zleva výřez originálního obrázku převedený do šedotónové reprezentace, rozdělený obrázek na bloky, výstup metody HOG. Převzato z \cite{hog2}.}
+  \end{center}
+\end{figure}
+
 
 \section{Detektory zaměřující se na špatné světelené podmínky}
-Tématem této práce je detekce obličeje ve špatných světelných podmínkách. Detekcí za těchto okolností se zabývala řada prací a bylo vytvořeno několik detektorů \cite{}. V této sekci jsou popsány metody a algoritmy zobírající se touto problematikou, včetně jejich úspěšnosti detekce při stanovených podmínkách.
+Tématem této práce je detekce obličeje ve špatných světelných podmínkách. Detekcí za těchto okolností se zabývala řada prací a bylo vytvořeno několik detektorů . V této sekci jsou popsány metody a algoritmy zaobírající se touto problematikou, včetně jejich úspěšnosti detekce při stanovených podmínkách.
 
 
 
@@ -268,23 +285,192 @@ Tématem této práce je detekce obličeje ve špatných světelných podmínká
 %         KaPITOLA
 %%%%%%%%%%%%%%%%%%%
 \chapter{Neuronové sítě pro detekci obličeje}
+Tato kapitola popisuje neuronové sítě a jejich využití pro detekci obličejů. Sekce \ref{sekce:NS} se věnuje popisu neuronových sítí obecně, v sekci \ref{sekce:datasety} jsou popsány datasety a jejich využití k trénování neuronových sítí. Sekce \ref{sekce:NSdetektory} se zabývá konkrétními detektory obličejů s využitím neuronových sítí a v sekci \ref{sekce:akcelerace} jsou zmíněny možnosti akcelerace detekčních algoritmů.
 
 \section{Neuronové sítě}
+\label{sekce:NS}
 
-\subsection*{Model neuronu}
+Neuronové sítě \cite{deeplearningbook, ns1994} umožňují nalezení neznámého řešení problému pomocí naučení se z podobných problémů u nichž známe řešení. Tyto umělé sítě jsou inspirovány biologickou nervovou soustavou lidí (lidským mozkem). Síla neuronových sítí se projevuje v úlohách zaměřených na detekci, rozpoznávání (objektů, lidí, obličejů, obecně vzorů -- anglicky patterns) a~zpracování dat. Existuje řada druhů neuronových sítí (konvoluční, hluboké, dopředné, rekurentní), pro detekci obličejů v obrázcích se nejčastěji používají konvoluční neuronové sítě (anglicky Convolutional Neural Networks -- CNN). 
+
+Na princip fungování neuronových sítí může být nahlíženo jako na nelineární matematickou funkci, která převádí $X$ vstupů na $Y$ výstupů. Proces transformace vstupních informací na výstup je ovlivňován váhováním hodnot vně sítě. Tyto hodnoty vah jsou určovány při tzv. učení/trénování neuronových sítí. Pro správné natrénování neuronové sítě je potřeba dostatečného počtu vstupních trénovacích dat (obrázků, textů, hodnot) a~dostatečně výkonný hardware. 
+
+\subsection*{Biologický neuron}
+Jak již bylo zmíněno, inspirací neuronových sítí je biologická nervová soustava. V lidském mozku se nachází okolo $10^{11}$ neuronů (elektricky aktivních buněk spracovávajích signály). Vstupem těchto neuronů jsou tzv. dendrity, výstupy pak nazýváme axony. Jednotlivé neurony jsou navzájem propojeny tisíci spoji pojmenovanými synapse. Synapse zajišťují komunikaci mezi neurony.
+
+Takto vytvořený paralelismus poskytuje mozku schopnost rychle zpracovávat informace. Neurony biologické i umělé pracují s váhovanými vstupy. Po překročení určitého prahu na vstupech je adekvátně upraven výstup neuronu. Klíčovou vlastností potom je způsobilost měnit hodnoty jednotlivých vah na základě externích vlivů. Tím dochází k učení sítě neuronů.
+
+\subsection*{Perceptron}
+
+Nejjednoduším modelem umělého neuronu je preceptron. Perceptron má $N$ vstupů, jejichž hodnoty $x$ jsou vynásobeny váhami $w$ a sesumovány dle vzorce \ref{vzorec:perceptron}.
+
+\begin{equation} \label{vzorec:perceptron}
+  a = \sum_{i=1}^{N} (w_i * x_i) + w_0 * x_0
+\end{equation}
+
+Hodnota $w_0$ se nazývá bias a jedná se o neměnnou vstupní hodnotu (často má hodnotu $+1$). Váhy a vstupy (včetně biasu) mohou být jak kladné, tak i záporné. Hodnota $a$ je po vypočtení předána tzv. \textbf{aktivační funkci}.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.4}{\includegraphics{obrazky-figures/perceptron.png}}
+  \label{obrazek:perceptron}
+  \caption{Perceptron s N vstupy, biasem $x_0$ a aktivační funkcí $f$}
+  \end{center}
+\end{figure}
 
 \subsection*{Aktivační funkce}
+Aktivační funkce $f$ je matematická funkce, která určuje výstup neuronu (vzorec \ref{vzorec:aktivacni_fce}). Na výběru vhodné aktivační funkce závisí přesnost neuronové sítě. Funkce může být různá, pro příklad je zde uveden výstup rozlišující zda se jedná o kladné či záporné číslo nebo nulu (viz vzorec \ref{vzorec:vystup_aktivacni_fce}). V praxi se často používá aktivační funkce nazvaná \textbf{rectified linear unit} (ReLU) \cite{deeplearningbook} definovaná jako $f(a) = max\{0, a\}$.
+
+\begin{equation} \label{vzorec:aktivacni_fce}
+  z = f(a)
+\end{equation}
+
+\begin{equation}
+  \label{vzorec:vystup_aktivacni_fce}
+   f(a) =
+    \begin{cases}
+      0       & \quad \text{pro } a = 0\\
+      1       & \quad \text{pro } a > 0\\
+      -1       & \quad \text{pro } a < 0
+    \end{cases}
+\end{equation}
+
+\subsection*{Spojování perceptronů}
+Spojením několika preceptronů lze vytvořit tzv. vrstvu (anglicky layer) perceptronů. Tytvo vrstvy se dělí na vstupní (anglicky input), výstupní (anglicky output) a skryté (anglicky hidden). Konkatenací vstupní, několika skrytých a výstupní vrstvy je možno vytvořit neuronovou síť připravenou k trénování.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.22}{\includegraphics{obrazky-figures/nsexample.png}}
+  \label{obrazek:nsexample}
+  \caption{Propojení vrstev perceptronů do neuronové sítě}
+  \end{center}
+\end{figure}
+
+\subsection*{Učení}
+Aby neuronová síť mohla fungovat, musí se natrénovat (tzn. nastavit co nejlépe váhy na vstupech perceptronů). K trénování se používají data z datasetů (viz sekce \ref{sekce:datasety}). Trénování neuronových sítí lze rozdělit do 3 kategorií \cite{deeplearningbook}:
+
+\begin{itemize}
+  \item \textbf{Učení bez učitele} (anglicky unsupervised learning) -- tyto algoritmy procházejí data z datasetu a provádějí nad nimi shlukování do tzv. clusterů
+  \item \textbf{Učení s učitelem} (anglicky supervised learning) -- každým datům z datasetu je přiřazena informace o požadvaném výstupu. Vstupy jsou zpracovány neuronovou sítí a podle chyby (rozdílu vstup/výstup) jsou upraveny parametry v neuronové síti
+  \item \textbf{Posilované učení} (anglicky reinforcement learning) -- tento druh učení není vázán pouza na data z datasetu, ale navíc interaguje s prostředím
+\end{itemize}
+
+\subsection*{Chyby}
+Abychom byli schopní aktualizovat váhy vstupů jednotlivých perceptronů, je potřeba měřit chybovost výstupu neuronové sítě. Jednou z možností měření chyby (využitelné například při lineární regresi) je \emph{mean squared error}. Dle vztahu \ref{vzorec:mse} je vypočítána chybovost a jsou upraveny váhy. Snahou je chybu co nejvíce zmenšit.
+
+\begin{equation}
+  \label{vzorec:mse}
+  MSE = \frac{1}{N} \sum_{i}^{N} (vystupNS - spravnyVystup)^2
+\end{equation}
+
+Při trénování může dojít k situaci, kdy neuronová síť zvládá zpracovávat trénovací data s velmi vysokou přesností, ale při použití testovacích (validačních) dat se chybovost zvyšuje. V takovémto případě mluvíme o \textbf{přetrénování} (anglicky overfitting). Druhým nežádoucím jevem, který může nastat je \textbf{nedotrénovanost} (anglicky underfitting) -- síť není dostatečně natrénovaná a dochází tak k vysoké chybovosti (příčinou je například málo trénovacích dat).
+
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.18}{\includegraphics{obrazky-figures/fitting.png}}
+  \label{obrazek:fitting}
+  \caption{Ukázka výstupu neuronové sítě při nedoučení, přeučení a dostatečně dobrém množství dat pro učení}
+  \end{center}
+\end{figure}
+
 
 \section{Datasety}
+\label{sekce:datasety}
+Datasetem rozumíme soubor podobných dat (například obrázků obličejů, číslic, předmětů nebo textů). Pro detekci obličejů se využívají datasety obsahující fotografie a videa lidí z veřejně dostupných zdrojů (internet, televize) nebo jsou datasety přímo účelně vytvářeny (fotografování lidí) a následně je možné si je koupit. Data v datasetech je nutné tzv. oanotovat (označit na daném obrázku je). V případě tváří se může jednat například o věk osoby, pohlaví, rasu, aby bylo možné určit zda po klasifikaci neuronovou sítí výstup odpovídá požadovanému výsledku.
 
+\subsection*{Datasety lidských obličejů}
+Dataset \textbf{CelebFaces Attributes Dataset} (CelebA) \cite{celeba} obsahuje více než $200 000$ obrázků obličejů známých osobností. Obrázky obsahují fotografie pořízené z různých úhlů a jsou velmi dobře anotovány. Tento dataset je volně přístupný pro nekomerční účely.
 
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.6}{\includegraphics{obrazky-figures/celeba.png}}
+  \label{obrazek:celeba}
+  \caption{Příklady obličejů z datasetu CelebA}
+  \end{center}
+\end{figure}
+
+Dataset \textbf{DigiFace1M} \cite{digiface1m} se skládá z 1 milionu snímků digitálně vytvořených obličejů (viz obrázek \ref{obrazek:digiface}), čímž se vyhýbá případným právním a etnickým problémům, které mohou být spojeny s využití tváří fyzických osob. Při použití tohoto datasetu umělých tváří společně s 200 až 2000 fotografiemi tváří reálných lidí lze dosáhnout podobných výsledků jako s datasety tvořenými čistě reálnými obličeji.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.6}{\includegraphics{obrazky-figures/digiface.png}}
+  \label{obrazek:digiface}
+  \caption{Příklady vygenerovaných obličejů pod různými úhly a různým osvětlením z datasetu DigiFace1M \cite{digiface1m}}
+  \end{center}
+\end{figure}
+
+\textbf{Multi-PIE} \cite{multipie} je dataset zaměřený na fotografie obličejů pořízených za různých světelných podmínek a pod různými úhly. Obshauje přes 750000 snímků, které byly vytvořeny vyfotografováním 337 lidí po dobu několika měsíců. Tento dataset je placený.
+
+Dataset \textbf{UTKFace} \cite{utkface} obsahuje přes 20000 fotek obličejů lidí různých věků, pohlaví a~ras z různých úhlů a~za rozličných světelných podmínek. Dataset je volně dostupný pro nekomerční použití. Data jsou podrobně anotovány dle vzorce \texttt{[věk]\_[pohlaví]\_[rasa]\_
+[datum a čas].jpg}, kde věk je v rozmezí 0--116 let, pohlaví muž/žena, rasa je jedna z výčtu běloch, černoch, asiat, ind, ostatní a datum a čas uchovává informaci o okamžiku zařazení fotografie do datasetu.
 
 \section{Detektory obličeje}
-\label{sekce:detektory_s_neuronovymi_sitemi}
+\label{sekce:NSdetektory}
+
+Detekce obličeje je zároveň samostatnou disciplínou i vstupním bodem několika dalších analyzačníh úkonů (rozpoznávání tváře, ověřování pomocí obličejů nebo identifikace obličejů). Zpracovávaný obrázek bývá rozdělen na několik menších oblastí (výřezů) a tyto výřezy bývají zpracovávány jednotlivě. 
+Existuje řada různých druhů a architektur neuronových sítí využívaných k detekci obličejů \cite{fdReviewNS}. Patří mezi ně například:
+
+\begin{itemize}
+  \item \textbf{Rotation invariant neural network} (RINN, rotačně invariantní neuronová síť) -- dokáže detekovat obličeje bez ohledu na úhel natočení tváře (není nutná normalizace v preprocessingu). Systém tohoto typu neuronové sítě obsahuje několik sítí, s tím že první se nazývá \emph{router network}. Tato síť určuje orientaci (natočení) výřezu obrázku a~připravuje (normalizuje) tak výřez pro 1 či více detekčních sítí.
+  \item \textbf{Fast neural network} (FNN, rychlá neuronová síť) -- obrázek je rozdělen na malé podobrázky a každý podobrázek je zvlášť otestován na výskyt tváře rychlou neuronovou sítí. Cílem je snížení výpočetního času nutného pro nalezení obličeje.
+  \item \textbf{Polynomial neural network} (PNN, polynomiální neuronová síť) -- oblasti v obrázku jsou klasifikovány jako tvář/ne--tvář pomocí binomické projekce této oblasti do podprostoru vlastností obličeje naučeného tvz. základní analýzou komponent (anglicky principal component analysis, PCA). Zkoumáním vlivu PCA na vzorky lze detekovat zda se jedná o obličej.
+  \item \textbf{Convolutional neural network} (CNN, konvoluční neuronové sítě) -- samostatně pospány v další podsekci. 
+\end{itemize}
+
+
+\subsection*{Konvoluční neuronové sítě}
+Konvoluční neuronové sítě (CNN) \cite{cnnNlp, cnnCv, cnnIntro} jsou použity ve většině systémů v oblasti počítačového vidění. Jelikož můžeme hodnoty pixelů vyjádřit čísly (používá se šedotónová varianta obrázku $\rightarrow$ při 8 bitové barevné hloubce může pixel nabývat hodnot 0 -- 255), lze tyto čísla použít jako vstupy neuronové sítě. Při vysokém rozlišení obrázku však nastává problém. Pokud bychom chtěli každou hodnotu pixelu použít na vstupu neuronové sítě pro celý obrázek naráz, měla by neuronová síť již u obrázku s rozměry 500 $\times$ 500 pixelů celkem 25000 vstupní neuronů, což je příliš výpočetně náročné. Proto se využívá konvoluce.
+
+\textbf{Konvoluce} je okenní matematická funkce, při níž je na každou část obrázku (okno, \emph{window}) násobením aplikována matice (filtr, kernel, konvoluční jádro). Princip konvoluce zachycuje následující obrázek.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.25}{\includegraphics{obrazky-figures/principkonvoluce.png}}
+  \label{obrazek:principkonvoluce}
+  \caption{Princip konvoluce 2D obrázku s rozměry 3$\times$3 a filtru $2\times2$}
+  \end{center}
+\end{figure}
+
+Konvoluce dovoluje zásadně snížit počet nutných vstupů neuronové sítě. Navíc jsou konvoluční operace rychlé, protože tato funkce je hardwarově implementována na grafické kartě.
+
+Jak lze vidět na obrázku \ref{obrazek:cnnpipeline} konvoluční neuronová síť se skládá z několika vrstev.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.55}{\includegraphics{obrazky-figures/cnnpipeline.png}}
+  \label{obrazek:cnnpipeline}
+  \caption{Řetězec vrstev konvoluční neuronové sítě \cite{cnnNlp}}
+  \end{center}
+\end{figure}
+
+\textbf{Konvoluční vrstva} provádí výše popsanou konvoluci. Otázkou zůstává jak zpracovávat okraje obrázku. Existují dva přístupy:
+
+\begin{itemize}
+  \item \emph{Wide convolution} -- přidání nul kolem dokola obrázku a provedení konvoluce krajních hodnot (výstup bude stejně velký jako vstup).
+  \item \emph{Narrow convolution} -- provedení konvoluce jako na obrázku \ref{obrazek:principkonvoluce}. Dojde ke zmenšení velikosti na výstupu.
+\end{itemize}
+
+Dalším parametrem konvolučních neuronových sítí je tzv. \textbf{stride} velikost. Určuje o kolik hodnot se konvoluční jádro posune při každém kroku. Na obrázku \ref{obrazek:principkonvoluce} je použit stride 1. Větší hodnota vede k menšímu výstupu. Běžně se používají hodnoty 1 nebo 2.
+
+\textbf{Poolingová vrstva} (anglicky pooling layer) je vrstva aplikovaná po konvoluční vrstvě. Používá se ke snížení výpočetná náročnosti. Tím, že je aplikována statistická funkce (maximum, průměr) na výstup konvoluční vrstvy (většinou filtrem o velikosti 2 $\times$ 2 se stride = 2), dojde ke zredukování počtu hodnot výsledné matice (viz obrázek \ref{obrazek:cnnpooling}).
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.25}{\includegraphics{obrazky-figures/cnnpooling.png}}
+  \label{obrazek:cnnpooling}
+  \caption{Řetězec vrstev konvoluční neuronové sítě \cite{cnnCv}}
+  \end{center}
+\end{figure}
+
+V reálné aplikaci jsou konvoluční a poolingové vrstvy poskládány za sebe. Na konci řetězce (obrázek \ref{obrazek:cnnpipeline}) se pak nachází část plně propojených vrstev neuronů (fully--conected layer).
+
+\subsection*{Detektory}
+Tato část popisuje vybrané existující detektory obličejů založené na neuronových sítí. 
 
 \subsection*{Detektory zaměřující se na špatné světelené podmínky}
 
 \section{Akcelerace detekce}
+\label{sekce:akcelerace}
 
 \subsection*{Intel Neural Compute Stick 2}
 
