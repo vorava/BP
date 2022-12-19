@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  12 DEC 2022 20:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  19 DEC 2022 13:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -954,13 +954,26 @@ Package pdftex.def Info: obrazky-figures/cnnpooling.png  used on input line 459.
 
 LaTeX Warning: Citation `cnnCv' on page 20 undefined on input line 461.
 
-[20 <./obrazky-figures/principkonvoluce.png> <./obrazky-figures/cnnpipeline.png>] [21 <./obrazky-figures/cnnpooling.png (PNG copy)>]
+[20 <./obrazky-figures/principkonvoluce.png> <./obrazky-figures/cnnpipeline.png>]
+
+LaTeX Warning: Citation `fdCNNComparison' on page 21 undefined on input line 470.
+
+
+LaTeX Warning: Citation `ssd' on page 21 undefined on input line 472.
+
+
+LaTeX Warning: Citation `vgg-16' on page 21 undefined on input line 474.
+
+
+LaTeX Warning: Citation `yolo' on page 21 undefined on input line 476.
+
+[21 <./obrazky-figures/cnnpooling.png (PNG copy)>] [22]
 Kapitola 5.
-[22
+[23
 
 ]
 Kapitola 6.
-[23
+[24
 
 ]
 Kapitola 7.
@@ -968,7 +981,7 @@ Kapitola 7.
 
 No file projekt.bbl.
 \c@ttl@toc@chapters=\count347
-(prilohy.tex [24
+(prilohy.tex [25
 
 ]
 Příloha A.
@@ -976,7 +989,7 @@ Příloha A.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
- [25
+ [26
 
 ] (projekt.aux)
 
@@ -986,17 +999,17 @@ Package rerunfilecheck Info: File `projekt.out' has not changed.
 (rerunfilecheck)             Checksum: ECFA433C852C35C0550E877D14FACE64;4210.
  ) 
 Here is how much of TeX's memory you used:
- 16361 strings out of 475385
- 266590 string characters out of 2776907
+ 16362 strings out of 475385
+ 266597 string characters out of 2776907
  632141 words of memory out of 3000000
  37238 multiletter control sequences out of 15000+600000
  547483 words of font info for 83 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,10n,77p,821b,500s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
-Output written on projekt.pdf (28 pages, 4570512 bytes).
+Output written on projekt.pdf (29 pages, 4573919 bytes).
 PDF statistics:
- 467 PDF objects out of 1000 (max. 8388607)
- 99 named destinations out of 1000 (max. 500000)
+ 472 PDF objects out of 1000 (max. 8388607)
+ 100 named destinations out of 1000 (max. 500000)
  319 words of extra memory for PDF output out of 10000 (max. 10000000)
 
