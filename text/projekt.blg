@@ -1,0 +1,125 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: projekt.aux
+Reallocating 'name_of_file' (item size: 1) to 25 items.
+The style file: bib-styles/Pysny/czplain.bst
+Reallocating 'name_of_file' (item size: 1) to 11 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Database file #1: literatura.bib
+Warning--to sort, need author or key in TinaFace
+Warning--to sort, need author or key in MTCNN
+Warning--empty year in MTCNN
+Warning--empty year and revised in MTCNN
+Warning--empty year in TinaFace
+Warning--empty year and revised in TinaFace
+Warning--empty edition in localBinaryPatterns
+Warning--empty edition in fdReviewNS
+Warning--empty number in fdReviewNS
+Warning--empty isbn and issn in digiface1m
+Warning--empty year in violaJonesArticle
+Warning--empty year and revised in violaJonesArticle
+Warning--empty edition in ns1994
+Warning--empty year in cnnNlp
+Warning--empty year and revised in cnnNlp
+Warning--empty editor and organization in hog
+Warning--empty isbn and issn in hog
+Warning--empty journal in faceRecognitionFrameworks
+Warning--empty edition in faceRecognitionFrameworks
+Warning--empty number in faceRecognitionFrameworks
+Warning--empty editor and organization in yolo
+Warning--empty isbn and issn in yolo
+Warning--empty edition in deeplearningbook
+Warning--empty isbn in deeplearningbook
+Warning--empty editor and organization in multipie
+Warning--empty isbn and issn in multipie
+Warning--empty editor and organization in fdCNNComparison
+Warning--empty isbn and issn in fdCNNComparison
+Warning--empty editor and organization in localBinaryPatternsTests
+Warning--empty isbn and issn in localBinaryPatternsTests
+Warning--empty edition in fdReview
+Warning--"{" isn't a brace-balanced string for entry ssd
+while executing--line 3240 of file bib-styles/Pysny/czplain.bst
+Warning--empty edition in ssd
+Warning--empty number in ssd
+Warning--empty year in celeba
+Warning--empty year and revised in celeba
+Warning--empty edition in emotionDetector
+Warning--empty year in cnnCv
+Warning--empty year and revised in cnnCv
+Warning--empty edition in cnnIntro
+Warning--empty number in cnnIntro
+Warning--empty journal in hog2
+Warning--empty edition in hog2
+Warning--empty number in hog2
+Warning--empty year in securityCamsWeb
+Warning--empty year and revised in securityCamsWeb
+Warning--empty year in securityCamsWeb2
+Warning--empty year and revised in securityCamsWeb2
+Warning--empty edition in frReview
+Warning--empty number in frReview
+Warning--empty editor and organization in feature-based-fd-review
+Warning--empty isbn and issn in feature-based-fd-review
+Warning--empty year in utkface
+Warning--empty year and revised in utkface
+Warning--empty year in vgg-16
+Warning--empty year and revised in vgg-16
+Warning--empty edition in lowLightFdReview
+Warning--empty number in lowLightFdReview
+Warning--empty edition in suspectIdentification
+Warning--empty number in suspectIdentification
+Warning--empty editor and organization in violaJones
+Warning--empty isbn and issn in violaJones
+Warning--empty edition in HLAFace
+Warning--empty number in HLAFace
+Warning--empty year in darkFace
+Warning--empty year and revised in darkFace
+Warning--empty editor and organization in fdExtremelyLowConditions
+Warning--empty isbn and issn in fdExtremelyLowConditions
+You've used 34 entries,
+            3946 wiz_defined-function locations,
+            1037 strings with 11975 characters,
+and the built_in function-call counts, 17134 in all, are:
+= -- 1272
+> -- 634
+< -- 76
++ -- 269
+- -- 225
+* -- 998
+:= -- 2247
+add.period$ -- 126
+call.type$ -- 34
+change.case$ -- 250
+chr.to.int$ -- 74
+cite$ -- 101
+duplicate$ -- 1050
+empty$ -- 2188
+format.name$ -- 165
+if$ -- 4083
+int.to.chr$ -- 0
+int.to.str$ -- 34
+missing$ -- 0
+newline$ -- 231
+num.names$ -- 64
+pop$ -- 455
+preamble$ -- 1
+purify$ -- 171
+quote$ -- 0
+skip$ -- 748
+stack$ -- 0
+substring$ -- 674
+swap$ -- 197
+text.length$ -- 53
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 68
+warning$ -- 67
+while$ -- 110
+width$ -- 36
+write$ -- 433
+(There were 68 warnings)
