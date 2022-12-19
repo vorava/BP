@@ -465,17 +465,7 @@ Dalším parametrem konvolučních neuronových sítí je tzv. \textbf{stride} v
 V reálné aplikaci jsou konvoluční a poolingové vrstvy poskládány za sebe. Na konci řetězce (obrázek \ref{obrazek:cnnpipeline}) se pak nachází část plně propojených vrstev neuronů (fully--conected layer).
 
 \subsection*{Detektory}
-Tato část popisuje vybrané existující detektory obličejů založené na neuronových sítí a provnání úspěšnosti detekce těchto detektorů s detektory popsanými v sekci \ref{sekce:detektory_bez_neuronovych_siti}.
-
-\textbf{MTCNN} (Multi-Task Cascaded Convolutional Network) \cite{fdCNNComparison} provádí detekci obličejů pomocí kaskády konvoluční neuronových sítí. Algoritmus má dvě části. První část vytváří několik verzí vstupních obrázků, každa taková verze má jiné rozlišení. Druhá část složená z kaskády neuronových sítí se stará o detekci obličeje v různých verzích obrázku. Použití více verzí obrázku umožňuje zvýšit efektivitu detekce.
-
-Single shot detector \textbf{SSD} \cite{ssd} je konvoluční neuronová síť opět složená ze 2 částí, sloužící obecně k detekci objektů. Tyto části jsou: a) natrénovaný detekční model (VGG--16 nebo jiný) a b) část SSD -- další konvoluční vrstva, která rozděluje obrázek pomocí mřížky (\emph{grid}) s rozměry 4 $\times$ 4 nebo 8 $\times$ 8. V každém takto vytvořeném bloku je pak hledán objekt (obličej).
-
-Již výše zmíněný detekční/rozpoznávací algoritmus/neuronová síť \textbf{VGG--16} \cite{vgg-16} používá k detekci konvoluční filtry o rozměrech $3 \times 3$ v několika konvolučních vrstvách za sebou (počet filtrů se s každou další vrstvou navyšuje). Používá se zde stride o hodnotě 1.
-
-\textbf{YOLO} (You Only Look Once) \cite{yolo} je stejně jako SSD tzv. single shot detektor -- rozděluje vstupní obrázek do mřížky a provádí detekci případně rekognici nad jednotlivými bloky mřížky. Pro každý blok je určena hodnota jistoty výskytu objektu. Na vstupu sítě YOLO jsou barevné obrázky o velikosti 448 $\times$ 448 pixelů. Architektura neuronové sítě je složena ze 7 konvolučních vrstev následovaných pooling vrstvami a 3 plně propojenými vrstvami na výstupu.
-YOLO má několik verzí, které se liší složením neuronové sítě a úspěšností detekce.
-
+Tato část popisuje vybrané existující detektory obličejů založené na neuronových sítí. 
 
 \subsection*{Detektory zaměřující se na špatné světelené podmínky}
 
