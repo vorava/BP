@@ -543,8 +543,66 @@ Velké rozdíly v hodnotách $mAP$ jsou způsobeny tím, že neuronové sítě z
 \section{Akcelerace}
 \label{sekce:akcelerace}
 
+S rozmachem využívání strojového učení a neuronových sítí se objevila potřeba zrychlení takto založených úloh. Proto byly vytvořeny specializované zařízení s cílem urychlit výpočty a snížit energenitickou náročnost výpočtů ve srovnání s běžnými (univerzálními) výpočetním prostředky. Vznikly tak hardwarové akcelerátory neuronových sítí. Příkladem jsou Intel Neural Compute Stick 2 \cite{ncs2}, Coral \cite{coral} nebo Nvidia Jetson \cite{jetson}.
+
+Existují různé typy architektur akcelerátorů \cite{acceleratorsSurvey}, mezi něž patří architektury popsané v tomto odstavci.
+\textbf{NPU} (neural processing unit) -- k provádění matematických operací využívají speciální NPU obsahující PE (processing engines). NPU používá hardwarové verze MLP (multi--layer perceptron), pro dosažení zrychlení obecného výpočtu (nejen neuronových sítí). Pokud je část programu určená ke zrychlení spouštěna často a jsou dobře známy vstupy a výstupy, lze tuto část programu zrychlit pomocí NPU. Příkladem algoritmu pro zrychlení je rychlá Fourierova transformace (FFT).
+
+Architektura \textbf{RENO} využívá memristory (ReRAM) -- speciální druh paměti jejíž struktura umožňuje urychlit maticové a vektorové násobení.
+
+Mezi další akcelerátory patří série akcelerátorů \textbf{DianNao} využívaná na akademické půdě. Tyto akcelerátory obsahují NFU (neural functional unit), vstupní, výstupní a synaptický buffer a kontrolní procesor.
+
+Průmyslovým akcelerátorem od Google je \textbf{TPU} (tensor processing unit). Je použitelný i přes cloud.
+
+Kromě ReRAM jsou v akcelerátor používány i paměti typu HMC (hybrid memory cube). Obě paměti (ReRAM a HMC) umožňují tzv. \emph{processing--in--memory}, takže snižují čas výpočtu tím, že není nutno data přesouvat mezi procesorem a pamětí. Příkladem akcelerátoru postaveného na HMC je Neurocube \cite{neurocube} nebo Tetris \cite{tetris}.
+
+Většina akcelerátorů je zaměřena na výpočty s již natrénovanou neuronovou sítí, jen pár jich podporuje učení neuronových sítí. V některých případech (edge computing) se ke zrychlení neuronové sítě používají cloudové služby. V datacentrech provádějí náročné výpočty grafické karty a výsledky spolu s nenáročnými výpočty jsou zpracovány například na IoT (Internet of Things -- internet věcí) nebo mobilních zařízeních.
+
 \subsection*{Intel Neural Compute Stick 2}
 
+Intel Neural Compute Stick 2 (NCS2) \cite{ncs2} (obrázek \ref{obrazek:ncs2} je akcelerátor neuronových sítí zaměřený na počítačové vidění. Obsahuje VPU (vision processing unit) Intel Movidius X. Připojuje se k počítači přes rozhraní USB 3.0 a umožňuje urychlení neuronové sítě bez použití cloudu a za nízkých energetických nároků (například v kombinaci s Rasspberry Pi). Podporuje mj. frameworky TensorFlow, Caffee, PyTorch popsané v sekci \ref{sekce:frameworky_pro_ns}. Pro práci s NCS2 se používá knihovna/framework OpenVINO \cite{openvino}. 
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.25}{\includegraphics{obrazky-figures/ncs2.png}}
+  \label{obrazek:ncs2}
+  \caption{Intel Neural Compute Stick 2 \cite{ncs2}}
+  \end{center}
+\end{figure}
+
+Experimenty provedené v \cite{ncs2testYolo} porovnávají výkonnost akcelerátorů Nvidia Jetson Nano, Nvidia Jetson Xavier NX a Raspberry Pi 4B s NCS2. K porovnání posloužily frameworky YOLOv3 popsaný v sekci \ref{sekce:NSdetektory} a YOLOv3--tiny. Experimenty byly založeny na detekci objektů ve dvou videích.
+\begin{itemize}
+  \item \emph{Video1} -- rozlišení 768 $\times$ 436 pixelů, celkem 1596 framů
+  \item \emph{Video2} -- rozlišení 1920 $\times$ 1080 pixelů, celkem 960 framů 
+\end{itemize}
+
+Naměřené výsledky zobrazuje obrázek \ref{obrazek:ncs2test}.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.5}{\includegraphics{obrazky-figures/ncs2test.png}}
+  \label{obrazek:ncs2test}
+  \caption{Výsledky testu akcelerátorů neuronovýxh sítí s modelem YOLOv3 a~YOLOv3-tiny \cite{ncs2testYolo}}
+  \end{center}
+\end{figure}
+
+Z tabulky v obrázku můžeme vidět, že NCS2 dosahuje podobných výsledků detekce ve \emph{Videu1} jako Jetson Nano a zároveň nejméně zatěžuje procesor. U \emph{Videa2} má NCS2 nejlepší výsledky detekce. Využití paměti s větším vstupem roste, stále je však mezi konkurenty nejnižší, to samé lze řící o spotřebě energie. S dostatečně dobrým modelem neuronové sítě je NCS2 úsporným akcelerátorem s vysokou úspěšností detekce.
+
+
+\subsection*{OpenVINO}
+Framework OpenVINO se stará o konverzi a optimalizaci natrénovaného modelu neuronové sítě v jednom z podporovaných frameworků (viz obrázek \ref{obrazek:ovchart}) pro použití na NCS2 nebo jiném zařízení (procesory, grafické karty). OpenVINO se nezaměřuje pouze na oblast počítačového vidění ale na neuronové sítě obecně.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.22}{\includegraphics{obrazky-figures/ovchart.png}}
+  \label{obrazek:ovchart}
+  \caption{Využití frameworku OpenVINO \cite{openvino}}
+  \end{center}
+\end{figure}
+
+
+\section{Frameworky pro neuronové sítě}
+\label{sekce:frameworky_pro_ns}
 
 
 

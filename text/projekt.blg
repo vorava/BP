@@ -27,11 +27,16 @@ Warning--empty year and revised in violaJonesArticle
 Warning--empty edition in ns1994
 Warning--empty year in cnnNlp
 Warning--empty year and revised in cnnNlp
+Warning--empty edition in acceleratorsSurvey
+Warning--empty year in coral
+Warning--empty year and revised in coral
 Warning--empty editor and organization in hog
 Warning--empty isbn and issn in hog
 Warning--empty journal in faceRecognitionFrameworks
 Warning--empty edition in faceRecognitionFrameworks
 Warning--empty number in faceRecognitionFrameworks
+Warning--empty editor and organization in ncs2testYolo
+Warning--empty isbn and issn in ncs2testYolo
 Warning--empty editor and organization in yolo
 Warning--empty isbn and issn in yolo
 Warning--empty edition in deeplearningbook
@@ -40,8 +45,14 @@ Warning--empty editor and organization in multipie
 Warning--empty isbn and issn in multipie
 Warning--empty editor and organization in fdCNNComparison
 Warning--empty isbn and issn in fdCNNComparison
+Warning--empty year in ncs2
+Warning--empty year and revised in ncs2
+Warning--empty year in openvino
+Warning--empty year and revised in openvino
 Warning--empty editor and organization in localBinaryPatternsTests
 Warning--empty isbn and issn in localBinaryPatternsTests
+Warning--empty editor and organization in neurocube
+Warning--empty isbn and issn in neurocube
 Warning--empty edition in fdReview
 Warning--"{" isn't a brace-balanced string for entry ssd
 while executing--line 3240 of file bib-styles/Pysny/czplain.bst
@@ -49,9 +60,13 @@ Warning--empty edition in ssd
 Warning--empty number in ssd
 Warning--empty year in celeba
 Warning--empty year and revised in celeba
+Warning--empty editor and organization in tetris
+Warning--empty isbn and issn in tetris
 Warning--empty edition in emotionDetector
 Warning--empty year in cnnCv
 Warning--empty year and revised in cnnCv
+Warning--empty year in jetson
+Warning--empty year and revised in jetson
 Warning--empty edition in cnnIntro
 Warning--empty number in cnnIntro
 Warning--empty journal in hog2
@@ -81,45 +96,45 @@ Warning--empty year in darkFace
 Warning--empty year and revised in darkFace
 Warning--empty editor and organization in fdExtremelyLowConditions
 Warning--empty isbn and issn in fdExtremelyLowConditions
-You've used 34 entries,
+You've used 42 entries,
             3946 wiz_defined-function locations,
-            1037 strings with 11975 characters,
-and the built_in function-call counts, 17134 in all, are:
-= -- 1272
-> -- 634
-< -- 76
-+ -- 269
-- -- 225
-* -- 998
-:= -- 2247
-add.period$ -- 126
-call.type$ -- 34
-change.case$ -- 250
-chr.to.int$ -- 74
-cite$ -- 101
-duplicate$ -- 1050
-empty$ -- 2188
-format.name$ -- 165
-if$ -- 4083
+            1081 strings with 13513 characters,
+and the built_in function-call counts, 21253 in all, are:
+= -- 1589
+> -- 788
+< -- 86
++ -- 326
+- -- 273
+* -- 1258
+:= -- 2771
+add.period$ -- 156
+call.type$ -- 42
+change.case$ -- 316
+chr.to.int$ -- 78
+cite$ -- 124
+duplicate$ -- 1291
+empty$ -- 2719
+format.name$ -- 213
+if$ -- 5077
 int.to.chr$ -- 0
-int.to.str$ -- 34
+int.to.str$ -- 42
 missing$ -- 0
-newline$ -- 231
-num.names$ -- 64
-pop$ -- 455
+newline$ -- 285
+num.names$ -- 80
+pop$ -- 572
 preamble$ -- 1
-purify$ -- 171
+purify$ -- 215
 quote$ -- 0
-skip$ -- 748
+skip$ -- 930
 stack$ -- 0
-substring$ -- 674
-swap$ -- 197
-text.length$ -- 53
+substring$ -- 835
+swap$ -- 242
+text.length$ -- 65
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 68
-warning$ -- 67
-while$ -- 110
-width$ -- 36
-write$ -- 433
-(There were 68 warnings)
+type$ -- 84
+warning$ -- 82
+while$ -- 132
+width$ -- 44
+write$ -- 537
+(There were 83 warnings)
