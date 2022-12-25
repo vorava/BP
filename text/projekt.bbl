@@ -1,0 +1,351 @@
+\makeatletter
+\makeatother
+\begin{thebibliography}{10}
+
+\bibitem{MTCNN}
+{\em MTCNN} [online].
+\newblock {\small [cit. 2022-10-19]}.
+\newblock Dostupn{\'{e}} z: ~{\small\url{https://github.com/ipazc/mtcnn}}.
+
+\bibitem{TinaFace}
+{\em TinaFace: Strong but Simple Baseline for Face Detection} [online].
+\newblock {\small [cit. 2022-10-19]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://github.com/Media-Smart/vedadet/tree/main/configs/trainval/tinaface}}.
+
+\bibitem{localBinaryPatterns}
+{\sc\bgroup}Ahonen{\egroup}, T., {\sc\bgroup}Hadid{\egroup}, A.
+  a~{\sc\bgroup}Pietikainen{\egroup}, M.
+\newblock Face Description with Local Binary Patterns: Application to Face
+  Recognition.
+\newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}.
+\newblock 2006, sv.~28, č.~12, s.~2037--2041.
+\newblock DOI: 10.1109/TPAMI.2006.244.
+
+\bibitem{fdReviewNS}
+{\sc\bgroup}Al{-}Allaf{\egroup}, O. N.~A.
+\newblock Review of Face Detection Systems Based Artificial Neural Networks
+  Algorithms.
+\newblock {\em CoRR}.
+\newblock 2014, abs/1404.1292.
+\newblock Dostupn{\'{e}} z: ~{\small\url{http://arxiv.org/abs/1404.1292}}.
+
+\bibitem{digiface1m}
+{\sc\bgroup}Bae{\egroup}, G., {\sc\bgroup}La Gorce{\egroup}, M. de,
+  {\sc\bgroup}Baltrusaitis{\egroup}, T., {\sc\bgroup}Hewitt{\egroup}, C.,
+  {\sc\bgroup}Chen{\egroup}, D. et~al.
+\newblock DigiFace-1M: 1 Million Digital Face Images for Face Recognition.
+\newblock In: IEEE.~{\em 2023 IEEE Winter Conference on Applications of
+  Computer Vision (WACV)}.
+\newblock 2023.
+
+\bibitem{violaJonesArticle}
+{\sc\bgroup}Behera{\egroup}, G.~S.
+\newblock {\em Face Detection with Haar Cascade} [online].
+\newblock {\small [cit. 2022-11-06]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.aitimejournal.com/@alessandro.eric.russo/best-wifi-security-cameras-with-face-recognitiohttps://towardsdatascience.com/face-detection-with-haar-cascade-727f68dafd08}}.
+
+\bibitem{ns1994}
+{\sc\bgroup}Bishop{\egroup}, C.~M.
+\newblock Neural networks and their applications.
+\newblock {\em Review of Scientific Instruments}.
+\newblock 1994, sv.~65, č.~6, s.~1803--1832.
+\newblock DOI: 10.1063/1.1144830.
+\newblock Dostupn{\'{e}} z: ~{\small\url{https://doi.org/10.1063/1.1144830}}.
+
+\bibitem{cnnNlp}
+{\sc\bgroup}Britz{\egroup}, D.
+\newblock {\em Understanding Convolutional Neural Networks for NLP} [online].
+\newblock {\small [cit. 2022-12-12]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://dennybritz.com/posts/wildml/understanding-convolutional-neural-networks-for-nlp/}}.
+
+\bibitem{acceleratorsSurvey}
+{\sc\bgroup}Chen{\egroup}, Y., {\sc\bgroup}Xie{\egroup}, Y.,
+  {\sc\bgroup}Song{\egroup}, L., {\sc\bgroup}Chen{\egroup}, F.
+  a~{\sc\bgroup}Tang{\egroup}, T.
+\newblock A Survey of Accelerator Architectures for Deep Neural Networks.
+\newblock {\em Engineering}.
+\newblock 2020, sv.~6, č.~3, s.~264--274.
+\newblock DOI: https://doi.org/10.1016/j.eng.2020.01.007.
+\newblock ISSN 2095-8099.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.sciencedirect.com/science/article/pii/S2095809919306356}}.
+
+\bibitem{coral}
+{\sc\bgroup}Coral{\egroup}.
+\newblock {\em Build beneficial and privacy preserving AI} [online].
+\newblock {\small [cit. 2022-12-25]}.
+\newblock Dostupn{\'{e}} z: ~{\small\url{https://coral.ai}}.
+
+\bibitem{hog}
+{\sc\bgroup}Dalal{\egroup}, N. a~{\sc\bgroup}Triggs{\egroup}, B.
+\newblock Histograms of oriented gradients for human detection.
+\newblock In:~{\em 2005 IEEE Computer Society Conference on Computer Vision and
+  Pattern Recognition (CVPR'05)}.
+\newblock 2005, sv. 1, s.~886--893 vol. 1.
+\newblock DOI: 10.1109/CVPR.2005.177.
+
+\bibitem{faceRecognitionFrameworks}
+{\sc\bgroup}David Wanyonyi{\egroup}, T.~C.
+\newblock Open-Source Face Recognition Frameworks: A Review of the Landscape.
+\newblock Květen 2022, sv.~10.
+\newblock DOI: 10.1109/ACCESS.2022.3170037.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=9762647}}.
+
+\bibitem{ncs2testYolo}
+{\sc\bgroup}Feng{\egroup}, H., {\sc\bgroup}Mu{\egroup}, G.,
+  {\sc\bgroup}Zhong{\egroup}, S., {\sc\bgroup}Zhang{\egroup}, P.
+  a~{\sc\bgroup}Yuan{\egroup}, T.
+\newblock Benchmark Analysis of YOLO Performance on Edge Intelligence Devices.
+\newblock In:~{\em 2021 Cross Strait Radio Science and Wireless Technology
+  Conference (CSRSWTC)}.
+\newblock 2021, s.~319--321.
+\newblock DOI: 10.1109/CSRSWTC52801.2021.9631594.
+
+\bibitem{yolo}
+{\sc\bgroup}Garg{\egroup}, D., {\sc\bgroup}Goel{\egroup}, P.,
+  {\sc\bgroup}Pandya{\egroup}, S., {\sc\bgroup}Ganatra{\egroup}, A.
+  a~{\sc\bgroup}Kotecha{\egroup}, K.
+\newblock A Deep Learning Approach for Face Detection using YOLO.
+\newblock In:~{\em 2018 IEEE Punecon}.
+\newblock 2018, s.~1--4.
+\newblock DOI: 10.1109/PUNECON.2018.8745376.
+
+\bibitem{deeplearningbook}
+{\sc\bgroup}Goodfellow{\egroup}, I., {\sc\bgroup}Bengio{\egroup}, Y.
+  a~{\sc\bgroup}Courville{\egroup}, A.
+\newblock {\em Deep Learning}.
+\newblock MIT Press, 2016.
+\newblock \url{http://www.deeplearningbook.org}.
+
+\bibitem{multipie}
+{\sc\bgroup}Gross{\egroup}, R., {\sc\bgroup}Matthews{\egroup}, I.,
+  {\sc\bgroup}Cohn{\egroup}, J., {\sc\bgroup}Kanade{\egroup}, T.
+  a~{\sc\bgroup}Baker{\egroup}, S.
+\newblock Multi-PIE.
+\newblock In:~{\em 2008 8th IEEE International Conference on Automatic Face \&
+  Gesture Recognition}.
+\newblock 2008, s.~1--8.
+\newblock DOI: 10.1109/AFGR.2008.4813399.
+
+\bibitem{fdCNNComparison}
+{\sc\bgroup}Guo{\egroup}, Y. a~{\sc\bgroup}W\"{u}nsche{\egroup}, B.~C.
+\newblock Comparison of Face Detection Algorithms on Mobile Devices.
+\newblock In:~{\em 2020 35th International Conference on Image and Vision
+  Computing New Zealand (IVCNZ)}.
+\newblock 2020, s.~1--6.
+\newblock DOI: 10.1109/IVCNZ51579.2020.9290542.
+
+\bibitem{ncs2}
+{\sc\bgroup}Intel{\egroup}.
+\newblock {\em Intel® Neural Compute Stick 2 (Intel® NCS2)} [online].
+\newblock {\small [cit. 2022-12-25]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.intel.com/content/www/us/en/developer/articles/tool/neural-compute-stick.html}}.
+
+\bibitem{openvino}
+{\sc\bgroup}Intel{\egroup}.
+\newblock {\em OpenVINO} [online].
+\newblock {\small [cit. 2022-12-25]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://docs.openvino.ai/latest/home.html}}.
+
+\bibitem{localBinaryPatternsTests}
+{\sc\bgroup}Kadir{\egroup}, K., {\sc\bgroup}Kamaruddin{\egroup}, M.~K.,
+  {\sc\bgroup}Nasir{\egroup}, H., {\sc\bgroup}Safie{\egroup}, S.~I.
+  a~{\sc\bgroup}Bakti{\egroup}, Z. A.~K.
+\newblock A comparative study between LBP and Haar-like features for Face
+  Detection using OpenCV.
+\newblock In:~{\em 2014 4th International Conference on Engineering Technology
+  and Technopreneuship (ICE2T)}.
+\newblock 2014, s.~335--339.
+\newblock DOI: 10.1109/ICE2T.2014.7006273.
+
+\bibitem{neurocube}
+{\sc\bgroup}Kim{\egroup}, D., {\sc\bgroup}Kung{\egroup}, J.,
+  {\sc\bgroup}Chai{\egroup}, S., {\sc\bgroup}Yalamanchili{\egroup}, S.
+  a~{\sc\bgroup}Mukhopadhyay{\egroup}, S.
+\newblock Neurocube: A Programmable Digital Neuromorphic Architecture with
+  High-Density 3D Memory.
+\newblock In:~{\em 2016 ACM/IEEE 43rd Annual International Symposium on
+  Computer Architecture (ISCA)}.
+\newblock 2016, s.~380--392.
+\newblock DOI: 10.1109/ISCA.2016.41.
+
+\bibitem{fdReview}
+{\sc\bgroup}Kumar{\egroup}, A., {\sc\bgroup}Kaur{\egroup}, A.
+  a~{\sc\bgroup}Kumar{\egroup}, M.
+\newblock Face detection techniques: a review.
+\newblock {\em Artificial Intelligence Review}.
+\newblock Aug 2019, sv.~52, č.~2, s.~927--948.
+\newblock DOI: 10.1007/s10462-018-9650-2.
+\newblock ISSN 1573-7462.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://doi.org/10.1007/s10462-018-9650-2}}.
+
+\bibitem{ssd}
+{\sc\bgroup}Liu{\egroup}, W., {\sc\bgroup}Anguelov{\egroup}, D.,
+  {\sc\bgroup}Erhan{\egroup}, D., {\sc\bgroup}Szegedy{\egroup}, C.,
+  {\sc\bgroup}Reed{\egroup}, S.~E. et~al.
+\newblock {SSD:} Single Shot MultiBox Detector.
+\newblock {\em CoRR}.
+\newblock 2015, abs/1512.02325.
+\newblock Dostupn{\'{e}} z: ~{\small\url{http://arxiv.org/abs/1512.02325}}.
+
+\bibitem{celeba}
+{\sc\bgroup}Liu{\egroup}, Z., {\sc\bgroup}Luo{\egroup}, P.,
+  {\sc\bgroup}Wang{\egroup}, X. a~{\sc\bgroup}Tang{\egroup}, X.
+\newblock {\em Large-scale CelebFaces Attributes (CelebA) Dataset} [online].
+\newblock {\small [cit. 2022-12-10]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html}}.
+
+\bibitem{tetris}
+{\sc\bgroup}Lu{\egroup}, H., {\sc\bgroup}Wei{\egroup}, X.,
+  {\sc\bgroup}Lin{\egroup}, N., {\sc\bgroup}Yan{\egroup}, G.
+  a~{\sc\bgroup}Li{\egroup}, X.
+\newblock Tetris: Re-architecting Convolutional Neural Network Computation for
+  Machine Learning Accelerators.
+\newblock In:~{\em 2018 IEEE/ACM International Conference on Computer-Aided
+  Design (ICCAD)}.
+\newblock 2018, s.~1--8.
+\newblock DOI: 10.1145/3240765.3240855.
+
+\bibitem{emotionDetector}
+{\sc\bgroup}Mehendale{\egroup}, N.
+\newblock Facial emotion recognition using convolutional neural networks
+  (FERC).
+\newblock {\em SN Applied Sciences}.
+\newblock Feb 2020, sv.~2, č.~3, s.~446.
+\newblock DOI: 10.1007/s42452-020-2234-1.
+\newblock ISSN 2523-3971.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://doi.org/10.1007/s42452-020-2234-1}}.
+
+\bibitem{cnnCv}
+{\sc\bgroup}Melcher{\egroup}, K.
+\newblock {\em Convolutional Neural Networks \& Computer Vision} [online].
+\newblock {\small [cit. 2022-12-12]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.knime.com/blog/convolutional-neural-networks-computer-vision}}.
+
+\bibitem{jetson}
+{\sc\bgroup}Nvidia{\egroup}.
+\newblock {\em Embedded Systems with Jetson} [online].
+\newblock {\small [cit. 2022-12-25]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/}}.
+
+\bibitem{cnnIntro}
+{\sc\bgroup}O'Shea{\egroup}, K. a~{\sc\bgroup}Nash{\egroup}, R.
+\newblock An Introduction to Convolutional Neural Networks.
+\newblock {\em CoRR}.
+\newblock 2015, abs/1511.08458.
+\newblock Dostupn{\'{e}} z: ~{\small\url{http://arxiv.org/abs/1511.08458}}.
+
+\bibitem{hog2}
+{\sc\bgroup}Ramirez Cerna{\egroup}, L.
+\newblock Face Detection: Histogram of Oriented Gradients and Bag of Feature
+  Method.
+\newblock Říjen 2013.
+
+\bibitem{securityCamsWeb}
+{\sc\bgroup}Russo{\egroup}, A.~E.
+\newblock {\em Are Face Recognition Security Cameras Worth It?} [online].
+\newblock {\small [cit. 2022-10-18]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.aitimejournal.com/@alessandro.eric.russo/are-face-recognition-security-cameras-worth-it}}.
+
+\bibitem{securityCamsWeb2}
+{\sc\bgroup}Russo{\egroup}, A.~E.
+\newblock {\em Best Home Security Cameras with Face Recognition} [online].
+\newblock {\small [cit. 2022-10-18]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.aitimejournal.com/@alessandro.eric.russo/best-wifi-security-cameras-with-face-recognition}}.
+
+\bibitem{frReview}
+{\sc\bgroup}Saez{-}Trigueros{\egroup}, D., {\sc\bgroup}Meng{\egroup}, L.
+  a~{\sc\bgroup}Hartnett{\egroup}, M.
+\newblock Face Recognition: From Traditional to Deep Learning Methods.
+\newblock {\em CoRR}.
+\newblock 2018, abs/1811.00116.
+\newblock Dostupn{\'{e}} z: ~{\small\url{http://arxiv.org/abs/1811.00116}}.
+
+\bibitem{feature-based-fd-review}
+{\sc\bgroup}Sharifara{\egroup}, A., {\sc\bgroup}Mohd Rahim{\egroup}, M.~S.
+  a~{\sc\bgroup}Anisi{\egroup}, Y.
+\newblock A general review of human face detection including a study of neural
+  networks and Haar feature-based cascade classifier in face detection.
+\newblock In:~{\em 2014 International Symposium on Biometrics and Security
+  Technologies (ISBAST)}.
+\newblock 2014, s.~73--78.
+\newblock DOI: 10.1109/ISBAST.2014.7013097.
+
+\bibitem{utkface}
+{\sc\bgroup}Song{\egroup}, Y. a~{\sc\bgroup}Zhang{\egroup}, Z.
+\newblock {\em UTKFace} [online].
+\newblock {\small [cit. 2022-12-10]}.
+\newblock Dostupn{\'{e}} z: ~{\small\url{https://susanqq.github.io/UTKFace/}}.
+
+\bibitem{vgg-16}
+{\sc\bgroup}Team{\egroup}, G.~L.
+\newblock {\em Introduction to VGG16 | What is VGG16?} [online].
+\newblock {\small [cit. 2022-12-19]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://www.mygreatlearning.com/blog/introduction-to-vgg16/}}.
+
+\bibitem{lowLightFdReview}
+{\sc\bgroup}THEOFFILUS{\egroup}, R.~B., {\sc\bgroup}DHARMADINATA{\egroup},
+  O.~J. a~{\sc\bgroup}KUSUMA{\egroup}, G.~P.
+\newblock LOW-LIGHT FACE DETECTION USING DEEP LEARNING.
+\newblock {\em Jatit}.
+\newblock 2022, sv.~100.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{http://www.jatit.org/volumes/Vol100No10/28Vol100No10.pdf}}.
+
+\bibitem{suspectIdentification}
+{\sc\bgroup}V D{\egroup}, A.~K., {\sc\bgroup}Kumar{\egroup}, V.,
+  {\sc\bgroup}Subramanian{\egroup}, M., {\sc\bgroup}Vengatesan{\egroup}, K.
+  a~{\sc\bgroup}Ramakrishnan{\egroup}, M.
+\newblock Facial Recognition System for Suspect Identification Using a
+  Surveillance Camera.
+\newblock {\em Pattern Recognition and Image Analysis}.
+\newblock Červenec 2018, sv.~28, s.~410--420.
+\newblock DOI: 10.1134/S1054661818030136.
+
+\bibitem{violaJones}
+{\sc\bgroup}Viola{\egroup}, P. a~{\sc\bgroup}Jones{\egroup}, M.
+\newblock Rapid object detection using a boosted cascade of simple features.
+\newblock In:~{\em Proceedings of the 2001 IEEE Computer Society Conference on
+  Computer Vision and Pattern Recognition. CVPR 2001}.
+\newblock 2001, sv. 1, s.~I--I.
+\newblock DOI: 10.1109/CVPR.2001.990517.
+
+\bibitem{HLAFace}
+{\sc\bgroup}Wang{\egroup}, W., {\sc\bgroup}Yang{\egroup}, W.
+  a~{\sc\bgroup}Liu{\egroup}, J.
+\newblock HLA-Face: Joint High-Low Adaptation for Low Light Face Detection.
+\newblock {\em CoRR}.
+\newblock 2021, abs/2104.01984.
+\newblock Dostupn{\'{e}} z: ~{\small\url{https://arxiv.org/abs/2104.01984}}.
+
+\bibitem{darkFace}
+{\sc\bgroup}Yang{\egroup}, W.
+\newblock {\em DARK FACE: Face Detection in Low Light Condition} [online].
+\newblock {\small [cit. 2022-12-19]}.
+\newblock Dostupn{\'{e}} z:
+  ~{\small\url{https://flyywh.github.io/CVPRW2019LowLight/}}.
+
+\bibitem{fdExtremelyLowConditions}
+{\sc\bgroup}Yu{\egroup}, J., {\sc\bgroup}Hao{\egroup}, X.
+  a~{\sc\bgroup}He{\egroup}, P.
+\newblock Single-stage Face Detection under Extremely Low-light Conditions.
+\newblock In:~{\em 2021 IEEE/CVF International Conference on Computer Vision
+  Workshops (ICCVW)}.
+\newblock 2021, s.~3516--3525.
+\newblock DOI: 10.1109/ICCVW54120.2021.00392.
+
+\end{thebibliography}

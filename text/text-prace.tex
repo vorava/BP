@@ -404,6 +404,8 @@ Dataset \textbf{DigiFace1M} \cite{digiface1m} se skládá z 1 milionu snímků d
 Dataset \textbf{UTKFace} \cite{utkface} obsahuje přes 20000 fotek obličejů lidí různých věků, pohlaví a~ras z různých úhlů a~za rozličných světelných podmínek. Dataset je volně dostupný pro nekomerční použití. Data jsou podrobně anotovány dle vzorce \texttt{[věk]\_[pohlaví]\_[rasa]\_
 [datum a čas].jpg}, kde věk je v rozmezí 0--116 let, pohlaví muž/žena, rasa je jedna z výčtu běloch, černoch, asiat, ind, ostatní a datum a čas uchovává informaci o okamžiku zařazení fotografie do datasetu.
 
+Dataset \textbf{DARK FACE} \cite{darkFace} obsahuje 6000 fotografií různých prostředí s lidmi pořízených za špatných světelných podmínek. Používá se mj.při hodnocení účinnosti detektorů obličejů. Dataset obsahuje jak oanotované tak neanotované obrázky.
+
 \section{Detektory obličeje}
 \label{sekce:NSdetektory}
 
@@ -467,23 +469,140 @@ V reálné aplikaci jsou konvoluční a poolingové vrstvy poskládány za sebe.
 \subsection*{Detektory}
 Tato část popisuje vybrané existující detektory obličejů založené na neuronových sítí a provnání úspěšnosti detekce těchto detektorů s detektory popsanými v sekci \ref{sekce:detektory_bez_neuronovych_siti}.
 
-\textbf{MTCNN} (Multi-Task Cascaded Convolutional Network) \cite{fdCNNComparison} provádí detekci obličejů pomocí kaskády konvoluční neuronových sítí. Algoritmus má dvě části. První část vytváří několik verzí vstupních obrázků, každa taková verze má jiné rozlišení. Druhá část složená z kaskády neuronových sítí se stará o detekci obličeje v různých verzích obrázku. Použití více verzí obrázku umožňuje zvýšit efektivitu detekce.
+\textbf{MTCNN} (Multi-Task Cascaded Convolutional Network) \cite{fdCNNComparison, MTCNN} provádí detekci obličejů pomocí kaskády konvoluční neuronových sítí. Algoritmus má dvě části. První část vytváří několik verzí vstupních obrázků, každa taková verze má jiné rozlišení. Druhá část složená z kaskády neuronových sítí se stará o detekci obličeje v různých verzích obrázku. Použití více verzí obrázku umožňuje zvýšit efektivitu detekce.
 
 Single shot detector \textbf{SSD} \cite{ssd} je konvoluční neuronová síť opět složená ze 2 částí, sloužící obecně k detekci objektů. Tyto části jsou: a) natrénovaný detekční model (VGG--16 nebo jiný) a b) část SSD -- další konvoluční vrstva, která rozděluje obrázek pomocí mřížky (\emph{grid}) s rozměry 4 $\times$ 4 nebo 8 $\times$ 8. V každém takto vytvořeném bloku je pak hledán objekt (obličej).
 
 Již výše zmíněný detekční/rozpoznávací algoritmus/neuronová síť \textbf{VGG--16} \cite{vgg-16} používá k detekci konvoluční filtry o rozměrech $3 \times 3$ v několika konvolučních vrstvách za sebou (počet filtrů se s každou další vrstvou navyšuje). Používá se zde stride o hodnotě 1.
 
+Detekční model \textbf{RetinaFace} \cite{lowLightFdReview} používá multitask pro učení. Detekce probíhá určením pozice obličeje podle vyhledání pixelů, které tvář obsahuje. Model má 2 struktury: \emph{Multi--task loss} -- minimalizace chyb modelu a \emph{Dense Regression Branch} -- renderer, který filtruje obličeje a získává pixely z vyrenderovaných obličejů.
+
 \textbf{YOLO} (You Only Look Once) \cite{yolo} je stejně jako SSD tzv. single shot detektor -- rozděluje vstupní obrázek do mřížky a provádí detekci případně rekognici nad jednotlivými bloky mřížky. Pro každý blok je určena hodnota jistoty výskytu objektu. Na vstupu sítě YOLO jsou barevné obrázky o velikosti 448 $\times$ 448 pixelů. Architektura neuronové sítě je složena ze 7 konvolučních vrstev následovaných pooling vrstvami a 3 plně propojenými vrstvami na výstupu.
 YOLO má několik verzí, které se liší složením neuronové sítě a úspěšností detekce.
 
+\subsection*{Porovnání výkonnosti detektorů}
+Práce \cite{fdCNNComparison} se zabývá porovnáním detektorů Viola--Jones, Histogram of Oriented Gradients ze sekce \ref{sekce:detektory_bez_neuronovych_siti} a algoritmů založených na konvolučních neuronových sítích MTCNN a SSD (detektor VGG--16 je nahrazen deketorem MobileNet) ze sekce \ref{sekce:NSdetektory}. Testování bylo prováděno na datasetech AFW a WIDER FACE. Co se týká úspěšnosti detekce, nejlépe vyšel z testu detektor MTCNN, nejrychlejší pak byl detektor SSD (viz obrázek \ref{obrazek:cnncomparison}). Z detektorů založených na klasických metodách bez neuronových sítí měl vyšší úspěšnost HOG, rychlajší však byl detektor Viola--Jones. Hodnota AP (average precision) udává průměrnou přesnost detekce a hodnota FPS (frames per second) počet snímků zpracovaných za sekundu.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.7}{\includegraphics{obrazky-figures/cnncomparison.png}}
+  \label{obrazek:cnncomparison}
+  \caption{Výsledek testování detekčních algotitmů. Převzato z \cite{fdCNNComparison}.}
+  \end{center}
+\end{figure}
 
 \subsection*{Detektory zaměřující se na špatné světelené podmínky}
+Detektory zaměřující se na detekci ve špatných světelných podmínkách jsou buď specializované detektory, kdy je neuronová síť detektoru učena na datasetu vhodných obrázků nebo je použit obyčejný detektor obličeje. V obou případech je nutno nejprve provést \emph{low--light image enhacement} (vylepšení obrázku) a~až poté přejít k detekci.
 
-\section{Akcelerace detekce}
+Pro vylepšení obrázku existují různé metody \cite{lowLightFdReview}:
+\begin{itemize}
+  \item Mirnet,
+  \item Adaptive Gamma Correction (AGC),
+  \item Retinex,
+  \item RetinexNet,
+  \item a další.
+\end{itemize}
+
+\textbf{Mirnet} je metoda postavená na konvolučních neuronových sítí a jejím cílem je zvýšení kvality obrazu pomocí několika úprav v konvolučních vrstvách.
+
+\textbf{AGC} je metodou využívající gamma korekci k vylepšení nasvícení scény (obrázku). Metoda navíc rozděluje obrázky podle intenzity gamma na tmavé (hodnota pod $0,5$) a světlé (hodnota nad $0,5$).
+
+Koncept \textbf{Retinex} se snaží upravit kvalitu obrazu tak, aby odpovídala kvalitě lidského vidění. Dosaženo toho je tak, že je prováděno odmazávání odrazů světla z obrázku.
+
+\textbf{RetinexNet} vychází z Retinexu a provádí dekompozici obrázku tak, aby došlo k oddělení odrazů nezávislých na osvětlení a osvětlení se známou strukturou. Metoda také celkově upravuje nasvícení pro dosažení co největší konzistence světla v obrázku.
+
+Pro porovnání účinnosti \emph{image enhacement} metod lze použít 2 veličiny. \emph{Peak signal--noise ratio} (PSNR)-- poměr užitečného signálu k šumu a~\emph{Structural similarity} (SSIM) -- index podobnosti 2 obrazů.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.45}{\includegraphics{obrazky-figures/iepostup.png}}
+  \label{obrazek:iepostup}
+  \caption{Řetězec postupu detekce obličeje ve zhoršených světelných podmínkách. Vychází z \cite{lowLightFdReview}.}
+  \end{center}
+\end{figure}
+
+Obrázek \ref{obrazek:iepostup}, který vychází ze článku \cite{lowLightFdReview} popisuje potřebný postup pro úpravu obrázku a následné kroky vedoucí k detekci obličeje. V rámci tohoto článku jsou zpracovány výsledky detekce pomocí výše zmíněných metod vylepšení obrazu a detektoru RetinaFace (viz sekce Detektory). Jako testovací dataset byl použit dataset DARK FACE, popsaný v sekci \ref{sekce:datasety}. V rámci testování preprocessingových metod vylepšení obrazu bylo zjištěno, že nejlepší hodnoty PSNR ($19,48\:dB$) a SSIM ($0,74$) dosahuje metoda Mirnet (hodnoty dalších metod viz obrázek \ref{obrazek:psnrssim}).
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.7}{\includegraphics{obrazky-figures/psnrssim.png}}
+  \label{obrazek:psnrssim}
+  \caption{Hodnoty PSNR a SSIM pro metody vylepšení obrazu. Převzato z \cite{lowLightFdReview}.}
+  \end{center}
+\end{figure}
+
+Výsledky detekce však ukázaly, že v detekci obličejů si nejlépe vedl Retinex s $0,43\:\%\:mAP$ (mean average precision -- průměrná přesnost detekce). Z toho vyplývá, že lepší preprocessingová metoda nutně neznamená úspěšnější detektor.
+
+Detekcí ve špatných světelných podmínkách se zabývá i \cite{HLAFace}. V rámci tohoto článku byl vytvořen samoučící se (self--supervised) detektor dosahující $44,4\:\%\:mAP$ také na datech z datasetu DARK FACE.
+
+Práce \cite{fdExtremelyLowConditions} se rovněž zabývá detekcí nad datasetem DARK FACE při špatném osvětlení. Navržený algoritmus dosahuje $82,3\:\%\:mAP$. Algoritmus využívá 3 hlavní části umožňující dosáhnutí takto vysoké přesnosti detekce. Jsou to: \emph{Multi--scale retinex with color restoration} -- metoda podobná Retinexu, ale zachovává konzistenci barev, architektura konvolučních vrstev \emph{PyramidBox} a~\emph{Multi--scale test module} -- úpravy velikosti vstupního obrázku pro lepší detekci.
+
+Velké rozdíly v hodnotách $mAP$ jsou způsobeny tím, že neuronové sítě z prací \cite{HLAFace, fdExtremelyLowConditions} jsou trénovány přímo na datasetu obličejů ve zhoršených pozorovacích podmínkách, zatímco \cite{lowLightFdReview} používá model naučený na běžných snímcích tváří.
+
+
+\section{Akcelerace}
 \label{sekce:akcelerace}
+
+S rozmachem využívání strojového učení a neuronových sítí se objevila potřeba zrychlení takto založených úloh. Proto byly vytvořeny specializované zařízení s cílem urychlit výpočty a snížit energenitickou náročnost výpočtů ve srovnání s běžnými (univerzálními) výpočetním prostředky. Vznikly tak hardwarové akcelerátory neuronových sítí. Příkladem jsou Intel Neural Compute Stick 2 \cite{ncs2}, Coral \cite{coral} nebo Nvidia Jetson \cite{jetson}.
+
+Existují různé typy architektur akcelerátorů \cite{acceleratorsSurvey}, mezi něž patří architektury popsané v tomto odstavci.
+\textbf{NPU} (neural processing unit) -- k provádění matematických operací využívají speciální NPU obsahující PE (processing engines). NPU používá hardwarové verze MLP (multi--layer perceptron), pro dosažení zrychlení obecného výpočtu (nejen neuronových sítí). Pokud je část programu určená ke zrychlení spouštěna často a jsou dobře známy vstupy a výstupy, lze tuto část programu zrychlit pomocí NPU. Příkladem algoritmu pro zrychlení je rychlá Fourierova transformace (FFT).
+
+Architektura \textbf{RENO} využívá memristory (ReRAM) -- speciální druh paměti jejíž struktura umožňuje urychlit maticové a vektorové násobení.
+
+Mezi další akcelerátory patří série akcelerátorů \textbf{DianNao} využívaná na akademické půdě. Tyto akcelerátory obsahují NFU (neural functional unit), vstupní, výstupní a synaptický buffer a kontrolní procesor.
+
+Průmyslovým akcelerátorem od Google je \textbf{TPU} (tensor processing unit). Je použitelný i přes cloud.
+
+Kromě ReRAM jsou v akcelerátor používány i paměti typu HMC (hybrid memory cube). Obě paměti (ReRAM a HMC) umožňují tzv. \emph{processing--in--memory}, takže snižují čas výpočtu tím, že není nutno data přesouvat mezi procesorem a pamětí. Příkladem akcelerátoru postaveného na HMC je Neurocube \cite{neurocube} nebo Tetris \cite{tetris}.
+
+Většina akcelerátorů je zaměřena na výpočty s již natrénovanou neuronovou sítí, jen pár jich podporuje učení neuronových sítí. V některých případech (edge computing) se ke zrychlení neuronové sítě používají cloudové služby. V datacentrech provádějí náročné výpočty grafické karty a výsledky spolu s nenáročnými výpočty jsou zpracovány například na IoT (Internet of Things -- internet věcí) nebo mobilních zařízeních.
 
 \subsection*{Intel Neural Compute Stick 2}
 
+Intel Neural Compute Stick 2 (NCS2) \cite{ncs2} (obrázek \ref{obrazek:ncs2} je akcelerátor neuronových sítí zaměřený na počítačové vidění. Obsahuje VPU (vision processing unit) Intel Movidius X. Připojuje se k počítači přes rozhraní USB 3.0 a umožňuje urychlení neuronové sítě bez použití cloudu a za nízkých energetických nároků (například v kombinaci s Rasspberry Pi). Podporuje mj. frameworky TensorFlow, Caffee, PyTorch popsané v sekci \ref{sekce:frameworky_pro_ns}. Pro práci s NCS2 se používá knihovna/framework OpenVINO \cite{openvino}. 
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.25}{\includegraphics{obrazky-figures/ncs2.png}}
+  \label{obrazek:ncs2}
+  \caption{Intel Neural Compute Stick 2 \cite{ncs2}}
+  \end{center}
+\end{figure}
+
+Experimenty provedené v \cite{ncs2testYolo} porovnávají výkonnost akcelerátorů Nvidia Jetson Nano, Nvidia Jetson Xavier NX a Raspberry Pi 4B s NCS2. K porovnání posloužily frameworky YOLOv3 popsaný v sekci \ref{sekce:NSdetektory} a YOLOv3--tiny. Experimenty byly založeny na detekci objektů ve dvou videích.
+\begin{itemize}
+  \item \emph{Video1} -- rozlišení 768 $\times$ 436 pixelů, celkem 1596 framů
+  \item \emph{Video2} -- rozlišení 1920 $\times$ 1080 pixelů, celkem 960 framů 
+\end{itemize}
+
+Naměřené výsledky zobrazuje obrázek \ref{obrazek:ncs2test}.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.5}{\includegraphics{obrazky-figures/ncs2test.png}}
+  \label{obrazek:ncs2test}
+  \caption{Výsledky testu akcelerátorů neuronovýxh sítí s modelem YOLOv3 a~YOLOv3-tiny \cite{ncs2testYolo}}
+  \end{center}
+\end{figure}
+
+Z tabulky v obrázku můžeme vidět, že NCS2 dosahuje podobných výsledků detekce ve \emph{Videu1} jako Jetson Nano a zároveň nejméně zatěžuje procesor. U \emph{Videa2} má NCS2 nejlepší výsledky detekce. Využití paměti s větším vstupem roste, stále je však mezi konkurenty nejnižší, to samé lze řící o spotřebě energie. S dostatečně dobrým modelem neuronové sítě je NCS2 úsporným akcelerátorem s vysokou úspěšností detekce.
+
+
+\subsection*{OpenVINO}
+Framework OpenVINO se stará o konverzi a optimalizaci natrénovaného modelu neuronové sítě v jednom z podporovaných frameworků (viz obrázek \ref{obrazek:ovchart}) pro použití na NCS2 nebo jiném zařízení (procesory, grafické karty). OpenVINO se nezaměřuje pouze na oblast počítačového vidění ale na neuronové sítě obecně.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.22}{\includegraphics{obrazky-figures/ovchart.png}}
+  \label{obrazek:ovchart}
+  \caption{Využití frameworku OpenVINO \cite{openvino}}
+  \end{center}
+\end{figure}
+
+
+\section{Frameworky pro neuronové sítě}
+\label{sekce:frameworky_pro_ns}
 
 
 

@@ -12,16 +12,18 @@
 \contentsline {section}{\numberline {4.1}Neuronové sítě}{14}{section.4.1}%
 \contentsline {section}{\numberline {4.2}Datasety}{17}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Detektory obličeje}{19}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Akcelerace detekce}{22}{section.4.4}%
-\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{23}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Použité nástroje}{23}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{23}{section.5.2}%
-\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{23}{section.5.3}%
-\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{24}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Postup testování}{24}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Porovnání výsledků}{24}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Shrnutí}{24}{section.6.3}%
-\contentsline {chapter}{\numberline {7}Závěr}{25}{chapter.7}%
+\contentsline {section}{\numberline {4.4}Akcelerace}{24}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Frameworky pro neuronové sítě}{26}{section.4.5}%
+\contentsline {chapter}{\numberline {5}Implementace algoritmu pro akceleraci detekce obličeje}{27}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Použité nástroje}{27}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Trénování neuronové sítě}{27}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Detekce obličejů natrénovanou sítí}{27}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Porovnání výkonnosti řešení s existujícími detektory}{28}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Postup testování}{28}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Porovnání výsledků}{28}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Shrnutí}{28}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Závěr}{29}{chapter.7}%
+\contentsline {chapter}{Literatura}{30}{chapter*.29}%
 \ttl@starttoc {chapters@1}
-\contentsline {chapter}{\numberline {A}Priloha}{26}{appendix.A}%
+\contentsline {chapter}{\numberline {A}Priloha}{34}{appendix.A}%
 \contentsfinish 
