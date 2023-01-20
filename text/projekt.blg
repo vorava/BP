@@ -21,6 +21,8 @@ Warning--empty year and revised in TinaFace
 Warning--empty edition in localBinaryPatterns
 Warning--empty edition in fdReviewNS
 Warning--empty number in fdReviewNS
+Warning--empty year in nsFrameworks
+Warning--empty year and revised in nsFrameworks
 Warning--empty isbn and issn in digiface1m
 Warning--empty year in violaJonesArticle
 Warning--empty year and revised in violaJonesArticle
@@ -96,45 +98,45 @@ Warning--empty year in darkFace
 Warning--empty year and revised in darkFace
 Warning--empty editor and organization in fdExtremelyLowConditions
 Warning--empty isbn and issn in fdExtremelyLowConditions
-You've used 42 entries,
+You've used 43 entries,
             3946 wiz_defined-function locations,
-            1081 strings with 13513 characters,
-and the built_in function-call counts, 21253 in all, are:
-= -- 1589
-> -- 788
-< -- 86
-+ -- 326
-- -- 273
-* -- 1258
-:= -- 2771
-add.period$ -- 156
-call.type$ -- 42
-change.case$ -- 316
+            1087 strings with 13646 characters,
+and the built_in function-call counts, 21649 in all, are:
+= -- 1619
+> -- 797
+< -- 87
++ -- 329
+- -- 275
+* -- 1279
+:= -- 2815
+add.period$ -- 159
+call.type$ -- 43
+change.case$ -- 322
 chr.to.int$ -- 78
-cite$ -- 124
-duplicate$ -- 1291
-empty$ -- 2719
-format.name$ -- 213
-if$ -- 5077
+cite$ -- 127
+duplicate$ -- 1318
+empty$ -- 2779
+format.name$ -- 215
+if$ -- 5177
 int.to.chr$ -- 0
-int.to.str$ -- 42
+int.to.str$ -- 43
 missing$ -- 0
-newline$ -- 285
-num.names$ -- 80
-pop$ -- 572
+newline$ -- 291
+num.names$ -- 82
+pop$ -- 588
 preamble$ -- 1
-purify$ -- 215
+purify$ -- 218
 quote$ -- 0
-skip$ -- 930
+skip$ -- 952
 stack$ -- 0
-substring$ -- 835
-swap$ -- 242
-text.length$ -- 65
+substring$ -- 843
+swap$ -- 247
+text.length$ -- 67
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 84
-warning$ -- 82
-while$ -- 132
-width$ -- 44
-write$ -- 537
-(There were 83 warnings)
+type$ -- 86
+warning$ -- 84
+while$ -- 134
+width$ -- 45
+write$ -- 549
+(There were 85 warnings)

@@ -143,28 +143,24 @@
   %supervisor.title.a={},    %titul za jménem (nepovinné) / title after the name (optional)
   % Klíčová slova / keywords
   keywords.cs={Detekce obličeje, akcelerace neuronových sítí, NCS 2, detekce v reálných podmínkách, neuronové sítě, Python, počítačové vidění}, % klíčová slova v českém či slovenském jazyce / keywords in czech or slovak language
-  keywords.en={Face detection, Neural Networks acceleration, NCS 2, detection in real conditions, Neural Networks, Python, Compute Vision}, % klíčová slova v anglickém jazyce / keywords in english
+  keywords.en={Face detection, Neural Networks acceleration, NCS 2, Detection in Real World Conditions, Neural Networks, Python, Computer Vision}, % klíčová slova v anglickém jazyce / keywords in english
   %keywords.en={Here, individual keywords separated by commas will be written in English.},
   % Abstrakt / Abstract
   abstract.cs={
-  Cílem této práce je vytvořit detektor obličejů v záznamech s důrazem na rychlost a přesnost s využitím technologie neuronových sítí a specializovaného hardwaru pro tyto sítě. 
-  Práce obsahuje sumarizaci dosavadních řešení detektorů a navrhuje řešení pro akceleraci detektorů. Toto řešení spočívá v \todo{TODO}.
-  Navržené řešení bylo implementováno a bylo dosaženo výsledků \todo{Výsledky experimentů}.
-  Na základě výsledků bylo docíleno \todo{zrychlení detekce o XX\%}
-  Přínosem této práce je hlavně \todo{přínos}
+  Cílem této práce je vytvořit neuronovou síť pro rozpoznávání obličejů ve špatných světelných podmínkách, tuto síť akcelerovat a porovnat s existujícími řešeními.
+  Problém detekce je řešen konvoluční neuronovou sítí natrénovanou s využitím dat z datasetů obličejů a akcelerovanou akcelerátorem Intel Neural Compute Stick 2. 
+  Práce obsahuje sumarizaci dosavadních řešení a algoritmů detekce (jak klasických metod, tak těch využívajících neuronové sítě) a poskytuje porovnání těchto řešení.
   }, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
   abstract.en={Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}, % abstrakt v anglickém jazyce / abstract in english
   %abstract.en={An abstract of the work in English will be written in this paragraph.},
   % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
-  declaration={Prohlašuji, že jsem tuto bakalářskou práci vypracoval samostatně pod vedením pana X...
-Další informace mi poskytli...
+  declaration={Prohlašuji, že jsem tuto semestrální práci vypracoval samostatně pod vedením pana Ing. Tomáše Goldmanna.
 Uvedl jsem všechny literární prameny, publikace a další zdroje, ze kterých jsem čerpal.},
   %declaration={I hereby declare that this Bachelor's thesis was prepared as an original work by the author under the supervision of Mr. X
 % The supplementary information was provided by Mr. Y
 % I have listed all the literary sources, publications and other sources, which were used during the preparation of this thesis.},
   % Poděkování (nepovinné, nejlépe v jazyce práce) / Acknowledgement (optional, ideally in the language of the thesis)
-  acknowledgment={V této sekci je možno uvést poděkování vedoucímu práce a těm, kteří poskytli odbornou pomoc
-(externí zadavatel, konzultant apod.).},
+  acknowledgment={Chtěl bych poděkovat panu Ing. Tomáši Goldmannovi za vedení práce a poskytnuté konzultace.},
   %acknowledgment={Here it is possible to express thanks to the supervisor and to the people which provided professional help
 %(external submitter, consultant, etc.).},
   % Rozšířený abstrakt (cca 3 normostrany) - lze definovat zde nebo níže / Extended abstract (approximately 3 standard pages) - can be defined here or below
@@ -341,7 +337,7 @@ Uvedl jsem všechny literární prameny, publikace a další zdroje, ze kterých
   \ifenglish
     \input{projekt-30-prilohy-appendices-en}
   \else
-    \input{prilohy}
+   % \input{prilohy}
   \fi
   
   % Kompilace po částech (viz výše, nutno odkomentovat)
