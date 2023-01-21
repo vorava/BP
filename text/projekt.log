@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  21 JAN 2023 10:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  21 JAN 2023 10:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -676,46 +676,46 @@ File: obrazky-figures/fddeleni.png Graphic file (type png)
 Package pdftex.def Info: obrazky-figures/fddeleni.png  used on input line 65.
 (pdftex.def)             Requested size: 329.42995pt x 178.86781pt.
  [4 <./obrazky-figures/fdexample.png> <./obrazky-figures/fddeleni.png>]
-<obrazky-figures/fdproblems.png, id=170, 673.51625pt x 470.75874pt>
+<obrazky-figures/fdproblems.png, id=171, 673.51625pt x 470.75874pt>
 File: obrazky-figures/fdproblems.png Graphic file (type png)
 <use obrazky-figures/fdproblems.png>
 Package pdftex.def Info: obrazky-figures/fdproblems.png  used on input line 90.
 (pdftex.def)             Requested size: 673.5146pt x 470.7576pt.
  [5] [6 <./obrazky-figures/fdproblems.png>]
-<obrazky-figures/illuminationexample.png, id=192, 432.4155pt x 111.41624pt>
+<obrazky-figures/illuminationexample.png, id=193, 432.4155pt x 111.41624pt>
 File: obrazky-figures/illuminationexample.png Graphic file (type png)
 <use obrazky-figures/illuminationexample.png>
 Package pdftex.def Info: obrazky-figures/illuminationexample.png  used on input line 127.
 (pdftex.def)             Requested size: 432.41444pt x 111.41597pt.
-<obrazky-figures/lbp.png, id=198, 502.87875pt x 91.542pt>
+<obrazky-figures/lbp.png, id=199, 502.87875pt x 91.542pt>
 File: obrazky-figures/lbp.png Graphic file (type png)
 <use obrazky-figures/lbp.png>
 Package pdftex.def Info: obrazky-figures/lbp.png  used on input line 143.
 (pdftex.def)             Requested size: 502.87752pt x 91.54178pt.
  [7 <./obrazky-figures/illuminationexample.png>]
-<obrazky-figures/lbpPrimitives.png, id=216, 366.168pt x 221.02576pt>
+<obrazky-figures/lbpPrimitives.png, id=217, 366.168pt x 221.02576pt>
 File: obrazky-figures/lbpPrimitives.png Graphic file (type png)
 <use obrazky-figures/lbpPrimitives.png>
 Package pdftex.def Info: obrazky-figures/lbpPrimitives.png  used on input line 155.
 (pdftex.def)             Requested size: 366.1671pt x 221.0252pt.
-<obrazky-figures/haarfeatures.png, id=224, 497.4585pt x 376.40625pt>
+<obrazky-figures/haarfeatures.png, id=225, 497.4585pt x 376.40625pt>
 File: obrazky-figures/haarfeatures.png Graphic file (type png)
 <use obrazky-figures/haarfeatures.png>
 Package pdftex.def Info: obrazky-figures/haarfeatures.png  used on input line 169.
 (pdftex.def)             Requested size: 497.45728pt x 376.40532pt.
  [8 <./obrazky-figures/lbp.png> <./obrazky-figures/lbpPrimitives.png>]
-<obrazky-figures/haarexample.png, id=240, 973.6375pt x 453.695pt>
+<obrazky-figures/haarexample.png, id=241, 973.6375pt x 453.695pt>
 File: obrazky-figures/haarexample.png Graphic file (type png)
 <use obrazky-figures/haarexample.png>
 Package pdftex.def Info: obrazky-figures/haarexample.png  used on input line 178.
 (pdftex.def)             Requested size: 973.63512pt x 453.6939pt.
-<obrazky-figures/integralimage.png, id=245, 439.6425pt x 220.4235pt>
+<obrazky-figures/integralimage.png, id=246, 439.6425pt x 220.4235pt>
 File: obrazky-figures/integralimage.png Graphic file (type png)
 <use obrazky-figures/integralimage.png>
 Package pdftex.def Info: obrazky-figures/integralimage.png  used on input line 189.
 (pdftex.def)             Requested size: 439.64142pt x 220.42294pt.
  [9 <./obrazky-figures/haarfeatures.png> <./obrazky-figures/haarexample.png>]
-<obrazky-figures/hogexample.png, id=258, 592.2125pt x 401.5pt>
+<obrazky-figures/hogexample.png, id=259, 592.2125pt x 401.5pt>
 File: obrazky-figures/hogexample.png Graphic file (type png)
 <use obrazky-figures/hogexample.png>
 Package pdftex.def Info: obrazky-figures/hogexample.png  used on input line 209.
@@ -725,30 +725,30 @@ Kapitola 3.
 [12
 
 ]
-<obrazky-figures/perceptron.png, id=292, 995.72pt x 449.68pt>
+<obrazky-figures/perceptron.png, id=293, 995.72pt x 449.68pt>
 File: obrazky-figures/perceptron.png Graphic file (type png)
 <use obrazky-figures/perceptron.png>
 Package pdftex.def Info: obrazky-figures/perceptron.png  used on input line 247.
 (pdftex.def)             Requested size: 995.71758pt x 449.6789pt.
-<obrazky-figures/nsexample.png, id=296, 1903.11pt x 957.5775pt>
+<obrazky-figures/nsexample.png, id=297, 1903.11pt x 957.5775pt>
 File: obrazky-figures/nsexample.png Graphic file (type png)
 <use obrazky-figures/nsexample.png>
 Package pdftex.def Info: obrazky-figures/nsexample.png  used on input line 275.
 (pdftex.def)             Requested size: 1903.10538pt x 957.57516pt.
  [13 <./obrazky-figures/perceptron.png>]
-<obrazky-figures/fitting.png, id=314, 2250.4075pt x 991.705pt>
+<obrazky-figures/fitting.png, id=315, 2250.4075pt x 991.705pt>
 File: obrazky-figures/fitting.png Graphic file (type png)
 <use obrazky-figures/fitting.png>
 Package pdftex.def Info: obrazky-figures/fitting.png  used on input line 303.
 (pdftex.def)             Requested size: 2250.40204pt x 991.70259pt.
  [14 <./obrazky-figures/nsexample.png>]
-<obrazky-figures/celeba.png, id=325, 558.28575pt x 388.45125pt>
+<obrazky-figures/celeba.png, id=326, 558.28575pt x 388.45125pt>
 File: obrazky-figures/celeba.png Graphic file (type png)
 <use obrazky-figures/celeba.png>
 Package pdftex.def Info: obrazky-figures/celeba.png  used on input line 319.
 (pdftex.def)             Requested size: 558.28438pt x 388.45029pt.
  [15 <./obrazky-figures/fitting.png>]
-<obrazky-figures/digiface.png, id=336, 665.48625pt x 115.02975pt>
+<obrazky-figures/digiface.png, id=337, 665.48625pt x 115.02975pt>
 File: obrazky-figures/digiface.png Graphic file (type png)
 <use obrazky-figures/digiface.png>
 Package pdftex.def Info: obrazky-figures/digiface.png  used on input line 329.
@@ -757,42 +757,42 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 33
  (C:\Users\vojta\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [16 <./obrazky-figures/celeba.png> <./obrazky-figures/digiface.png>]
-<obrazky-figures/principkonvoluce.png, id=359, 1587.9325pt x 509.905pt>
+<obrazky-figures/principkonvoluce.png, id=360, 1587.9325pt x 509.905pt>
 File: obrazky-figures/principkonvoluce.png Graphic file (type png)
 <use obrazky-figures/principkonvoluce.png>
 Package pdftex.def Info: obrazky-figures/principkonvoluce.png  used on input line 363.
 (pdftex.def)             Requested size: 1587.92863pt x 509.90375pt.
  [17]
-<obrazky-figures/cnnpipeline.png, id=371, 781.92125pt x 212.795pt>
+<obrazky-figures/cnnpipeline.png, id=372, 781.92125pt x 212.795pt>
 File: obrazky-figures/cnnpipeline.png Graphic file (type png)
 <use obrazky-figures/cnnpipeline.png>
 Package pdftex.def Info: obrazky-figures/cnnpipeline.png  used on input line 375.
 (pdftex.def)             Requested size: 781.91934pt x 212.79446pt.
-<obrazky-figures/cnnpooling.png, id=376, 1174.3875pt x 732.7375pt>
+<obrazky-figures/cnnpooling.png, id=377, 1174.3875pt x 732.7375pt>
 File: obrazky-figures/cnnpooling.png Graphic file (type png)
 <use obrazky-figures/cnnpooling.png>
 Package pdftex.def Info: obrazky-figures/cnnpooling.png  used on input line 394.
 (pdftex.def)             Requested size: 1174.38464pt x 732.73572pt.
  [18 <./obrazky-figures/principkonvoluce.png> <./obrazky-figures/cnnpipeline.png>] [19 <./obrazky-figures/cnnpooling.png (PNG copy)>]
-<obrazky-figures/cnncomparison.png, id=410, 398.6895pt x 129.48375pt>
+<obrazky-figures/cnncomparison.png, id=411, 398.6895pt x 129.48375pt>
 File: obrazky-figures/cnncomparison.png Graphic file (type png)
 <use obrazky-figures/cnncomparison.png>
 Package pdftex.def Info: obrazky-figures/cnncomparison.png  used on input line 421.
 (pdftex.def)             Requested size: 398.68852pt x 129.48341pt.
-<obrazky-figures/iepostup.png, id=413, 904.37875pt x 61.22874pt>
+<obrazky-figures/iepostup.png, id=414, 904.37875pt x 61.22874pt>
 File: obrazky-figures/iepostup.png Graphic file (type png)
 <use obrazky-figures/iepostup.png>
 Package pdftex.def Info: obrazky-figures/iepostup.png  used on input line 451.
 (pdftex.def)             Requested size: 904.37656pt x 61.22858pt.
  [20 <./obrazky-figures/cnncomparison.png>]
-<obrazky-figures/psnrssim.png, id=428, 416.757pt x 263.18324pt>
+<obrazky-figures/psnrssim.png, id=429, 416.757pt x 263.18324pt>
 File: obrazky-figures/psnrssim.png Graphic file (type png)
 <use obrazky-figures/psnrssim.png>
 Package pdftex.def Info: obrazky-figures/psnrssim.png  used on input line 461.
 (pdftex.def)             Requested size: 416.75598pt x 263.1826pt.
  [21 <./obrazky-figures/iepostup.png> <./obrazky-figures/psnrssim.png>] [22]
 Kapitola 4.
-<obrazky-figures/nest-hello.png, id=455, 542.025pt x 303.38344pt>
+<obrazky-figures/nest-hello.png, id=456, 542.025pt x 303.38344pt>
 File: obrazky-figures/nest-hello.png Graphic file (type png)
 <use obrazky-figures/nest-hello.png>
 Package pdftex.def Info: obrazky-figures/nest-hello.png  used on input line 541.
@@ -800,18 +800,18 @@ Package pdftex.def Info: obrazky-figures/nest-hello.png  used on input line 541.
 [23
 
 ] [24 <./obrazky-figures/nest-hello.png>]
-<obrazky-figures/ncs2.png, id=491, 1284.8pt x 722.7pt>
+<obrazky-figures/ncs2.png, id=492, 1284.8pt x 722.7pt>
 File: obrazky-figures/ncs2.png Graphic file (type png)
 <use obrazky-figures/ncs2.png>
 Package pdftex.def Info: obrazky-figures/ncs2.png  used on input line 579.
 (pdftex.def)             Requested size: 1284.79688pt x 722.69823pt.
-<obrazky-figures/ncs2test.png, id=496, 844.95676pt x 254.1495pt>
+<obrazky-figures/ncs2test.png, id=497, 844.95676pt x 254.1495pt>
 File: obrazky-figures/ncs2test.png Graphic file (type png)
 <use obrazky-figures/ncs2test.png>
 Package pdftex.def Info: obrazky-figures/ncs2test.png  used on input line 595.
 (pdftex.def)             Requested size: 844.9547pt x 254.14888pt.
  [25 <./obrazky-figures/ncs2.png>]
-<obrazky-figures/ovchart.png, id=513, 1927.2pt x 1084.05pt>
+<obrazky-figures/ovchart.png, id=514, 1927.2pt x 1084.05pt>
 File: obrazky-figures/ovchart.png Graphic file (type png)
 <use obrazky-figures/ovchart.png>
 Package pdftex.def Info: obrazky-figures/ovchart.png  used on input line 609.
@@ -842,9 +842,9 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  73i,10n,77p,911b,670s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmcsc10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb>
-Output written on projekt.pdf (34 pages, 5856486 bytes).
+Output written on projekt.pdf (34 pages, 4156450 bytes).
 PDF statistics:
- 665 PDF objects out of 1000 (max. 8388607)
+ 666 PDF objects out of 1000 (max. 8388607)
  148 named destinations out of 1000 (max. 500000)
  285 words of extra memory for PDF output out of 10000 (max. 10000000)
 
