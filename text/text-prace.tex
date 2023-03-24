@@ -287,6 +287,8 @@ Aby neuronová síť mohla fungovat, musí se natrénovat (tzn. nastavit co nejp
   \item \textbf{Posilované učení} (anglicky reinforcement learning) -- tento druh učení není vázán pouze na data z~datasetu, ale navíc interaguje s~prostředím.
 \end{itemize}
 
+Trénování neuronových sítí je rozděleno do tzv. \textbf{epoch}, kdy jedna epocha znamená, že všechna trénovací data byla zpracována neuronovou sítí právě jedenkrát. S pojemem epocha souvisí pojem \textbf{batch}, který udává počet trénovacích dat, které síť zpracuje, než dojde k aktualizaci jejích vnitřních stavů. Běžně používané hodnoty batch jsou mocniny 2 (2, 4, 8, 16, 32, 64). 
+
 \subsection*{Chyby}
 Abychom byli schopní aktualizovat váhy vstupů jednotlivých neuronů, je potřeba měřit chybovost výstupu neuronové sítě. Jednou z~možností měření chyby (využitelné například při lineární regresi) je \emph{mean squared error}. Dle vztahu \ref{vzorec:mse} je vypočítána chybovost a jsou upraveny váhy. Snahou je chybu co nejvíce zmenšit.
 
@@ -312,13 +314,13 @@ Při trénování může dojít k~situaci, kdy neuronová síť zvládá zpracov
 Datasetem rozumíme soubor podobných dat (například obrázků obličejů, číslic, předmětů nebo textů). Pro detekci obličejů se využívají datasety obsahující fotografie a videa lidí z~veřejně dostupných zdrojů (internet, televize) nebo jsou datasety přímo účelně vytvářeny (fotografování lidí) a následně je možné si je koupit nebo stáhnout. Data v~datasetech je nutné tzv. anotovat (označit co na daném obrázku je). V~případě tváří se může jednat například o~věk osoby, pohlaví, rasu, aby bylo možné určit zda po klasifikaci neuronovou sítí výstup odpovídá požadovanému výsledku. Následující podsekce popisují datasety používané k~učení neuronových sítí pro detekci obličejů.
 
 \subsection*{Datasety lidských obličejů}
-Dataset \textbf{CelebFaces Attributes Dataset} (CelebA) \cite{celeba} obsahuje více než $200 000$ obrázků obličejů známých osobností. Obrázky obsahují fotografie pořízené z~různých úhlů a jsou velmi dobře anotovány. Tento dataset je volně přístupný pro nekomerční účely.
+Dataset \textbf{WIDER FACE}\footnote{\url{http://shuoyang1213.me/WIDERFACE/}} je dataset snímků obličejů obsahující 32203 obrázků ve skupinách trénovací, validační, testovací s poměrovým rozdělením 40\%/10\%/50\%. Dataset je volně přístupný a autoři poskytují k trénovacím a validačním obrázkům anotační soubory s pozicemi obličejů. Fotografie spadají do různých skupin jako jsou různé pozice hlavy, různé zakrytí obličeje nebo špatné světelné podmínky. Fotografie jsou navíc rozděleny do 61 kategorií podle událostí, za kterých byly pořízeny (například demonstrace nebo volby).
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.6}{\includegraphics{obrazky-figures/celeba.png}}
   \label{obrazek:celeba}
-  \caption{Příklady obličejů z~datasetu CelebA}
+  \caption{Příklady obličejů z~datasetu WIDER FACE}
   \end{center}
 \end{figure}
 
@@ -611,6 +613,190 @@ Framework/knihovna OpenVINO se stará o~konverzi a optimalizaci natrénovaného 
   \caption{Využití frameworku OpenVINO \cite{openvino}}
   \end{center}
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       KAPITOLA Návrh
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Návrh řešení}
+Tato kapitola popisuje jak nástroje a postupy použité při realizaci řešení, tak také způsob získávání dat pro natrénování detekční neuronové sítě. Dále se kapitola zabývá návrhem této konvoluční neuronové sítě a návrhem způsobu získávání výsledků detekčních experimentů. V kapitole také nalezneme popis plán funkcí uživatelského rozhraní detektoru a přiblížení metody Mirnet.
+
+\section{Použité nástroje}
+\label{sekce:pouzite_nastroje}
+K programování, akceleraci a vizualizaci výsledků detekce s využitím neuronových sítí je potřeba zvolit vhodný programovací jazyk, vhodné knihovny a frameworky. Mezi nejpoužívanější jazyky k tomuto účelu patří C++ a Python. Ze zadání byl vybrán jazyk Python. Tvorba neuronových sítí je usnadněna, pomocí k tomu určených knihoven jako jsou TensorFlow, PyTorch nebo ONNX. Akceleraci neuronových sítí na zařízeních značky Intel (tedy i NCS2) se věnuje knihovna OpenVINO. Aby bylo možné ověřit funkčnost detektoru, je potřeba grafické rozhraní pro zobrazování detekce. K tomuto účelu lze využít knihoven pro grafická uživatelská rozhraní jako jsou Tkinter nebo PyQt. Tato část vystihuje soubor zvolených nástrojů k vytvoření detektoru obličejů a možnostem jeho použití.
+
+\subsection*{TensorFlow}
+Framework \textbf{TensorFlow}, částečně popsaný v sekci \ref{sekce:frameworky_pro_ns}, slouží k programování aplikací strojového učení. Využívá knihovnu \textbf{Keras} a umožňuje vytvářet nebo používat existující modely neuronových sítí. Tvorba neuronových sítí je realizována spojováním různých vrstev sítě a nastavováním aktivačních funkcí, filtrů apod.
+TensorFlow navíc poskytuje API pro různé aplikace umělé inteligence, jedno z těchto API se věnuje detekci objektů.\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}}
+
+V rámci frameworku TensorFlow je integrován program TensorBoard umožňující vizualizovat výsledky a průběh trénování a výsledky evaluace TensorFlow modelů.
+
+\subsection*{OpenVINO}
+Teoreticky je tato knihovna popsána v předcházející kapitole. Praktické použití knihovny spočívá ve využití části nazvané \textbf{Model Optimizer} sloužící k optimalizování modelu neuronové sítě pro dosažení nižší latence při zpracování obrázku při detekci. Model může být dále akcelerován pomocí kvantování hodnot vah jednotlivých vrstev neuronů. Knihovna zároveň funguje jako programové rozhraní pro práci s Intel Neural Compute Stick 2 a dalšími akcelerátory značky Intel.
+
+\subsection*{PyQt6}
+Knihovna PyQt6 je Python knihovna vycházející z C++ implementace grafické knihovy Qt6. Používá se k návrhu grafického uživatelského rozhraní aplikací napsaných v jazyce Python, pracuje se signály a sloty (události a jejich obsluha). Knihovna poskytuje rozhraní a třídy pro práci s více vlákny, umožňuje používat dialogová okna a je snadná na používání.
+
+
+\section{Data}
+\label{sekce:data_navrh}
+Pro trénování neuronových sítí je potřeba mít dostatek trénovacích dat. Detektory obličejů jsou trénovány na obrázcích z datasetů, které musejí mít přidruženy anotační soubory se souřadnicemi poloh obličejů. V této sekci je popsán návrh vhodného datasetu a možnosti jeho rozšíření pomocí augmentace.
+
+\subsection*{Datasety}
+Mezi existujícími datasety obličejů lze v jednoduchosti nalézt dva druhy dat. Jedním druhem jsou takové datasety, které obsahují fotografie obličejů v poměru jeden obličej na jednu fotografii. Příkladem takového datasetu mohou být datasety \textbf{DigiFace1M} nebo \textbf{UTKFace} popsané v sekci \ref{sekce:datasety}. Tyto datasety mohou sloužit jako datasety k detekci obličejů, ale hodí se spíše na klasifikaci/rozpoznávání. Anotační soubory buď existují a obsahují souřadnice hranic obličeje na snímku, nebo úplně chybí a obrázek tak obsahuje pouze obličej -- souřadnice odpovídají rozměrům obrázku.
+
+Druhou možností jsou datasety, kde je na jedné fotografii větší množství obličejů (případně je zde jen jeden obličej, ale nezabírá celou plochu obrázku). Tyto datasety mívají k daným obrázkům přidruženy anotační soubory, obsahující minimálně koordináty tváří, v případě některých (například \textbf{WIDER FACE}, zmíněný v sekci \ref{sekce:datasety}) jsou doplněny informace o rozmazání, póze, zastínění anebo zakrytí daného obličeje. Takovéto datasety jsou vhodné pro trénování detekčních neuronových sítí.
+
+Body, udávající takzvané ohraničující boxy (anglicky \emph{bounding boxes}) v nichž se vyskytují tváře je možné zapsat v různých tvarech. Základní dělení je na tři typy zápisu těchto souřadnic: \textbf{Pascal VOC}, \textbf{COCO} a \textbf{YOLO} \cite{annotace_formaty}.
+
+\textbf{PascalVOC} anotuje obličeje ve tvaru $x_{min}, y_{min}, x_{max}, y_{max}$, kde $x_{min}, y_{min}$ jsou souřadnice levého horního rohu a $x_{max}, y_{max}$ jsou souřadnice pravého dolního rohu ohraničení. Formát \textbf{COCO} využívá stejně jako PascalVOC hodnoty $x_{min}, y_{min}$ a přidává k nim údaje $width$ a $height$, odpovídající šířce a výšce hraničního obdélníku. Třetí z nejpoužívanějších stylů značení, \textbf{YOLO}, nahrazuje hodnoty $x_{min}, y_{min}$ hodnotami $x_{center}, y_{center}$, které značí střed ohraničení. Tento formát navíc stejně jako COCO poskytuje hodnoty $width$ a $height$, aby bylo možné určit celou plochu ohraničení. Graficky tyto formáty zobrazuje obrázek \ref{obrazek:annotace_formaty}.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.33}{\includegraphics{obrazky-figures/annotation_formats.png}}
+  \label{obrazek:annotace_formaty}
+  \caption{Zobrazení anotací pomocí různých formátů. Zleva PascalVOC, COCO a YOLO}
+  \end{center}
+\end{figure}
+ 
+\subsection*{Augmentace}
+Dat z datasetů nemusí být vždy tolik, kolik je zapotřebí k natrénování dostatečně přesné neuronové sítě, nebo tyto data nemusejí přesně odpovídat zvolenému účelu a vytváření nových dat by bylo neefektivní. V těchto případech lze tento problém řešit augmentací.
+
+Augmentace (s daty, jimiž jsou obrázky) spočívá v kopírování existujících dat s provedením různých úprav (jas, vystřižení části obrázu, otočení, kontrast, ISO, gamma, rozmazání, záměna barevných kanálů apod.). Takto nově vzniklá data pak lze použít jako dodatečná data k trénovacím obrázkům. Augmentaci lze provádět ručně, ale existují i specializované knihovny zajišťující, že v nově vzniklém obrázku budou automaticky vytvořeny anotační soubory se správně pozměněnými pozicemi obličejů.
+
+\section{Detekční neuronová síť}
+Neuronová síť pro detekci obličejů je, jak už bylo zmíněno výše, konvoluční neuronová síť, složená z několika různých vrstev (konvoluční vrstva, poolingová vrstva a další). Jelikož je detekční model často složen z velmi mnoha částí (např. generátor kotevních bodů/boxů -- anglicky \emph{anchor boxes}) a je náročné jej naprogramovat, poskytují frameworky pro práci s umělou inteligencí možnost využití API s předchystanými modely. Tyto modely pak je možno buď trénovat tzv. \uv{od nuly} nebo lze začít s trénováním částečně předtrénované sítě.
+
+Při detekci ve zhoršených světelných podmínkách je vhodné využít některou z metod vylepšení obrázku (viz metody v sekci \ref{sekce:NSdetektory}). Jednou z nejlepších takovýchto metod je metoda Mirnet, tvořená natrénovanou neuronovou sítí, převádějící tmavé a špatně osvětlené obrázky na obrázky s lepší viditelností.
+
+Tato sekce popisuje jak API pro detekci objektů z knihovny TensorFlow, tak detailně také metodu Mirnet.
+
+\subsection*{TensorFlow 2 Object Detection API}
+Framework TensorFlow poskytuje open\,--\,source API pro práci s modely pro detekci objektů\footnote{\url{https://github.com/tensorflow/models/tree/master/research/object_detection}} nebo například sledování (tracking) objektů. Toto API je podporováno TensorFlow verzí 1 i verzí 2 a umožňuje jednoduchým způsobem trénovat, validovat a testovat předpřipravené modely. Modely, které TensorFlow 2 Object Detection API (TF OD API) poskytuje jsou dostupné v tzv. TensorFlow 2 Detection Model Zoo. Tyto modely jsou předtrénovany na datasetu COCO 2017 a lze je tak využít na detekování jakýchkoliv objektů. Mezi nejznámější modely poskytované v rámci Detection Model Zoo patří \textbf{SSD ResNet50 V1 FPN} nebo \textbf{Faster R-CNN ResNet101}. Modely se liší mj. liší rozlišeními, s nimiž pracují, od 512 $\times$ 512 pixelů až po 1536 $\times$ 1536 pixelů.
+
+TF OD API ke každému předtrénovanému modelu poskytuje základní informace o rychlosti detekce, o přesnosti změřené na validačních datech z výše zmíněného COCO datasetu a také informaci o tvaru výstupu neuronové sítě (souřadnice/klíčové body). Souřadnicový systém ohraničujích obdélníků odpovídá formátu PascalVOC. 
+
+S modely se pracuje pomocí skriptů v jazyce Python (trénování, evaluace, export), nastavování se provádí skrze editaci konfiguračních souborů, které jsou poskytovány pro každý model zvlášť. Při trénování pak dochází k vytváření tzv. \emph{checkpointů}, vytvoření souborů s údaji o vahách neuronů. Trénování neprobíhá v epochách jak je tomu u TensorFlow běžné, ale v krocích, kdy jeden krok znamená, že síť zpracuje počet obrázků daných velikostí \textbf{batch}. Z toho vyplývá nasledující vztah:
+
+\begin{equation}
+  epocha = \frac{pocetObrazku}{batch}  \;\;[kroky]  
+\end{equation}
+
+
+\subsection*{Mirnet}
+Metoda Mirnet\cite{mirnet} je sofistikovaná metoda pro zlepšování kvality špatně osvětlených obrázků pomocí neuronové sítě. Metoda je tvořena několika bloky (Feature Extractor, Dual Attention Unit, Selective Kernel Feature Fusion a další), které postupně zpracovávají vstupní obrázek a snaží se jej zkvalitnit (zesvětlit, zvýraznit detaily). Architekturu Mirnetu zachycuje obrázek \ref{obrazek:mirnet}. Jelikož je Mirnet tvořen neuronovou sítí, je třeba jej před použitím natrénovat. K tomuto účelu je zapotřebí dataset s párovými obrázky, kdy oba obrázky zachycují stejný fenomén, ale na jednom z nich je snížená/zhoršená viditelnost (například tmou). Ideálním kandidátem na trénování, který splňuje tyto požadavky je dataset LoL Dataset\footnote{\url{https://daooshee.github.io/BMVC2018website/}} (ukázka viz obrázek \ref{obrazek:loldataset}). Dostatečně natrénovaná síť pak dokáže vylepšit vizuální kvalitu jakkéhokoliv obrázku, což je možno využít při detekci ve zhoršených světelných podmínkách.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.45}{\includegraphics{obrazky-figures/mirnet_arch.png}}
+  \label{obrazek:mirnet}
+  \caption{Architektura neuronové sítě metody Mirnet}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.35}{\includegraphics{obrazky-figures/loldataset.png}}
+  \label{obrazek:loldataset}
+  \caption{Ukázka párového snímku z datasetu LoL (vlevo normální snímek, vpravo stejný snímek se zhoršenou viditelností.)}
+  \end{center}
+\end{figure}
+ 
+\section{Uživatelské rozhraní}
+Výkonnost a úspěšnost detektorů může být vyhodnocována jednak veličinami přesnosti a rychlosti, ale také lidským pozorováním. Proto je vhodné detektory objektů používat ve spojení s grafickým uživatelským rozhraním, kdy jsou do promítaného videa nebo obrázku explicitně zakresleny lokátory detekovaných objektů, v tomto případě konkrétně tváří. Uživatelské rozhraní by ovšem mělo nejen umět přehrávat snímky a vykreslovat ohraničující obdélníky, ale také nabízet možnost kontroly přehrávání a možnost výběru vstupních dat. Nutnou součástí každého rozhraní pracujícího s videem by navíc měla být informace týkající se přehrávání -- aktuální čas a celková délka videa.
+
+K návrhu grafického prostředí lze využít různorodé postupy, programy a knihovny. V rámci tvorby uživatelského rozhraní k této práci byla využita knihovna PyQt6 popsaná v sekci \ref{sekce:pouzite_nastroje}.
+
+Aplikace navržená během tvorby této práce se však nestará jen o vyobrazení detekčních schopností navržené sítě, nýbrž také o přípravu dat pro vyhodnocení úspěšnosti a rychlosti detekce. Tato data (v případě úspěšnosti se jedná o procenta, v případě rychlosti pak o hodnotu FPS -- \emph{frames per second}, snímky za sekundu) finálně vyhodnocuje separátní program.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       KAPITOLA Implementace
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Implementace}
+\label{kapitola:implementace}
+Předchozí kapitola pojednávala o návrhu nástrojů a postupů pro vytvoření detektoru obličejů ve zhoršených světelných podmínkách, tato kapitola navazuje líčením o implementaci těchto postupů. Na začátku implementace detekční sítě stojí příprava trénovacích dat (obrázků a anotačních souborů), popsaná v sekci \ref{sekce:priprava_dat}. Následně je nutné vybrat a implementovat neuronovou síť detektoru a natrénovat ji (viz sekce \ref{sekce:detektor_obliceju_implementace}). Pro zrychlení detekece je poté využito akceleračních nástrojů popsaných v předchozích kapitolách, v nynější kapitole se tomuto věnuje sekce \ref{sekce:akcelerace_implementace}. K experimentům je nezbytné implementovat grafické uživatelské rozhraní (sekce \ref{sekce:gui}) a příslušné vyhodnocovací nástroje a programy (viz sekce \ref{sekce:nastroje_pro_experimenty}).
+
+\section{Příprava dat}
+\label{sekce:priprava_dat}
+Tématem této části je příprava fotografií z datasetu k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
+
+\subsection*{WIDER FACE dataset}
+Pro detekci obličejů bylo zásadní zvolit vhodný dataset. V průběhu práce byl zvažován a zkoušen dataset DARK FACE, ale kvůli malé úspěšnosti detekce takto natrénovaného detektoru v reálných experimentech, byl vybrán jiný dataset. Konkrétně dataset WIDER FACE popsaný v sekci \ref{sekce:datasety}.
+
+WIDER FACE poskytuje k trénovacím a validačním obrázkům anotační soubory v anotačním formátu COCO (viz sekce \ref{sekce:data_navrh}). Trénovacích souborů je dostupných celkem 12880, z nichž bylo odebrány ty, na nichž se nevyskytují žádné obličeje. Z takto filtrovaného výběru potom bylo vzato prvních 12000 snímků a byla provedena augmentace.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.35}{\includegraphics{obrazky-figures/widerface_example.jpg}}
+  \label{obrazek:widerfaceexample}
+  \caption{Ukázka snímku z datasetu WIDER FACE}
+  \end{center}
+\end{figure}
+
+\subsection*{Augmentace fotografií}
+Obecně byla augmentace rozebrána v sekci \ref{sekce:data_navrh}, konkrétně se v práci k provedení augmentace používá Python knihovna \textbf{albumentations}. 
+
+\subsection*{TFRecords}
+
+
+\section{Detektor obličejů}
+\label{sekce:detektor_obliceju_implementace}
+
+\subsection*{Originální model}
+
+\subsection*{SSD Mobilenet}
+
+\subsection*{SSD Resnet 50}
+
+\section{Trénování}
+
+\subsection*{Metacentrum}
+
+
+\section{Akcelerace detekce}
+\label{sekce:akcelerace_implementace}
+
+\subsection*{Model Optimizer}
+
+\subsection*{Kvantování}
+
+\section{Grafické uživatelské rozhraní}
+\label{sekce:gui}
+
+\subsection*{Implementace rozhraní}
+
+\subsection*{Měřené heuristiky}
+
+\subsection*{Příprava videí}
+
+
+\subsection*{Detekce}
+
+
+\subsection*{Výstupy}
+
+\section{Nástroje pro experimenty}
+\label{sekce:nastroje_pro_experimenty}
+
+\subsection*{Zpracování vstupů}
+
+\subsection*{Podoba výstupů}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%       KAPITOLA Experimenty
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Experimenty}
+
+\section{Podklady}
+videa
+
+\section{Porovnání akcelerovaného a normálního řešení}
+
+
+\section{Detekce s a bez Mirnetu}
+
+\section{Porovnání s YOLOFacev7}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA ZÁVĚR
