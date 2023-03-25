@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  24 MAR 2023 18:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  25 MAR 2023 22:07
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1109,16 +1109,22 @@ Package pdftex.def Info: obrazky-figures/loldataset.png  used on input line 699.
 (pdftex.def)             Requested size: 1205.50082pt x 403.50652pt.
  [31 <./obrazky-figures/mirnet_arch.png> <./obrazky-figures/loldataset.png>] [32]
 Kapitola 6.
-<obrazky-figures/widerface_example.jpg, id=551, 1027.84pt x 770.88pt>
+<obrazky-figures/widerface_example.jpg, id=551, 1027.84pt x 642.4pt>
 File: obrazky-figures/widerface_example.jpg Graphic file (type jpg)
 <use obrazky-figures/widerface_example.jpg>
 Package pdftex.def Info: obrazky-figures/widerface_example.jpg  used on input line 730.
-(pdftex.def)             Requested size: 1027.8375pt x 770.87813pt.
+(pdftex.def)             Requested size: 1027.8375pt x 642.39844pt.
 [33
 
-] [34 <./obrazky-figures/widerface_example.jpg>] [35]
+]
+<obrazky-figures/augmentedexample.jpg, id=559, 1027.84pt x 642.4pt>
+File: obrazky-figures/augmentedexample.jpg Graphic file (type jpg)
+<use obrazky-figures/augmentedexample.jpg>
+Package pdftex.def Info: obrazky-figures/augmentedexample.jpg  used on input line 755.
+(pdftex.def)             Requested size: 1027.8375pt x 642.39844pt.
+ [34 <./obrazky-figures/widerface_example.jpg>] [35 <./obrazky-figures/augmentedexample.jpg>] [36]
 Kapitola 7.
-[36
+[37
 
 ]
 Kapitola 8.
@@ -1129,7 +1135,7 @@ No file projekt.bbl.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
-[37
+[38
 
 ] (projekt.aux)
 
@@ -1139,17 +1145,17 @@ Package rerunfilecheck Info: File `projekt.out' has not changed.
 (rerunfilecheck)             Checksum: 9F56FD681276226BBA7D1E6706559261;5095.
  ) 
 Here is how much of TeX's memory you used:
- 16546 strings out of 475385
- 270266 string characters out of 2776907
- 637439 words of memory out of 3000000
- 37334 multiletter control sequences out of 15000+600000
+ 16558 strings out of 475385
+ 270607 string characters out of 2776907
+ 637528 words of memory out of 3000000
+ 37342 multiletter control sequences out of 15000+600000
  553631 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,10n,77p,1174b,567s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt9.pfb>
-Output written on projekt.pdf (40 pages, 6646926 bytes).
+Output written on projekt.pdf (41 pages, 7088882 bytes).
 PDF statistics:
- 688 PDF objects out of 1000 (max. 8388607)
- 159 named destinations out of 1000 (max. 500000)
- 433 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 698 PDF objects out of 1000 (max. 8388607)
+ 162 named destinations out of 1000 (max. 500000)
+ 438 words of extra memory for PDF output out of 10000 (max. 10000000)
 

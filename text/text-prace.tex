@@ -734,13 +734,49 @@ WIDER FACE poskytuje k trénovacím a validačním obrázkům anotační soubory
 \end{figure}
 
 \subsection*{Augmentace fotografií}
-Obecně byla augmentace rozebrána v sekci \ref{sekce:data_navrh}, konkrétně se v práci k provedení augmentace používá Python knihovna \textbf{albumentations}. 
+Obecně byla augmentace rozebrána v sekci \ref{sekce:data_navrh}, konkrétně se v práci k provedení augmentace používá Python knihovna \textbf{albumentations}. Proces augmentace sestává z několika kroků. Prvním z nich
+je zisk anotačních dat z anotačního souboru. První údaj obsahuje název fotografie, za ním následuje číslo udávající počet obličejů v obrázku a poté hraniční body všech obličejů v daném snímku.
 
-\subsection*{TFRecords}
+Poté následuje načtení originální fotografie z datasetu WIDERFACE do augmentačního programu. Na načtené fotografii je provedena augmentace -- je vytvořena kopie, v níž jsou s určitou pravděpodobností (viz číslo v závorce) provedeny tyto úpravy:
 
+\begin{itemize}
+  \item horizontální převrácení (0.5),
+  \item vertikální převrácení (0.5),
+  \item náhodná změna jasu a kontrastu směrem ke ztmavení (0.7),
+  \item náhodná změna gammy (0.1),
+  \item přidání Gaussova šumu (0.2),
+  \item přidání ISO šumu (0.4).
+\end{itemize}
+
+Pro vytvořený augmentovaný obrázek (ukázka na obrázku \ref{obrazek:augmentovanyobrazek}) přepočítá knihovna albumentations nové souřadnice obličejů. Obrázek je pak uložen a anotační data skládající se z \textbf{názvu obrázku}, \textbf{souřadnic obličejů ve formátu PascalVOC} a \textbf{klasifikačních tříd} (všechny objekty patří do třídy \emph{face}), jsou uložena ve formátu JSON. Podobný anotační JSON soubor se vytvoří i pro originální fotografii. Názvy obrázků jsou při tomto procesu nastaveny na číselné hodnoty 1.jpg až 12000.jpg pro originální snímky a na hodnoty 1.0.jpg až 12000.0.jpg pro augmentované obrázky.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.35}{\includegraphics{obrazky-figures/augmentedexample.jpg}}
+  \label{obrazek:augmentovanyobrazek}
+  \caption{Ukázka augmentovaného snímku}
+  \end{center}
+\end{figure}
+
+\subsection*{TFRecord}
+Vstupy TensorFlow modelů neuronových sítí mohou být dvojice dat vstup $\times$ výstup nebo se může jednat o serializovanou strukturu dat formátu \textbf{tfrecord}\footnote{\url{https://www.tensorflow.org/tutorials/load_data/tfrecord}}. Jedná se o binární sekvenci dat, mající určitou organizaci a řád. Výhodou použití tfrecord namísto klasických obrázků a anotačních souborů je to, že odpadá část předzpracování dat před spuštěním trénování sítě. Skript starající se o transformaci originálních a augmentovaných obrázků a popisných souborů do formátu tfrecord pracuje tak, že načte obrázek a anotační soubor a provede kontrolu, že žádný ohraničující box nezasahuje mimo rozměry obrázku. Dále pak vytvoří proměnnou typu \texttt{tf.train.Example}, která tvoří základ jednoho tfrecordu. Do proměnné se zapisují bytová data dle následujícího řádu:
+
+\begin{itemize}
+  \item data obrázku,
+  \item výška,
+  \item šířka,
+  \item název obrázku,
+  \item formát obrázku,
+  \item ID obrázku (odpovídá názvu),
+  \item PascalVOC formát pozice obličeje,
+  \item název a číslo třídy objektu (1 a \uv{face}).
+\end{itemize}
+
+Z důvodu snazší manipulace s daty ve formátu tfrecord byly obrázky rozděleny do skupin po 2000 jednotkách. Celkově tak bylo vytvořeno 12 trénovacích tfrecord souborů (12000 originálních a 12000 augmentovaných obrázků po dvoutísícových skupinách).
 
 \section{Detektor obličejů}
 \label{sekce:detektor_obliceju_implementace}
+Tato část pojednává o implementaci použitého detektoru obličejů. Zabývá se návrhem a tvorbou původního modelu pro detekci a následně i konkrétními zvolenými modely.
 
 \subsection*{Originální model}
 
@@ -749,6 +785,8 @@ Obecně byla augmentace rozebrána v sekci \ref{sekce:data_navrh}, konkrétně s
 \subsection*{SSD Resnet 50}
 
 \section{Trénování}
+\label{sekce:trenovani}
+Následující sekce je věnována problematice trénování vybraných neuronových sítí z předcházející sekce.
 
 \subsection*{Metacentrum}
 
