@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -q gpu@meta-pbs.metacentrum.cz
 #PBS -l walltime=24:0:0
-#PBS -l select=1:ncpus=2:ngpus=2:mem=55gb:scratch_local=10gb:gpu_cap=cuda61:pbs_server=meta-pbs.metacentrum.cz:cluster=galdor
+#PBS -l select=1:ncpus=2:ngpus=2:mem=75gb:scratch_local=10gb:gpu_cap=cuda61:pbs_server=meta-pbs.metacentrum.cz:cluster=galdor
 #PBS -N trainModel_resnet
 #PBS -m ae
 
