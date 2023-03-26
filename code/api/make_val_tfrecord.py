@@ -1,4 +1,4 @@
-# make_tfrecord.py
+# make_val_tfrecord.py
 # Vojtech Orava (xorava02)
 # BP 2022/2023, FIT VUT
 import tensorflow as tf
@@ -21,10 +21,11 @@ OUTPUT_PATH = "data/workspace/annotations" if args.output_path is None else args
 
 # pomocne funkce pro ulozeni a zobrazeni dat do/z TFRecord souboru
 # vychazeji z https://keras.io/examples/keras_recipes/creating_tfrecords/
-def image_feature(value):    
+def image_feature(value):
     return tf.train.Feature(
         bytes_list=tf.train.BytesList(value=[tf.io.encode_jpeg(value).numpy()])
     )
+
 
 def bytes_feature(value):
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value.encode("utf-8")]))
@@ -32,8 +33,10 @@ def bytes_feature(value):
 def bytes_list_feature(value):
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=value))
 
+
 def float_feature(value):
     return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
+
 
 def int64_feature(value):
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
@@ -41,11 +44,13 @@ def int64_feature(value):
 def int64_list_feature(value):
     return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
 
+
 def float_feature_list(value):
     return tf.train.Feature(float_list=tf.train.FloatList(value=value))
 
-# vytvori TFRecord
+
 def make_record(part, filename):
+    
     f = open(os.path.join(AUG_PATH, part, "labels", filename), "r")
     j = json.load(f)
     bboxes = np.array(j["bboxes"], dtype=np.float32)
@@ -59,12 +64,13 @@ def make_record(part, filename):
     xmax = []
     ymax = []
 
-    # osetreni preteceni
+
     [xmin.append(max(0.001, (float(item[0]) / width))) for item in bboxes]
     [ymin.append(max(0.001, (float(item[1]) / height))) for item in bboxes]
     [xmax.append(min(0.999, (float(item[2]) / width))) for item in bboxes]
     [ymax.append(min(0.999, (float(item[3]) / height))) for item in bboxes]
-     
+    
+    
     class_text = []
     class_label = []
     for q in range(len(bboxes)):
@@ -76,7 +82,8 @@ def make_record(part, filename):
             
         if(ymin[q] >= ymax[q]):
             ymax[q] = ymin[q]+0.001
-                 
+            
+        
     image_encoded = open(os.path.join(AUG_PATH, part, "images", j["image"]), "rb").read()
 
     tf_example = tf.train.Example(features=tf.train.Features(feature={    
@@ -84,7 +91,7 @@ def make_record(part, filename):
         'image/height':  int64_feature(int(height)),
         'image/width': int64_feature(int(width)),
         'image/filename': bytes_feature(j["image"]),
-        'image/format': bytes_feature("jpg"),
+        'image/format': bytes_feature("png"),
         'image/source_id': bytes_feature(j["image"]),
         'image/object/bbox/xmin': float_feature_list(xmin),
         'image/object/bbox/xmax': float_feature_list(xmax),
@@ -98,7 +105,8 @@ def make_record(part, filename):
         
     return tf_example
 
-# pro kontrolu/testovani
+
+
 def parse_tfrecord_fn(example):
     feature_description = {
         'image/encoded':  tf.io.FixedLenFeature([], tf.string),
@@ -118,12 +126,11 @@ def parse_tfrecord_fn(example):
     example["image/encoded"] = tf.io.decode_jpeg(example["image/encoded"], channels=3)   
     return example
 
-def create_record(part, end, nop):
-    counter = nop*2000 - 1999
+def create_record(part):
     
-    labels = sorted(os.listdir(os.path.join(AUG_PATH, part, "labels")), key=lambda x: int(x.split(".")[0]))[counter-1:end]
+    labels = sorted(os.listdir(os.path.join(AUG_PATH, part, "labels")), key=lambda x: int(x.split(".")[0]))
 
-    writer = tf.io.TFRecordWriter(os.path.join(OUTPUT_PATH, part + str(nop) + ".tfrec"))
+    writer = tf.io.TFRecordWriter(os.path.join(OUTPUT_PATH, part + ".tfrec"))
     
     for i in range(len(labels)):
         tf_example = make_record(part, labels[i])
@@ -135,21 +142,18 @@ def create_record(part, end, nop):
 
 if __name__ == "__main__":
     
-    test = True
-    nop = 1
-    
+    test = False
+
     if test == False:
-        while(nop <= 12):
-            print("Starting part train", str(nop))
-            create_record("train", 2000*nop, nop)
-            nop+=1         
-        
+        print("Starting part val")
+        create_record("val")
+    
     
     if test:
-        raw_dataset = tf.data.TFRecordDataset(os.path.join(OUTPUT_PATH, "train11.tfrec"))
+        raw_dataset = tf.data.TFRecordDataset(os.path.join(OUTPUT_PATH, "val.tfrec"))
         parsed_dataset = raw_dataset.map(parse_tfrecord_fn)
 
-        for features in parsed_dataset.skip(556).take(2):
+        for features in parsed_dataset.skip(973).take(2):
             for key in features.keys():
                 if key != "image":
                     print(f"{key}: {features[key]}")

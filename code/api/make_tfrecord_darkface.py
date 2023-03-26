@@ -1,23 +1,33 @@
+# make_tfrecord_darkface.py
+# Vojtech Orava (xorava02)
+# BP 2022/2023, FIT VUT
 import tensorflow as tf
 import os
 import numpy as np
 import json
 import matplotlib.pyplot as plt
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-a', '--aug_images', type=str, required=False, help="augmented images folder path")
+parser.add_argument('-o', '--output_path', type=str, required=False, help="output folder path")
+
+args = parser.parse_args()
 
 
-AUG_PATH = "data/workspace/aug_darkface"
-OUTPUT_PATH = "data/workspace/annotations_darkface"
+AUG_PATH = "data/workspace/aug_darkface" if args.aug_images is None else args.aug_images
+OUTPUT_PATH = "data/workspace/annotations_darkface" if args.output_path is None else args.outputh_path
 
-
+# pomocne funkce pro ulozeni a zobrazeni dat do/z TFRecord souboru
+# vychazeji z https://keras.io/examples/keras_recipes/creating_tfrecords/
 def image_feature(value):
-    """Returns a bytes_list from a string / byte."""
     return tf.train.Feature(
         bytes_list=tf.train.BytesList(value=[tf.io.encode_jpeg(value).numpy()])
     )
 
 
 def bytes_feature(value):
-    """Returns a bytes_list from a string / byte."""
     return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value.encode("utf-8")]))
 
 def bytes_list_feature(value):
@@ -25,22 +35,19 @@ def bytes_list_feature(value):
 
 
 def float_feature(value):
-    """Returns a float_list from a float / double."""
     return tf.train.Feature(float_list=tf.train.FloatList(value=[value]))
 
 
 def int64_feature(value):
-    """Returns an int64_list from a bool / enum / int / uint."""
     return tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))
 
 def int64_list_feature(value):
-    """Returns an int64_list from a bool / enum / int / uint."""
     return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
 
 
 def float_feature_list(value):
-    """Returns a list of float_list from a float / double."""
     return tf.train.Feature(float_list=tf.train.FloatList(value=value))
+
 
 def make_record(part, filename):
     
@@ -97,8 +104,6 @@ def make_record(part, filename):
     print(filename)
         
     return tf_example
-
-
 
 def parse_tfrecord_fn(example):
     feature_description = {

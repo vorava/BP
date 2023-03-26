@@ -1,3 +1,6 @@
+# get_data.py
+# Vojtech Orava (xorava02)
+# BP 2022/2023 FIT VUT
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,14 +8,19 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-f', '--fps', type=str, required=False, action='append', nargs='*')
-parser.add_argument('-d', '--detections', type=str, required=False, action='append', nargs='*')
+parser.add_argument('-f', '--fps', type=str, required=False, action='append', nargs='*', help="FPS file from GUI app")
+parser.add_argument('-d', '--detections', type=str, required=False, action='append', nargs='*', help="detection file from GUI app")
 
 args = parser.parse_args()
 
-print(args.fps)
+
 
 def get_fps(fps_files):
+    """Vytvori grafy z FPS souboru z GUI aplikace
+
+    Args:
+        fps_files (list): pole cest k FPS souborum
+    """
     fig = plt.figure(figsize=(13,8))
     
     for i in fps_files[0]:
@@ -36,6 +44,11 @@ def get_fps(fps_files):
     plt.show()
 
 def get_detections(detection_files):
+    """Vytvori grafy z detekcnich souboru z GUI aplikace
+
+    Args:
+        detection_files (list): pole cest k detekcnim souborum
+    """
     fig = plt.figure(figsize=(13,8))
     
     for i in detection_files[0]:

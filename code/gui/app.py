@@ -1,3 +1,7 @@
+# app.py 
+# Vojtech Orava (xorava02)
+# BP 2022/2023 FIT VUT
+
 # importy pro GUI
 from PyQt6.QtWidgets import *
 import sys
@@ -18,12 +22,13 @@ import tensorflow as tf
 # importy pro detekci
 from openvino.runtime import Core
 
-
-SKIP_VAL = 5
+# krok preskoceni ve videu 
+SKIP_VAL = 5 # sekundy
 
 # OpenVINO vychozi nastaveni
 ie = Core()
 
+# promenne openvino modelu a TF modelu
 global model
 global compiled_model
 
@@ -31,6 +36,14 @@ global model_tf
     
 @tf.function
 def detect_faces_tf(image):
+    """Detekuje obliceje v obrazku
+
+    Args:
+        image (np.darray): numpy reprezentace obrazku pro detekci 
+
+    Returns:
+        bboxy obliceju (pascalvoc), confidence detekce
+    """
     global model_tf
     
     input_tensor = tf.convert_to_tensor(image)
@@ -42,11 +55,21 @@ def detect_faces_tf(image):
 
 
 def get_models():
+    """Nacte modely, ktere je mozno pouzit k detekci (modely ze slozky models)
+
+    Returns:
+        list: pole modelu jako string
+    """
     models = sorted(os.listdir("models"))
     return models
 
 
 def get_devices():
+    """Nacte pouzitelne zarizeni Intel (VPU, CPU, GPU)
+
+    Returns:
+        list: pole zarizeni jako dictionary {full_name, type}
+    """
     device_list = []
     try:
         device_list.append({"full_name": ie.get_property("MYRIAD", "FULL_DEVICE_NAME"),
@@ -69,16 +92,20 @@ def get_devices():
     return device_list
 
 # pomocne detekcni funkce
-def apply_bboxes(image, bboxes, conf, threshold=0.5):
+def apply_bboxes(image, bboxes, conf, threshold=0.5, color = (255,0,0)):
     """ Prida do framu bounding boxy 
 
     Args:
-        image (np.array): zpracovavany frame ve vychozim rozliseni
-        result (np.array): vystup akcelerovaneho detektoru z OpenVINO
+        image (np.darray): zpracovavany frame ve vychozim rozliseni
+        bboxes (np.darray): bboxy z funkce detect_faces(_tf)
+        conf (np.darray): pole confidence pro jednotlive bboxy z funkce detect_faces(_tf)
         threshold (prah conf pro zobrazeni, optional): prahova hodnota verohodnosti. Defaults to 0.5.
+        color (tuple, optional): barva bboxu
 
     Returns:
-        image: puvodni obrazek s pridanymi bboxy
+        image: puvodni obrazek jako np array s pridanymi bboxy
+        nof_detections: pocet detekovanych obliceju, 
+        output_bboxes: souradnice ve formatu coco (xywh) pro vystup do txt
     """
     DEFAULT_RESOLUTION = [640, 640] # rozliseni ssd detektoru
     bboxes[:, ::2] *= DEFAULT_RESOLUTION[0] # transformace bboxu z 0..1 na 0..640
@@ -88,6 +115,7 @@ def apply_bboxes(image, bboxes, conf, threshold=0.5):
     ratio_x, ratio_y = image.shape[1] / DEFAULT_RESOLUTION[1], image.shape[0] / DEFAULT_RESOLUTION[0]
     
     nof_detections = 0
+    output_bboxes = []
     # iterace nad bboxy a zakresleni obdelniku a conf
     for i, box in enumerate(bboxes):
     
@@ -98,10 +126,9 @@ def apply_bboxes(image, bboxes, conf, threshold=0.5):
                 int(max(corner_position * ratio_y, 10)) if idx % 2 
                 else int(corner_position * ratio_x)
                 for idx, corner_position in enumerate(box)
-            ]
-            #print(f"ar: x: {ratio_x} y: {ratio_y} bboxes: {box[3:][:]} xmin,ymin,xmax,ymax {x_min, y_min, x_max, y_max}")
+            ]           
             
-            image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), (255,0,0), 2)
+            image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), color, 2)
                       
             image = cv2.putText(
                     image,
@@ -113,18 +140,23 @@ def apply_bboxes(image, bboxes, conf, threshold=0.5):
                     1,
                     cv2.LINE_AA,
                 )
-        # konec castecne prevzate casti
-    return image, nof_detections
+            
+            
+            # konec castecne prevzate casti
+            output_bboxes.append([x_min, y_min, x_max - x_min, y_max-y_min])
+            
+    return image, nof_detections, output_bboxes
 
 
 def detect_faces(image):
-    """ Pripravi obrazek pro zpracovani detekcni siti a provede detekci
+    """ Pripravi obrazek pro zpracovani detekcni siti OPENVINO a provede detekci
 
     Args:
-        image (np.array): obrazek v puvodnim rozliseni
+        image (np.darray): obrazek v puvodnim rozliseni
         
     Returns:
-        result: pole vystupnich hodnot (format [0,1,conf,x1,y1,x2,y2])
+        bboxes: souradnice tvari (pascalvoc)
+        conf: confidence detekci
     """
     image = cv2.resize(image, (640, 640))
     image = np.array(image)
@@ -139,11 +171,12 @@ def detect_faces(image):
 
 ##############
 # GUI cast
+# mala cast vychazi z tutorialu
 # https://gist.github.com/docPhil99/ca4da12c9d6f29b9cea137b617c7b8b1
 # https://www.pythonguis.com/faq/pause-a-running-worker-thread/
 ##############
 
-# trida pro aktualizaci videa
+# tridy pro aktualizaci videa a zpracovani signalu
 class WorkerSignals(QObject):
     change_pixmap_signal = pyqtSignal(np.ndarray)
     change_frame_count = pyqtSignal(int, int)
@@ -160,7 +193,7 @@ class JobRunner(QRunnable):
 
         self.is_paused = False
         self.is_killed = False
-        self.is_bboxes = True
+        self.is_bboxes = False
         self.is_frame_changed = False
         self.time_spot = 0
         self.new_val = 0
@@ -170,6 +203,16 @@ class JobRunner(QRunnable):
 
     @pyqtSlot()
     def run(self):    
+        # zpracovani nazvu souboru z cesty pro vytvoreni vystupu
+        filename = self.path.split("\\")[-1].split(".")[0]
+        self.gt_file = open(f"{filename}_gt.txt", "r")
+      
+        # vystupni soubor s bboxy ve formatu COCO
+        try:
+            self.bbox_file = open(f"{filename}_output.txt", "w")
+        except Exception:
+            self.bbox_file = None
+        
         self.cap = cv2.VideoCapture(self.path)
         frame_count = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
         
@@ -188,11 +231,11 @@ class JobRunner(QRunnable):
         current_frame_number = 0
         
         while self.cap.isOpened():
-            if self.is_frame_changed:
+            if self.is_frame_changed: # skok ve videu pomoci slideru
                 self.cap.set(cv2.CAP_PROP_POS_FRAMES, int(self.time_spot * self.cap.get(cv2.CAP_PROP_FPS)))
                 self.is_frame_changed = False
                 
-            if self.new_val != 0:
+            if self.new_val != 0: # skok ve videu
                 current_frame_number += int(self.new_val *self.cap.get(cv2.CAP_PROP_FPS))
                 self.cap.set(cv2.CAP_PROP_POS_FRAMES, current_frame_number)
                 self.new_val = 0
@@ -200,41 +243,64 @@ class JobRunner(QRunnable):
             ret, image = self.cap.read()
             if ret:
                 
-                if(self.is_bboxes):
-                    if(self.use_openvino):
-                        start = time.time()
-                        bboxes, conf = detect_faces(image)
-                        image, nof_detections = apply_bboxes(image, bboxes, conf, threshold=0.3)
-                        end = time.time()
-                        
-                        try:
-                            self.signals.change_fps_signal.emit(end-start, nof_detections)
-                        except RuntimeError:
-                            pass
+                if self.bbox_file is not None:
+                    self.bbox_file.write(f"frame - {current_frame_number}\n")
                     
-                    else:
-                        start = time.time()
-                        bboxes, conf = detect_faces_tf(image)
-                        image, nof_detections = apply_bboxes(image, bboxes.numpy(), conf.numpy(), threshold=0.3)
-                        end = time.time()
+                if self.gt_file is not None:                            
+                    try:
+                        self.gt_file.readline()
+                        count = int(self.gt_file.readline())
+                        if count == 0: 
+                            self.gt_file.readline()
+                        else:
+                            for i in range(count):
+                                bbox = np.array(self.gt_file.readline().split()[:4], dtype=np.float32)
+                                # prevod do pascal VOC
+                                bbox[2] = bbox[2] + bbox[0]
+                                bbox[3] = bbox[3] + bbox[1]
+                                bbox = bbox.astype(int)
+                                # zobrazeni GT boxu
+                                if self.is_bboxes:
+                                    image = cv2.rectangle(image, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0,255,0), 2)
+                    except Exception:
+                        pass
+                
+                # provedeni detekce
+                if(self.use_openvino):
+                    start = time.time()
+                    bboxes, conf = detect_faces(image)
+                    image, nof_detections, out_bboxes = apply_bboxes(image, bboxes, conf, threshold=0.3)
+                    end = time.time()
                         
-                        try:
-                            self.signals.change_fps_signal.emit(end-start, nof_detections)
-                        except RuntimeError:
-                            pass
+                else:
+                    start = time.time()
+                    bboxes, conf = detect_faces_tf(image)
+                    image, nof_detections, out_bboxes = apply_bboxes(image, bboxes.numpy(), conf.numpy(), threshold=0.3)
+                    end = time.time()
+                    
+                # zapis do souboru s bboxy    
+                self.bbox_file.write(f"{nof_detections}\n")
+                for q in range(nof_detections):
+                    self.bbox_file.write(f"{' '.join(map(str, out_bboxes[q]))}\n")
+                    
+                # aktualizace FPS ukazatele
+                try:
+                    self.signals.change_fps_signal.emit(end-start, nof_detections)
+                except RuntimeError:
+                    pass
                    
         
                 current_frame_number = int(self.cap.get(cv2.CAP_PROP_POS_FRAMES))
                 current_duration = int(current_frame_number / fps_count)
                 
+                # aktualizace dalsich ukazatelu
                 try:
                     self.signals.change_pixmap_signal.emit(image)
                     self.signals.change_frame_count.emit(current_frame_number, frame_count)
                     self.signals.change_duration_signal.emit(int(current_duration), duration_s)
                 except RuntimeError:
                     pass
-                
-                
+                                
                 if self.is_captured:
                     cv2.imwrite(str(current_frame_number)+".jpg", image)
                     self.is_captured = False
@@ -248,10 +314,13 @@ class JobRunner(QRunnable):
                 break
                 
                 
-        # shut down capture system
+        # ukonceni prace vlakna
         self.cap.release()
+        if self.gt_file is not None:
+            self.gt_file.close()
+        self.bbox_file.close()
            
-
+    # pomocne funkce pro ovladani prehravani a detekce
     def pause(self, play_state):
         if play_state == True:
             self.is_paused = False
@@ -268,10 +337,12 @@ class JobRunner(QRunnable):
             self.is_bboxes = False
             
     def change_frame(self, time_s):
+        self.is_bboxes = False
         self.is_frame_changed = True
         self.time_spot = time_s
 
     def update_time(self, new_val):
+        self.is_bboxes = False
         self.new_val = new_val
         
     def capture(self):
@@ -339,6 +410,7 @@ class MainWindow(QWidget):
         self.slider.setMinimum(0)
         self.slider.setMaximum(self.end_value)
         self.slider.valueChanged.connect(self.slider_moved)
+        self.slider.sliderPressed.connect(self.slider_pressed)
         
         self.slider.setEnabled(False)
         
@@ -390,7 +462,7 @@ class MainWindow(QWidget):
         
         # spodni radek ovladani 2
         control_layout2 = QHBoxLayout()
-        self.btn_bboxes_toggle = QPushButton("Hide bboxes")
+        self.btn_bboxes_toggle = QPushButton("Show GT bboxes")
         self.btn_capture = QPushButton("Capture")
         
         # urcuje stav tlacitka show/hide bboxes
@@ -419,6 +491,7 @@ class MainWindow(QWidget):
         self.select_model(0)
         self.select_device(0)
         
+        # vystupni csv soubory pro dalsi zpracovani
         self.fps_csv = None
         self.fps_writer = None
         
@@ -429,10 +502,15 @@ class MainWindow(QWidget):
 
         self.show()
         
+        
     def set_qz(self):
+        """Zapina a vypina kvantovani
+        """
         self.select_model(self.model_cb.currentIndex())
     
     def set_ov(self):
+        """Zapina a vypina OpenVINO
+        """
         self.select_model(self.model_cb.currentIndex())
         
         if(self.ov_checkbox.isChecked() == False):
@@ -442,13 +520,18 @@ class MainWindow(QWidget):
         
         
     def select_model(self, idx):
+        """Nastavuje model podle zvoleneho indexu v comboboxu
+
+        Args:
+            idx (int): index v comboboxu modelu
+        """
         global model
         global model_tf
         model_list = get_models()
         
         # openvino
         if self.ov_checkbox.isChecked():
-            if self.qz_checkbox.isChecked():
+            if self.qz_checkbox.isChecked(): # kvantovani on/off
                 path = f"models/{model_list[idx]}/quantized/saved_model.xml"
             else:
                 path = f"models/{model_list[idx]}/accelerated/saved_model.xml"
@@ -456,13 +539,17 @@ class MainWindow(QWidget):
             model = ie.read_model(model=path)
             self.select_device(self.device_cb.currentIndex())
             
-        
         #tf
         else:
             model_tf = tf.saved_model.load(f"models/{model_list[idx]}/default/saved_model")
             
         
     def select_device(self, idx):
+        """Nastavuje zarizeni podle zvoleneho indexu v comboboxu
+
+        Args:
+            idx (int): index v comboboxu zarizeni
+        """
         global compiled_model
         global model
         device_list = get_devices()
@@ -470,9 +557,18 @@ class MainWindow(QWidget):
            
         
     def capture(self):
+        """Vytvori screenshot z aktualniho framu
+        """
         self.btn_capture.pressed.connect(self.runner.capture)
+        
+    def slider_pressed(self):
+        """Rucni pohyb sliderem znemozni zobrazovani GT boxu
+        """
+        self.btn_bboxes_toggle.setEnabled(False)
       
     def slider_moved(self):   
+        """Nastavi cas videa dle pohybu slideru
+        """
         current = self.slider.value()
         end = self.end_value
         self.duration_label.setText(
@@ -482,13 +578,20 @@ class MainWindow(QWidget):
        
         
     def rewind(self):
+        """Skok SKIP_VAL sekund zpet
+        """
+        self.btn_bboxes_toggle.setEnabled(False)
         self.btn_rewind.pressed.connect(partial(self.runner.update_time, -SKIP_VAL))
         
     def skip(self):
+        """Skok SKIP_VAL sekund dopredu
+        """
+        self.btn_bboxes_toggle.setEnabled(False)
         self.btn_skip.pressed.connect(partial(self.runner.update_time, SKIP_VAL))
         
-    # ovladani play/pause
     def toggle_pause(self):
+        """Ovladani play/pause
+        """
         if self.play_state == True:
             self.btn_pause_toggle.setText("Pause")
             self.play_state = False
@@ -499,11 +602,13 @@ class MainWindow(QWidget):
         self.btn_pause_toggle.pressed.connect(partial(self.runner.pause, self.play_state))
         
     def toggle_bboxes(self):
+        """Ovladani zobrazeni/skryti GT boxu
+        """
         if self.show_bboxes_state == True:
-            self.btn_bboxes_toggle.setText("Hide bboxes")
+            self.btn_bboxes_toggle.setText("Hide GT bboxes")
             self.show_bboxes_state = False
         else:
-            self.btn_bboxes_toggle.setText("Show bboxes")
+            self.btn_bboxes_toggle.setText("Show GT bboxes")
             self.show_bboxes_state = True
             
         self.btn_bboxes_toggle.pressed.connect(partial(self.runner.show_bboxes, self.show_bboxes_state))
@@ -525,6 +630,14 @@ class MainWindow(QWidget):
         event.accept()
         
     def get_config(self, path):
+        """Vraci aktualni config pro vystupni soubory
+
+        Args:
+            path (str): udava nazev souboru
+
+        Returns:
+            str: textovy vystup konfigurace pro prvni radky vystupnic analyzacnich souboru
+        """
         output = path
         output += "-"
         output += self.model_cb.currentText() + "-"
@@ -534,10 +647,11 @@ class MainWindow(QWidget):
         return output
         
     # otevreni souboru
+    # vychazi z
     # https://www.pythontutorial.net/pyqt/pyqt-qfiledialog/
     def open_file_dialog(self):    
         if self.runner != None:   
-            # close file
+            # uzavreni souboru
             
             self.name.setText("Filename")
             self.runner.signals.disconnect()
@@ -569,8 +683,9 @@ class MainWindow(QWidget):
             self.image_label.setText("No video loaded")
            
         else: 
-            
+            # otevreni noveho souboru
             dialog = QFileDialog(self)
+            # vychozi cesta
             dialog.setDirectory(r'C:\VUTFIT\BP\code\data')
             dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
             dialog.setNameFilter("Videos (*.mp4)")
@@ -580,25 +695,20 @@ class MainWindow(QWidget):
                 filenames = dialog.selectedFiles()
                 if filenames:
                     
-                    """if self.ov_checkbox.isEnabled() == False:
-                        self.runner.kill()
-                        self.threadpool.releaseThread()
-                    """
-                    
                     input_path = str(Path(filenames[0]))
                     self.name.setText(input_path)
                     
                     self.threadpool = QThreadPool()
                     
-                    # CSV Writer FPS
                     pathname = input_path.split("\\")[-1]
                     fname = pathname
                     fname += "-" + datetime.datetime.now().strftime("%d%m%Y-%H%M%S")
                     
+                    # CSV writer FPS
                     self.fps_csv = open("out/" + fname + "-fps.csv", "w", newline='') 
                     self.fps_writer = csv.writer(self.fps_csv, delimiter=";")
                     self.fps_writer.writerow([self.get_config(pathname)])
-                    
+                    # CSV writer detekce
                     self.detections_csv = open("out/" + fname + "-detections.csv", "w", newline='')
                     self.detections_writer = csv.writer(self.detections_csv, delimiter=";")
                     self.detections_writer.writerow([self.get_config(pathname)])
@@ -624,7 +734,8 @@ class MainWindow(QWidget):
                     self.btn_capture.pressed.connect(self.runner.capture)
                     
                     self.runner.use_ov(self.ov_checkbox.isChecked())                
-                                    
+                                 
+                    # nastaveni povoleni tlacitek a prepinacu   
                     self.ov_checkbox.setDisabled(True)
                     self.qz_checkbox.setDisabled(True)
                     self.slider.setEnabled(True)
@@ -636,9 +747,15 @@ class MainWindow(QWidget):
                  
                 
     # aktualizace framu
+    # nasledujic 2 funkce vychazeji z
+    # https://gist.github.com/docPhil99/ca4da12c9d6f29b9cea137b617c7b8b1
     @pyqtSlot(np.ndarray)
     def update_image(self, cv_img):
-        """Updates the image_label with a new opencv image"""
+        """Aktualizuje zobrazovany frame
+
+        Args:
+            cv_img (np.darray): obrazek pro zobrazeni
+        """
         if self.runner == None:
             self.image_label.clear()
             self.image_label.setText("No video loaded")
@@ -648,7 +765,14 @@ class MainWindow(QWidget):
         
     
     def convert_cv_qt(self, cv_img):
-        """Convert from an opencv image to QPixmap"""
+        """Prevede OpenCV obrazek na PixMap format
+
+        Args:
+           cv_img (np.darray): obrazek pro zobrazeni
+
+        Returns:
+            QPixMap: obrazek pro zobrazeni v image_labelu
+        """
         rgb_image = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
         h, w, ch = rgb_image.shape
         bytes_per_line = ch * w
@@ -656,12 +780,12 @@ class MainWindow(QWidget):
         p = convert_to_Qt_format.scaled(self.video_width, self.video_height, Qt.AspectRatioMode.KeepAspectRatio)
         return QPixmap.fromImage(p)
     
+    # pomocne funkce pro zobrazovani statistik
     @pyqtSlot(int, int)
     def update_frame_counter(self, current, end):
         text = f"{current}/{end}"
         self.frame_counter_label.setText(text)
         
-     
     @pyqtSlot(int, int)
     def update_duration(self, current, end):
         text = f"{int(current/60):02d}:{int(current%60):02d} -- {int(end/60):02d}:{int(end%60):02d}" 
@@ -697,8 +821,8 @@ class MainWindow(QWidget):
         default_text = f"Default: {default_fps} FPS"
         self.default_fps.setText(default_text)
 
+# spusteni aplikace
 if __name__=="__main__":
-    
     app = QApplication(sys.argv)
     a = MainWindow()
     sys.exit(app.exec())

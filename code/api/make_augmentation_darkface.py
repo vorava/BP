@@ -1,10 +1,22 @@
+# make_augmentation_darkface.py
+# Vojtech Orava (xorava02)
+# BP 2022/2023, FIT VUT
 import os
 import cv2
 import numpy as np
 import albumentations as alb
 import json
-from matplotlib import pyplot as plt
+import argparse
 
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-t', '--train_images', type=str, required=False, help="train images folder path")
+parser.add_argument('-v', '--val_images', type=str, required=False, help="val images folder path")
+parser.add_argument('-l', '--train_labels', type=str, required=False, help="train labels folder path")
+parser.add_argument('-e', '--val_labels', type=str, required=False, help="val labels folder path")
+parser.add_argument('-o', '--output_path', type=str, required=False, help="output folder path")
+
+args = parser.parse_args()
 
 augmentor = alb.Compose([
     alb.HorizontalFlip(p=0.5),
@@ -16,11 +28,11 @@ augmentor = alb.Compose([
 )
 
 # cesty
-TRAIN_PATH = "darkface/train/images"
-VAL_PATH = "darkface/val/images"
-TRAIN_LABELS = "darkface/train/labels"
-VAL_LABELS = "darkface/val/labels"
-OUTPUT_PATH = "data/workspace/aug_darkface"
+TRAIN_PATH = "darkface/train/images" if args.train_images is None else args.train_images
+VAL_PATH = "darkface/val/images" if args.val_images is None else args.val_images
+TRAIN_LABELS = "darkface/train/labels" if args.train_labels is None else args.train_labels
+VAL_LABELS = "darkface/val/labels" if args.val_labels is None else args.val_labels
+OUTPUT_PATH = "data/workspace/aug_darkface" if args.output_path is None else args.output_path
 
 
 def proccess_one(img_path, labels_path, part):

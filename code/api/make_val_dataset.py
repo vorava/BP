@@ -1,4 +1,4 @@
-# make_augmentation.py
+# make_val_dataset.py
 # Vojtech Orava (xorava02)
 # BP 2022/2023, FIT VUT
 import os
@@ -10,8 +10,8 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('-t', '--train_images', type=str, required=False, help="train images folder path")
-parser.add_argument('-l', '--train_labels', type=str, required=False, help="train labels file path")
+parser.add_argument('-v', '--val_images', type=str, required=False, help="val images folder path")
+parser.add_argument('-l', '--val_labels', type=str, required=False, help="val labels file path")
 parser.add_argument('-o', '--output_path', type=str, required=False, help="output folder path")
 
 args = parser.parse_args()
@@ -20,7 +20,7 @@ args = parser.parse_args()
 augmentor = alb.Compose([
     alb.HorizontalFlip(p=0.5),
     alb.VerticalFlip(p=0.5),
-    alb.RandomBrightnessContrast(brightness_limit=[-0.3,-0.1], contrast_limit=[-0.3,-0.1], p=0.7),
+    alb.RandomBrightnessContrast(brightness_limit=[-0.4,-0.2], contrast_limit=[-0.4,-0.2], p=0.9),
     alb.RandomGamma(p=0.1),
     alb.GaussNoise(p=0.2),
     alb.ISONoise(p=0.4)],
@@ -28,9 +28,10 @@ augmentor = alb.Compose([
 )
 
 # cesty
-WIDER_TRAIN_PATH = "../data/WIDER_train/images" if args.train_images is None else args.train_images
-TRAIN_GT_PATH = "../data/wider_face_split/wider_face_train_bbx_gt.txt"  if args.train_labels is None else args.train_labels
-OUTPUT_PATH = "data/workspace/aug/train" if args.output_path is None else args.outputh_path
+WIDER_VAL_PATH = "../data/WIDER_val/images" if args.val_images is None else args.val_images
+VAL_GT_PATH = "../data/wider_face_split/wider_face_val_bbx_gt.txt" if args.val_labels is None else args.val_labels
+OUTPUT_PATH = "data/workspace/aug/val"if args.outputh_path is None else args.outputh_path
+
 
 name_counter = 1
 
@@ -77,22 +78,7 @@ def get_data(gt_path, imgs_path):
                             bbox[3] = int(image.shape[0])-2
                             
                     bboxes.append(bbox.tolist())
-                    
-                img_name = str(name_counter) + ".jpg"
-                json_name = str(name_counter) + ".json"
-
-                print(img_name)
-
-                annotation = {}
-                annotation['image'] = img_name
-                annotation['bboxes'] = bboxes
-                annotation["class"] = ['face']*len(bboxes)
-
-                with open(os.path.join(OUTPUT_PATH, 'labels', json_name), 'w') as b:
-                    json.dump(annotation, b)  
-                    
-                cv2.imwrite(os.path.join(OUTPUT_PATH, 'images', img_name),
-                    cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            
 
                 create_aug(bboxes, image)
                 name_counter += 1
@@ -125,11 +111,6 @@ def create_aug(bboxes, image):
 
 
 if __name__ == "__main__":
-    print("Starting train part")
-    get_data(TRAIN_GT_PATH, WIDER_TRAIN_PATH)
-    
-
-    
-        
-    
+    print("Starting val part")
+    get_data(VAL_GT_PATH, WIDER_VAL_PATH)
     
