@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  25 MAR 2023 22:07
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  28 MAR 2023 17:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1094,37 +1094,64 @@ Package pdftex.def Info: obrazky-figures/annotation_formats.png  used on input l
 (pdftex.def)             Requested size: 1234.6095pt x 412.54024pt.
 [28] [29 <./obrazky-figures/annotation_formats.png>]
 
-LaTeX Warning: Citation `mirnet' on page 30 undefined on input line 686.
+LaTeX Warning: Citation `mirnet' on page 30 undefined on input line 687.
 
 <obrazky-figures/mirnet_arch.png, id=522, 950.55125pt x 464.73625pt>
 File: obrazky-figures/mirnet_arch.png Graphic file (type png)
 <use obrazky-figures/mirnet_arch.png>
-Package pdftex.def Info: obrazky-figures/mirnet_arch.png  used on input line 690.
+Package pdftex.def Info: obrazky-figures/mirnet_arch.png  used on input line 691.
 (pdftex.def)             Requested size: 950.54893pt x 464.7351pt.
 [30]
 <obrazky-figures/loldataset.png, id=532, 1205.50375pt x 403.5075pt>
 File: obrazky-figures/loldataset.png Graphic file (type png)
 <use obrazky-figures/loldataset.png>
-Package pdftex.def Info: obrazky-figures/loldataset.png  used on input line 699.
+Package pdftex.def Info: obrazky-figures/loldataset.png  used on input line 700.
 (pdftex.def)             Requested size: 1205.50082pt x 403.50652pt.
  [31 <./obrazky-figures/mirnet_arch.png> <./obrazky-figures/loldataset.png>] [32]
 Kapitola 6.
 <obrazky-figures/widerface_example.jpg, id=551, 1027.84pt x 642.4pt>
 File: obrazky-figures/widerface_example.jpg Graphic file (type jpg)
 <use obrazky-figures/widerface_example.jpg>
-Package pdftex.def Info: obrazky-figures/widerface_example.jpg  used on input line 730.
+Package pdftex.def Info: obrazky-figures/widerface_example.jpg  used on input line 731.
 (pdftex.def)             Requested size: 1027.8375pt x 642.39844pt.
 [33
 
 ]
-<obrazky-figures/augmentedexample.jpg, id=559, 1027.84pt x 642.4pt>
+<obrazky-figures/darkfaceexample.png, id=558, 1084.05pt x 722.7pt>
+File: obrazky-figures/darkfaceexample.png Graphic file (type png)
+<use obrazky-figures/darkfaceexample.png>
+Package pdftex.def Info: obrazky-figures/darkfaceexample.png  used on input line 741.
+(pdftex.def)             Requested size: 1084.04736pt x 722.69823pt.
+ [34 <./obrazky-figures/widerface_example.jpg> <./obrazky-figures/darkfaceexample.png (PNG copy)>]
+<obrazky-figures/augmentedexample.jpg, id=569, 1027.84pt x 642.4pt>
 File: obrazky-figures/augmentedexample.jpg Graphic file (type jpg)
 <use obrazky-figures/augmentedexample.jpg>
-Package pdftex.def Info: obrazky-figures/augmentedexample.jpg  used on input line 755.
+Package pdftex.def Info: obrazky-figures/augmentedexample.jpg  used on input line 766.
 (pdftex.def)             Requested size: 1027.8375pt x 642.39844pt.
- [34 <./obrazky-figures/widerface_example.jpg>] [35 <./obrazky-figures/augmentedexample.jpg>] [36]
+ [35 <./obrazky-figures/augmentedexample.jpg>] [36] [37]
+Overfull \hbox (26.5755pt too wide) in paragraph at lines 822--822
+[][][][][]$\T1/lmtt/m/n/9 https : / / docs\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 openvino\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 ai / latest / openvino[]docs[]MO[]DG[]Deep[]Learning[]Model[]Optimizer[]DevGuide\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 html$[][]| 
+ []
+
+<obrazky-figures/moworkflow.png, id=599, 767.86874pt x 201.75375pt>
+File: obrazky-figures/moworkflow.png Graphic file (type png)
+<use obrazky-figures/moworkflow.png>
+Package pdftex.def Info: obrazky-figures/moworkflow.png  used on input line 826.
+(pdftex.def)             Requested size: 767.86687pt x 201.75325pt.
+
+LaTeX Warning: Citation `quantization' on page 38 undefined on input line 839.
+
+<obrazky-figures/kvantovani.png, id=602, 769.6755pt x 291.489pt>
+File: obrazky-figures/kvantovani.png Graphic file (type png)
+<use obrazky-figures/kvantovani.png>
+Package pdftex.def Info: obrazky-figures/kvantovani.png  used on input line 845.
+(pdftex.def)             Requested size: 769.67363pt x 291.48828pt.
+
+LaTeX Warning: Citation `quantization' on page 38 undefined on input line 847.
+
+[38 <./obrazky-figures/moworkflow.png>] [39 <./obrazky-figures/kvantovani.png>]
 Kapitola 7.
-[37
+[40
 
 ]
 Kapitola 8.
@@ -1135,7 +1162,7 @@ No file projekt.bbl.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
-[38
+[41
 
 ] (projekt.aux)
 
@@ -1145,17 +1172,17 @@ Package rerunfilecheck Info: File `projekt.out' has not changed.
 (rerunfilecheck)             Checksum: 9F56FD681276226BBA7D1E6706559261;5095.
  ) 
 Here is how much of TeX's memory you used:
- 16558 strings out of 475385
- 270607 string characters out of 2776907
- 637528 words of memory out of 3000000
- 37342 multiletter control sequences out of 15000+600000
+ 16593 strings out of 475385
+ 271514 string characters out of 2776907
+ 637755 words of memory out of 3000000
+ 37365 multiletter control sequences out of 15000+600000
  553631 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,10n,77p,1174b,567s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt9.pfb>
-Output written on projekt.pdf (41 pages, 7088882 bytes).
+Output written on projekt.pdf (44 pages, 8221643 bytes).
 PDF statistics:
- 698 PDF objects out of 1000 (max. 8388607)
- 162 named destinations out of 1000 (max. 500000)
- 438 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 733 PDF objects out of 1000 (max. 8388607)
+ 171 named destinations out of 1000 (max. 500000)
+ 453 words of extra memory for PDF output out of 10000 (max. 10000000)
 

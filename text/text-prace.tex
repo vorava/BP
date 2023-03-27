@@ -664,6 +664,7 @@ Dat z datasetů nemusí být vždy tolik, kolik je zapotřebí k natrénování 
 Augmentace (s daty, jimiž jsou obrázky) spočívá v kopírování existujících dat s provedením různých úprav (jas, vystřižení části obrázu, otočení, kontrast, ISO, gamma, rozmazání, záměna barevných kanálů apod.). Takto nově vzniklá data pak lze použít jako dodatečná data k trénovacím obrázkům. Augmentaci lze provádět ručně, ale existují i specializované knihovny zajišťující, že v nově vzniklém obrázku budou automaticky vytvořeny anotační soubory se správně pozměněnými pozicemi obličejů.
 
 \section{Detekční neuronová síť}
+\label{sekce:detekcni_sit_navrh}
 Neuronová síť pro detekci obličejů je, jak už bylo zmíněno výše, konvoluční neuronová síť, složená z několika různých vrstev (konvoluční vrstva, poolingová vrstva a další). Jelikož je detekční model často složen z velmi mnoha částí (např. generátor kotevních bodů/boxů -- anglicky \emph{anchor boxes}) a je náročné jej naprogramovat, poskytují frameworky pro práci s umělou inteligencí možnost využití API s předchystanými modely. Tyto modely pak je možno buď trénovat tzv. \uv{od nuly} nebo lze začít s trénováním částečně předtrénované sítě.
 
 Při detekci ve zhoršených světelných podmínkách je vhodné využít některou z metod vylepšení obrázku (viz metody v sekci \ref{sekce:NSdetektory}). Jednou z nejlepších takovýchto metod je metoda Mirnet, tvořená natrénovanou neuronovou sítí, převádějící tmavé a špatně osvětlené obrázky na obrázky s lepší viditelností.
@@ -718,10 +719,10 @@ Předchozí kapitola pojednávala o návrhu nástrojů a postupů pro vytvořen�
 
 \section{Příprava dat}
 \label{sekce:priprava_dat}
-Tématem této části je příprava fotografií z datasetu k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
+Tématem této části je příprava fotografií z datasetů k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
 
-\subsection*{WIDER FACE dataset}
-Pro detekci obličejů bylo zásadní zvolit vhodný dataset. V průběhu práce byl zvažován a zkoušen dataset DARK FACE, ale kvůli malé úspěšnosti detekce takto natrénovaného detektoru v reálných experimentech, byl vybrán jiný dataset. Konkrétně dataset WIDER FACE popsaný v sekci \ref{sekce:datasety}.
+\subsection*{Použité datasety}
+Pro detekci obličejů bylo zásadní zvolit vhodný dataset. V průběhu práce byly zvažovány a zkoušeny různé datasety a nakonec bylo rozhodnuto, že budou použity 2 datasety. Konkrétně dataset WIDER FACE a dataset DARK FACE, oba uvedené v sekci \ref{sekce:datasety}.
 
 WIDER FACE poskytuje k trénovacím a validačním obrázkům anotační soubory v anotačním formátu COCO (viz sekce \ref{sekce:data_navrh}). Trénovacích souborů je dostupných celkem 12880, z nichž bylo odebrány ty, na nichž se nevyskytují žádné obličeje. Z takto filtrovaného výběru potom bylo vzato prvních 12000 snímků a byla provedena augmentace.
 
@@ -733,11 +734,21 @@ WIDER FACE poskytuje k trénovacím a validačním obrázkům anotační soubory
   \end{center}
 \end{figure}
 
-\subsection*{Augmentace fotografií}
+DARK FACE dataset dává k dispozici 6000 anotovaných obrázků vyfocených v noci v městském prostředí (viz ukázka na obrázku \ref{obrazek:darkfaceexample}). Z těchto 6000 fotek bylo prvních 4800 vybráno jako trénovací data (zbytek byl využit jako validační dataset). Následně byla provedena augmentace, podobně jako s datasetem WIDER FACE.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.35}{\includegraphics{obrazky-figures/darkfaceexample.png}}
+  \label{obrazek:darkfaceexample}
+  \caption{Ukázka snímku z datasetu DARK FACE}
+  \end{center}
+\end{figure}
+
+\subsection*{Augmentace fotografií WIDER FACE}
 Obecně byla augmentace rozebrána v sekci \ref{sekce:data_navrh}, konkrétně se v práci k provedení augmentace používá Python knihovna \textbf{albumentations}. Proces augmentace sestává z několika kroků. Prvním z nich
 je zisk anotačních dat z anotačního souboru. První údaj obsahuje název fotografie, za ním následuje číslo udávající počet obličejů v obrázku a poté hraniční body všech obličejů v daném snímku.
 
-Poté následuje načtení originální fotografie z datasetu WIDERFACE do augmentačního programu. Na načtené fotografii je provedena augmentace -- je vytvořena kopie, v níž jsou s určitou pravděpodobností (viz číslo v závorce) provedeny tyto úpravy:
+Poté následuje načtení originální fotografie z datasetu WIDER FACE do augmentačního programu. Na načtené fotografii je provedena augmentace -- je vytvořena kopie, v níž jsou s určitou pravděpodobností (viz číslo v závorce) provedeny tyto úpravy:
 
 \begin{itemize}
   \item horizontální převrácení (0.5),
@@ -748,15 +759,18 @@ Poté následuje načtení originální fotografie z datasetu WIDERFACE do augme
   \item přidání ISO šumu (0.4).
 \end{itemize}
 
-Pro vytvořený augmentovaný obrázek (ukázka na obrázku \ref{obrazek:augmentovanyobrazek}) přepočítá knihovna albumentations nové souřadnice obličejů. Obrázek je pak uložen a anotační data skládající se z \textbf{názvu obrázku}, \textbf{souřadnic obličejů ve formátu PascalVOC} a \textbf{klasifikačních tříd} (všechny objekty patří do třídy \emph{face}), jsou uložena ve formátu JSON. Podobný anotační JSON soubor se vytvoří i pro originální fotografii. Názvy obrázků jsou při tomto procesu nastaveny na číselné hodnoty 1.jpg až 12000.jpg pro originální snímky a na hodnoty 1.0.jpg až 12000.0.jpg pro augmentované obrázky.
+Pro vytvořený augmentovaný obrázek (ukázka na obrázku \ref{obrazek:augmentovanyobrazek}, originál viz obrázek \ref{obrazek:widerfaceexample}) přepočítá knihovna albumentations nové souřadnice obličejů. Obrázek je pak uložen a anotační data skládající se z \textbf{názvu obrázku}, \textbf{souřadnic obličejů ve formátu PascalVOC} a \textbf{klasifikačních tříd} (všechny objekty patří do třídy \emph{face}), jsou uložena ve formátu JSON. Podobný anotační JSON soubor se vytvoří i pro originální fotografii. Názvy obrázků jsou při tomto procesu nastaveny na číselné hodnoty 1.jpg až 12000.jpg pro originální snímky a na hodnoty 1.0.jpg až 12000.0.jpg pro augmentované obrázky. Celkem je tak k trénování připraveno 24000 obrázků.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.35}{\includegraphics{obrazky-figures/augmentedexample.jpg}}
   \label{obrazek:augmentovanyobrazek}
-  \caption{Ukázka augmentovaného snímku}
+  \caption{Ukázka augmentovaného snímku z datasetu WIDER FACE}
   \end{center}
 \end{figure}
+
+\subsection*{Augmentace fotografií DARK FACE}
+Augmentace obrázků z datasetu DARK FACE je velmi podobná augmentaci fotografií z datasetu WIDER FACE. Anotační soubor zda má mírně odlišnou syntaxi a výčet úprav je ochuzen o Gaussův šum a snížení pravděpodobnosti změny jasu a kontrastu na 0.5. Výstup augmentačního skriptu ovšem zachovává stejný formát. S využitím augmentace je tak vytvořeno 4800 nových snímků (1.0.png až 4800.0.png) a celkem tak trénovací set tvoří 9600 tmavých obrázků.
 
 \subsection*{TFRecord}
 Vstupy TensorFlow modelů neuronových sítí mohou být dvojice dat vstup $\times$ výstup nebo se může jednat o serializovanou strukturu dat formátu \textbf{tfrecord}\footnote{\url{https://www.tensorflow.org/tutorials/load_data/tfrecord}}. Jedná se o binární sekvenci dat, mající určitou organizaci a řád. Výhodou použití tfrecord namísto klasických obrázků a anotačních souborů je to, že odpadá část předzpracování dat před spuštěním trénování sítě. Skript starající se o transformaci originálních a augmentovaných obrázků a popisných souborů do formátu tfrecord pracuje tak, že načte obrázek a anotační soubor a provede kontrolu, že žádný ohraničující box nezasahuje mimo rozměry obrázku. Dále pak vytvoří proměnnou typu \texttt{tf.train.Example}, která tvoří základ jednoho tfrecordu. Do proměnné se zapisují bytová data dle následujícího řádu:
@@ -772,13 +786,18 @@ Vstupy TensorFlow modelů neuronových sítí mohou být dvojice dat vstup $\tim
   \item název a číslo třídy objektu (1 a \uv{face}).
 \end{itemize}
 
-Z důvodu snazší manipulace s daty ve formátu tfrecord byly obrázky rozděleny do skupin po 2000 jednotkách. Celkově tak bylo vytvořeno 12 trénovacích tfrecord souborů (12000 originálních a 12000 augmentovaných obrázků po dvoutísícových skupinách).
+Z důvodu snazší manipulace s daty ve formátu tfrecord byly obrázky z datasetu WIDER FACE rozděleny do skupin po 2000 jednotkách. Celkově tak bylo vytvořeno 12 trénovacích tfrecord souborů (12000 originálních a 12000 augmentovaných obrázků po dvoutísícových skupinách). Pro druhý dataset byly vytvořeny skupiny po 200 snímcích a vzniklo tak 48 tfrecord souborů.
 
 \section{Detektor obličejů}
 \label{sekce:detektor_obliceju_implementace}
-Tato část pojednává o implementaci použitého detektoru obličejů. Zabývá se návrhem a tvorbou původního modelu pro detekci a následně i konkrétními zvolenými modely.
+Tato část pojednává o implementaci použitého detektoru obličejů. Zabývá se návrhem a tvorbou původního modelu pro detekci a následně i použitím konkrétních zvolených existujících modelů. V původním plánu byla snaha o vytvoření plně vlastního detektoru obličejů, od čehož bylo upuštěno pro příliš vysokou náročnost. Tomuto prvotnímu záměru se věnuje první část této sekce. Přirozeně pak následujícím krokem byl přechod na modely existující. K tomuto účel bylo vybráno TensorFlow Object Detection API (TF OD API) popsané v sekci \ref{sekce:detekcni_sit_navrh}. Výsledný detektor, respektive detektory tváří tak stojí na základech detektorů objektů. Explicitně využité modely neuronových sítí popisují další pasáže této sekce.
 
-\subsection*{Originální model}
+\subsection*{Původní záměr}
+Jak již bylo avizováno výše, původní záměr spočíval ve vytvoření vlastní detekční sítě s využitím frameworků TensorFlow a Keras. Po několika pokusech se podařilo vytvořit a natrénovat model podobný neuronové síti VGG--16. Tento model zvládal detekovat pouze 1 obličej, protože se spíše než o detektor jednalo o klasifikátor (který klasifikoval v obrázku obličej a dokázal vrátit souřadnice ohraničení tváře). Následným testováním na obrázcích s více obličeji, kdy bylo vyzkoušeno oblast detekovaného obličeje v obrázku začernit a pokusit se o detekci znovu, bylo zjištěno, že metoda je neefektivní a nepříliš funkční.
+
+Novým způsobem, který bylo možné zkusit zrealizovat byla celková implementace SSD detektoru. Poměrně složité matematické operace s jednotlivými vrstvami výstupů detekční sítě se ukázaly být příliš náročné na implementaci. Bylo tak rozhodnuto, o využití existujícího řešení s implementací vlastní augmentace vstupních dat a vlastního natrénování. Při trénování muselo být využito dostupného předtrénovaného stavu sítě, protože kompletní trénování sítě tzv \uv{od nuly} by zabralo neúnosně mnoho výpočetního i reálného času.
+
+Použité modely tak vycházejí z detektorů objektů a jsou přetrénovány tak, aby detekovaly jen 1 třídu objektů (obličeje), místo výchozích 90 tříd. V tom se také odlišují od konkrétně zaměřených detektorů tváří jako je například RetinaFace, která byla trénována pro detekci obličejů.
 
 \subsection*{SSD Mobilenet}
 
@@ -790,20 +809,54 @@ Následující sekce je věnována problematice trénování vybraných neuronov
 
 \subsection*{Metacentrum}
 
+\subsection*{Mirnet}
+
 
 \section{Akcelerace detekce}
 \label{sekce:akcelerace_implementace}
+Teorie věnující se akceleraci neuronových sítí a akcelerační knihovně OpenVINO byla shrnuta v sekci \ref{sekce:akcelerace}. Tato část je zaměřena na konkrétní implementaci a použití knihovny OpenVINO během práce na detektoru obličejů. Samotné detekční modely vytvořené s pomocí frameworku TensorFlow, které byly popsány výše, nedosahují na málo výkonném hardwaru požadované rychlosti zpracování vstupního videa. Řešením je použití akcelerační knihovny, která inferenci modelu výrazně urychlí, lze ji však využít jen na hardwaru značky Intel.
+
+Akcelerace provedená v rámci této práce stojí na dvou pilířích z knihovny OpenVINO -- Model Optimizer a kvantování. \textbf{Model Optimizer} je vstupním bodem v práci s knihovnou OpenVINO. Stará se o převedení uloženého TensorFlow modelu do formátů XML a BIN. Další možností ještě vyšší akcelerace je tzv. \textbf{kvantování}, které nemusí být dostupné a funkční na každém Intel zařízení. Kvantování však umožňuje razantní nárůst rychlosti se zanedbatelným vlivem na přesnost detekce. Obě tyto činnosti jsou shrnuty na následujících řádcích.
 
 \subsection*{Model Optimizer}
+Utilita \textbf{Model Optimizer}\footnote{\url{https://docs.openvino.ai/latest/openvino_docs_MO_DG_Deep_Learning_Model_Optimizer_DevGuide.html}} se stará o převod a přizpůsobení modelu pro práci s možnostmi knihovny OpenVINO. Optimizer je součástí knihovního balíčku a spouští se jako samostatný program v příkazovém řádku. Typický pracovní postup Model Optimizeru zachycuje obrázek \ref{obrazek:moworkflow}. Jak již bylo zmíněno, program vytváří 2 soubory -- XML a BIN. XML soubor uchovává topologii neuronové sítě a v BIN souboru jsou uloženy váhy a biasy natrénované sítě.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.5}{\includegraphics{obrazky-figures/moworkflow.png}}
+  \label{obrazek:moworkflow}
+  \caption{Postup použití (workflow) Model Optimizeru}
+  \end{center}
+\end{figure}
+
+Při převodu obyčejného TensorFlow nebo PyTorch modelu stačí programu předat cestu k uloženému modelu. Transformace modelu z TensorFlow Object Detection API (TF OD API) je nicméně o něco složitější. Model Optimizeru musí být předána cesta k uloženému modelu (parametr \texttt{saved\_model\_dir}), dále pak cesta ke konfiguračnímu souboru modelu (\texttt{tensorflow\_object\_detection\_api\_pipeline\_config}) a také lokace tzv. transformačního konfiguračního souboru (\texttt{transformations\_config}), který je specifický pro modely z TF OD API.
+
+Aby byla co nejvíce navýšena rychlost detekce na Intel Neural Compute Stick 2 (NCS2), byl navíc přidán parametr \texttt{data\_type} s hodnotou FP16. Ten zajistí, že model bude po převodu používat jen 16bitový float systém, což by mělo vést k celkovému zvýšení rychlosti inference. Posledním parametrem použitým při převodu je \texttt{input\_shape}, nastavující vstup detektoru na 640 $\times$ 640 pixelů.
+
+Transformovaný model pak dosahuje značného zrychlení jak ukazují experimenty v kapitole \ref{kapitola:experimenty}. Akceleraci však lze ještě vylepšit pomocí kvantování.
 
 \subsection*{Kvantování}
+Kvantování \cite{quantization} pomocí knihovny OpenVINO je proces, při němž dochází k transformaci modelu z floating point aritmetiky na 8 bitovou celočíselnou aritmetiku. Model se tak stává více \emph{HW--friendly} a může tak běžet rychleji. Zároveň nedochází k rapidnímu snížení výkonnosti detekce.
+
+Základní princip při kvantování zobrazuje obrázek \ref{obrazek:kvantovani}. Model neuronové sítě převedený OpenVINO Model Optimizerem, který pracuje s 32bitovými nebo 16bitovými floaty je kvantován, tak aby využíval 8 bitová velá čísla na interní výpočty modelu. Na výstupu jsou pak celá čísla převedena zpět na floaty. 
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.5}{\includegraphics{obrazky-figures/kvantovani.png}}
+  \label{obrazek:kvantovani}
+  \caption{Ukázka principu kvantování neuronových modelů \cite{quantization}}
+  \end{center}
+\end{figure}
+
+Skript starající se o kvantování modelů používaných v rámci této práce, potřebuje na vstupu kromě XML a BIN souborů modelu také kalibrační dataset. Dle dokumentace by tento dataset měl být tvořen snímky z trénovacího nebo validačního balíčku a obsahovat alespoň 300 fotografií. Kvantování pak probíhá za spolupráce knihovny \textbf{nncf} a OpenVINO, výstupní model je uložen opět ve formátu XML a BIN souborů. Vliv kvantování na rychlost lze posoudit z grafů v kapitole \ref{kapitola:experimenty}. Nevýhodou kvantování je mj. to, že takto pozměněný model nelze spustit na NCS2, které s celými čísly neumí pracovat. Kvantování již z logiky věci zmenšuje celkovou velikost modelu.
 
 \section{Grafické uživatelské rozhraní}
 \label{sekce:gui}
+Grafické uživatelské rozhraní (GUI) aplikace vytvořené k praktickému zkoušení modelů bylo vytvořeno tak, aby nejen zobrazovalo video a detekované obličeje, ale také tak, aby umožňovalo vytvářet soubory s naměřenými metrikami pro další zpracování. Funkce a schopnosti GUI, způsoby měření, provádění detekce a organizaci výstupů jsou shrnuty níže v textu. 
 
 \subsection*{Implementace rozhraní}
 
-\subsection*{Měřené heuristiky}
+\subsection*{Měřené metriky}
 
 \subsection*{Příprava videí}
 
@@ -825,6 +878,7 @@ Následující sekce je věnována problematice trénování vybraných neuronov
 %       KAPITOLA Experimenty
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Experimenty}
+\label{kapitola:experimenty}
 
 \section{Podklady}
 videa
