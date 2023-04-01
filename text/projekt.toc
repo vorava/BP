@@ -21,14 +21,14 @@
 \contentsline {chapter}{\numberline {6}Implementace}{33}{chapter.6}%
 \contentsline {section}{\numberline {6.1}Příprava dat}{33}{section.6.1}%
 \contentsline {section}{\numberline {6.2}Detektor obličejů}{36}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Trénování}{37}{section.6.3}%
-\contentsline {section}{\numberline {6.4}Akcelerace detekce}{37}{section.6.4}%
-\contentsline {section}{\numberline {6.5}Grafické uživatelské rozhraní}{39}{section.6.5}%
-\contentsline {section}{\numberline {6.6}Nástroje pro experimenty}{39}{section.6.6}%
-\contentsline {chapter}{\numberline {7}Experimenty}{40}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Podklady}{40}{section.7.1}%
-\contentsline {section}{\numberline {7.2}Porovnání akcelerovaného a normálního řešení}{40}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Detekce s a bez Mirnetu}{40}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Porovnání s YOLOFacev7}{40}{section.7.4}%
-\contentsline {chapter}{\numberline {8}Závěr}{41}{chapter.8}%
+\contentsline {section}{\numberline {6.3}Trénování}{38}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Akcelerace detekce}{39}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Grafické uživatelské rozhraní}{41}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Nástroje pro experimenty}{43}{section.6.6}%
+\contentsline {chapter}{\numberline {7}Experimenty}{45}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Podklady}{45}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Porovnání akcelerovaného a normálního řešení}{45}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Detekce s a bez Mirnetu}{45}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Porovnání s YOLOFacev7}{45}{section.7.4}%
+\contentsline {chapter}{\numberline {8}Závěr}{46}{chapter.8}%
 \contentsfinish 

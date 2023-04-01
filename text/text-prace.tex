@@ -408,8 +408,6 @@ Tato část popisuje vybrané existující detektory obličejů založené na ne
 
 Single shot detector \textbf{SSD} \cite{ssd} je konvoluční neuronová síť opět složená ze 2 částí, sloužící obecně k~detekci objektů. Tyto části jsou: a) natrénovaný detekční model (VGG--16 nebo jiný) a b) část SSD -- další konvoluční vrstva, která rozděluje obrázek pomocí mřížky (\emph{grid}) s~rozměry 4 $\times$ 4 nebo 8 $\times$ 8. V~každém takto vytvořeném bloku je pak hledán objekt (obličej).
 
-Již výše zmíněný detekční/rozpoznávací algoritmus/neuronová síť \textbf{VGG--16} \cite{vgg-16} používá k~detekci konvoluční filtry o~rozměrech $3 \times 3$ v~několika konvolučních vrstvách za sebou (počet filtrů se s~každou další vrstvou navyšuje). Používá se zde stride o~hodnotě 1.
-
 Detekční model \textbf{RetinaFace} \cite{lowLightFdReview} používá multitasking pro učení. Detekce probíhá určením pozice obličeje podle vyhledání pixelů, které tvář obsahuje. Model má 2 struktury: \emph{Multi--task loss} -- minimalizace chyb modelu a \emph{Dense Regression Branch} -- renderer, který filtruje obličeje a získává pixely z~vyrenderovaných obličejů.
 
 \textbf{YOLO} (You Only Look Once) \cite{yolo} je stejně jako SSD tzv. single shot detektor -- rozděluje vstupní obrázek do mřížky a provádí detekci případně rekognici nad jednotlivými bloky mřížky. Pro každý blok je určena hodnota jistoty výskytu objektu. Na vstupu sítě YOLO jsou barevné obrázky o~velikosti 448 $\times$ 448 pixelů. Architektura neuronové sítě je složena ze 7 konvolučních vrstev následovaných pooling vrstvami a 3 plně propojenými vrstvami na výstupu.
@@ -719,7 +717,7 @@ Předchozí kapitola pojednávala o návrhu nástrojů a postupů pro vytvořen�
 
 \section{Příprava dat}
 \label{sekce:priprava_dat}
-Tématem této části je příprava fotografií z datasetů k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
+Tématem této frakce je příprava fotografií z datasetů k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
 
 \subsection*{Použité datasety}
 Pro detekci obličejů bylo zásadní zvolit vhodný dataset. V průběhu práce byly zvažovány a zkoušeny různé datasety a nakonec bylo rozhodnuto, že budou použity 2 datasety. Konkrétně dataset WIDER FACE a dataset DARK FACE, oba uvedené v sekci \ref{sekce:datasety}.
@@ -797,19 +795,47 @@ Jak již bylo avizováno výše, původní záměr spočíval ve vytvoření vla
 
 Novým způsobem, který bylo možné zkusit zrealizovat byla celková implementace SSD detektoru. Poměrně složité matematické operace s jednotlivými vrstvami výstupů detekční sítě se ukázaly být příliš náročné na implementaci. Bylo tak rozhodnuto, o využití existujícího řešení s implementací vlastní augmentace vstupních dat a vlastního natrénování. Při trénování muselo být využito dostupného předtrénovaného stavu sítě, protože kompletní trénování sítě tzv \uv{od nuly} by zabralo neúnosně mnoho výpočetního i reálného času.
 
-Použité modely tak vycházejí z detektorů objektů a jsou přetrénovány tak, aby detekovaly jen 1 třídu objektů (obličeje), místo výchozích 90 tříd. V tom se také odlišují od konkrétně zaměřených detektorů tváří jako je například RetinaFace, která byla trénována pro detekci obličejů.
+Použité modely tak vycházejí z detektorů objektů a jsou přetrénovány tak, aby detekovaly jen 1 třídu objektů (obličeje), místo výchozích 90 tříd. V tom se také odlišují od konkrétně zaměřených detektorů tváří jako je například RetinaFace, která byla trénována přímo pro detekci obličejů.
 
-\subsection*{SSD Mobilenet}
+\subsection*{SSD ResNet50 V1 FPN}
+Prvním zvoleným modelem z TensorFlow 2 Detection Model Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} (TF DMZ) byl model SSD ResNet50 V1 FPN 640x640 (RetinaNet50). Jak název napovídá, jedná se o neuronovou síť ResNet50 spojenou s kaskádou SSD. Model má na vstupu preprocessingovou část, která se stará o změnu rozlišení vstupního obrázku na 640 $\times$ 640 pixelů. Dle stránek TF DMZ dosahuje ve výchozím předtrénovaném stavu model rychlosti detekce 46 ms a má průměrnou přesnost 34,3 \% na datasetu COCO 2017.
 
-\subsection*{SSD Resnet 50}
+SSD část tohoto modelu je popsána v sekci \ref{sekce:NSdetektory}. Síť ResNet50 (Residual Network) \cite{resnet} je konvoluční neuronová síť patřící mezi skupinu ResNet modelů, mající 50 vrstev. Vychází z původního 18, respektive 34 vrstvého ResNetu. Každá vrstva obsahuje konvoluční filtr 3 $\times$ 3. Konkurentem ResNetu je například síť VGG--16. Další verze ResNetu mají 101 nebo 152 konvolučních vrstev.
+
+Tento model byl natrénován na datasetech popsaných výše. Samotné trénování popisuje sekce \ref{sekce:trenovani}. Po natrénování byl model vyzkoušen při detekci. Bez konkrétního měření přesnosti (konkrétní hodnoty byly změřeny později a jsou zaznamenány v experimentech v kapitole \ref{kapitola:experimenty}) dosahoval model obstojných výsledků detekce obličejů, ovšem ukázalo se, že detekce je pomalá a nelze s ním detekovat tváře ve videu v reálném čase. Proto byl hledán jiný, rychlejší model a nakonec byl ustanoven model SSD MobileNet V2 FPNLite.
+
+\subsection*{SSD MobileNet V2 FPNLite}
+SSD MobileNet V2 FPNLite 640 $\times$ 640 je model složený z SSD části a neuronové sítě MobileNet. MobileNet \cite{mobilenet} je pro svou efektivitu a rychlost určen převážně pro mobilní zařízení (například v Android telefonech jej lze použít s TensorFlow Lite), ale může posloužit i jako real--time detektor na běžném počítači. MobileNet používá stejně jak ostatní  detekční sítě konvoluční vrstvy, ale konvoluce v něm je rozdělena na tzv \emph{depthwise} a \emph{pointwise} část. Depthwise konvoluce je aplikována na každý vstupní kanál a pointwise konvoluce pak na tento výstup aplikuje konvoluci s filtrem o velikosti 1 $\times$ 1. Velikost sítě v počtu vrstev je poloviční oproti ResNet50. Velikost na disku je v případě MobileNetu 10$\times$ nižší než v případě ResNet50.
+
+MobileNet podle dat z TF DMZ dosahuje rychlosti zpracování 1 obrázku za 39 ms a průměrná úspěšnost na datasetu COCO 2017 je 28,2 \%. Model stejně jako předcházející ResNet50 pracuje s rozlišením 640 $\times$ 640 pixelů. V práci byly nakonec použity oba modely a během experimentů byly porovnány mezi sebou.
 
 \section{Trénování}
 \label{sekce:trenovani}
-Následující sekce je věnována problematice trénování vybraných neuronových sítí z předcházející sekce.
+Následující blok je věnován problematice trénování vybraných neuronových sítí z předcházející sekce. Neboť je trénování detekčních neuronových sítí velmi výpočetně a časově náročná akce, je potřeba mít výkonnou grafickou kartu nebo využít trénování v cloudu (například Google Colab). Autor textu nejprve zkoušel trénovat síť na vlastní grafické kartě nVidia GTX 1070 Ti s 8 GB video paměti RAM. To se ukázalo jako příliš pomalé a tak bylo trénování přesunuto na servery služby Metacetrum. Podrobněji Metacentrum popisuje text níže.
 
 \subsection*{Metacentrum}
+Metacentrum je virtuální organizace spravovaná organizací Cesnet, která poskytuje zdarma akademickým pracovníkům a studentům vypočetní zdroje na několika serverech po celé ČR. Spouštění úloh je realizováno interaktivě nebo dávkově. Pro potřeby trénování bylo využito dávkových úloh, které spočívají v přípravě bash skriptu a jeho následném předání plánovači úloh. Skripty dávkových úloh mají danou počáteční syntaxi dle pravidel Metacentra (nastavení požadovaných zdrojů, požadovaná délka běhu atd.). Po těcto pravidlech následuje klasický kód v bashi.
+
+Aby mohlo trénování běžet, bylo potřeba předpřipravit prostředí na serverech Metacentra. Příprava sestávala z vytvoření virtuálního prostředí (pomocí aplikace micromamba) pro běh TF OD API, samotná instalace TF OD API a instalace potřebných knihoven pro práci s grafickými kartami nVidia (cuDNN 8.1.0 a CUDA 11.2). Pro trénování pak byl vybrán téměř vždy server Galdor s využitím dvou grafických karet nVidia A40.
+
+Trénink modelu z TF OD API se spouští speciálním Python skriptem, který je obsažen v repozitáři TF OD API. Skript ke spuštění potřebuje znát místo uložení trénovaného modelu a také konfigurační soubor \texttt{pipeline.config}. V tomto konfiguračním souboru se nastavují parametry trénování (optimizér, počet kroků, batch velikost, míra učení -- \emph{learning rate}, maximální počet detekcí v obrázku, počet detekovaných tříd, druhy a váhy jednotlivých chybových funkcí a další parametry) a také místo uložení trénovacích a evaluačních TFRecord souborů a lokace výchozího předtrénovaného bodu modelu.
+
+Skript pro učení modelu automaticky každých 1000 provedených kroků ukládá aktuální stav modelu do tzv. checkpointů. Tyto checkpointy je pak možno převést na klasický TensorFlow \emph{saved model} formát a následně použít k detekci. Výstupní hodnoty jednotlivých chybových funkcí jsou při běhu trénování vypisovány na standardní chybový výstup ve formátu, který zachycuje obrázek \ref{obrazek:trenovani}.
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.7}{\includegraphics{obrazky-figures/trenink.png}}
+  \label{obrazek:trenovani}
+  \caption{Výstup trénovacího skriptu během trénování}
+  \end{center}
+\end{figure}
+
+\subsection*{Natrénované modely}
+Celkově byly natrénovány 4 modely. Oba modely popsané v sekci \ref{sekce:detektor_obliceju_implementace} s oběma datasety ze sekce \ref{sekce:priprava_dat}. Jednotlivé parametry trénovaných modelů zachycuje tabulka.
 
 \subsection*{Mirnet}
+Poněvadž je práce zaměřena na detekci ve zhoršených světelných podmínkách a využívá metodu Mirnet, která je sama neuronovou sítí, bylo třeba natrénovat i ji. K tomuto účelu postačila vlastní grafická karta autora a nebylo třeba využívat služeb Metacentra. Kód neuronové sítě Mirnetu byl převzat z \cite{mirnet}. Trénování sítě bylo spuštěno po dobu 70 epoch a byl použit dataset LoL. 350 obrázků z tohoto datasetu bylo využito k trénování a zbylých 135 pak k validaci modelu. Vzhledem k vysoké náročnosti na video paměť, byl batch nastaven na velikost 1. 
+
 
 
 \section{Akcelerace detekce}
@@ -852,26 +878,62 @@ Skript starající se o kvantování modelů používaných v rámci této prác
 
 \section{Grafické uživatelské rozhraní}
 \label{sekce:gui}
-Grafické uživatelské rozhraní (GUI) aplikace vytvořené k praktickému zkoušení modelů bylo vytvořeno tak, aby nejen zobrazovalo video a detekované obličeje, ale také tak, aby umožňovalo vytvářet soubory s naměřenými metrikami pro další zpracování. Funkce a schopnosti GUI, způsoby měření, provádění detekce a organizaci výstupů jsou shrnuty níže v textu. 
+Grafické uživatelské rozhraní (GUI) aplikace vytvořené k praktickému zkoušení modelů bylo vytvořeno tak, aby nejen zobrazovalo video a detekované obličeje, ale také tak, aby umožňovalo vytvářet soubory s naměřenými metrikami pro další zpracování. Funkce a schopnosti GUI, způsoby měření, provádění detekce a organizaci výstupů jsou shrnuty v následujím oddílu. 
 
-\subsection*{Implementace rozhraní}
+\subsection*{Rozhraní}
+Kostra aplikace je postavena na knihovně PyQt6 a jejích signálech a slotech (události a reakce na ně). Rozhraní (viz obrázek \ref{obrazek:gui}) se skládá z několika sekcí. Horní část slouží k výběru přehrávaného videa ve formátu mp4 a výběru modelu pro detekci (jeden ze čtyř natrénovaných z předcházející části). Dále lze pak vybrat zařízení na němž detekce poběží v případě spuštění akcelerované OpenVINO verze modelu (NCS2, CPU, GPU), a nakonec je možno určit zda se má použít akcelerovaný model (políčko OpenVINO?) a pokud ano, tak zda jeho kvantovaná verze (políčko Quantization?).
+
+Následuje plocha s promítaným načteným videem, v němž jsou modře ohraničeny detekované obličeje. Na každým takovým boxem je červeným písmem napsána přesnost (\emph{confidence}) detekce.
+
+Ve spodní části je umístěn posuvník pro pohyb ve videu, dále pak ukazatele statistických informací (číslo aktuálního snímku/počet snímků celkem, uběhlý čas/celková délka videa a aktuální, průměrné a výchozí FPS). Na samém spodním kraji se nachází tlačítka ovládání přehrávání, tlačítko pro zobrazení správných (\emph{ground truth}) boxů (pokud je anotační soubor videa k dispozici) a tlačítko pro uložení aktuálního snímku.
+
+
+\begin{figure}[H]
+  \begin{center}
+      \scalebox{0.54}{\includegraphics{obrazky-figures/gui.png}}
+  \label{obrazek:gui}
+  \caption{Aplikace pro detekci obličejů ve zhoršených světelných podmínkách}
+  \end{center}
+\end{figure}
 
 \subsection*{Měřené metriky}
+Při přehrávání videa nedochází pouze k detekci tváří, ale jsou zaznamenávány i metriky detekce. Mezi tyto metriky patří:
+
+\begin{itemize}
+  \item aktuální FPS,
+  \item počet detekcí v aktuálním snímku,
+  \item počet a polohy detekovaných obličejů ve formátu COCO.
+\end{itemize}
+
+\textbf{Aktuální FPS} jsou vypočítány pomocí doby uběhlé mezi začátkem detekce a zakreslením hraničních boxů kolem detekovaných tváří do snímku. 
+\textbf{Počet detekcí} aplikace zaznamenává pro každý snímek zvlášť. Tyto dvě metriky jsou exportovány v csv souborech k dalšímu zpracování (viz sekce \ref{sekce:nastroje_pro_experimenty}).
+
+Ke každému snímku je do souboru nazev\_videa\_output.txt zapsán \textbf{počet detekovaných obličejů a jejich souřadnice} v anotačním formátu COCO. Textový soubor odpovídá formátu, který používá dataset WIDER FACE. Formát COCO byl zvolen z toho důvodu, že stejný formát mají anotační soubory testovacích videí a je tak usnadněna práce s vyhodnocováním přesnosti detekce napříč snímky videa. Program, který pracuje s tímto výstupem je popsán v oddílu \ref{sekce:nastroje_pro_experimenty}.
+
 
 \subsection*{Příprava videí}
-
+K otestování schopností detektorů byly vybrány 2 testovací videa. Obě videa bylo třeba oanotovat, k čemuž byl použit webový nástroj CVAT\footnote{\url{https://www.cvat.ai}} (Computer Vision Anottation Tool). 
+Tento program umožňuje ve zpracovávaném videu projít každý jeden snímek (frame) a nastavit v něm ohraničující boxy jednotlivých tváří. Tento úkon bylo nutno udělat ručně a výstup slouží jak \emph{ground truth} údaje pro validaci a porovnávání modelů mezi sebou. Formát výstupu je možné zvolit v několika tvarech, pro zpracovaná videa byl zvolen výstup podobný anotaci WIDER FACE datasetu (číslo snímku, počet obličejů ve snímku, COCO souřadnice). Konkrétní vybraná videa jsou popsána v další kapitole. 
 
 \subsection*{Detekce}
+Detekce, správa ovládání a zápis statistických informací probíhá v aplikaci v separátním vláknu. Vlákno je vytvořeno pomocí PyQt6 knihovních tříd QThreadPool a QRunnable. Pomocí PyQt6 signálů jsou mezi hlavním vláknem aplikace a detekčním vláknem předávány informace o snímkové frekvenci a aktuálním snímku s využitím slotových funkcí v rámci hlavního aplikačního vlákna. Další funkcionalita detekčního vlákna je zápis výstupních informací do csv souborů a předávání snímku s detekovanými obličeji pro vykreslení v hlavním vlákně.
 
+Nastavení druhu používaného modelu, výběr zda využít jeho akcelerovanou nebo případně kvatovanou verzi je v gesci hlavního vlákna. Modely se nastavují jako globální proměnné, takže jsou dostupné ve všech funkcích a třídách aplikace.
 
-\subsection*{Výstupy}
+O detekci se starají dvě hlavní funkce, obě jsou globální. Funkce \texttt{detect\_faces} je funkce pro detekci OpenVINO verzí modelu, podobně pojmenovaná funkce \texttt{detect\_faces\_tf} pak spouští detekci na TensorFlow variantě modelu. Která z funkcí bude využita definuje uživatelem dané nastavení v horním ovládacím řádku aplikace. Toto nastavení nelze již během zpracovávání videa měnit. Pro nastavení jiného modelu je třeba video uzavřít, změnit nastavení a video soubor znovu načíst.
+
+Detekováné tváře, respektive jejich ohraničující body a důvěra modelu ve správnost detekce (\emph{confidence}), jsou hlavním výstupem obou vvýše zmíněných funkcí. Na vykreslení obdélníků do snímku dbá funkce \texttt{apply\_bboxes}, jenž zároveň vrací souřadnice v COCO formátu pro uložení do výstupního souboru k dalšímu zpracování.
+
+Pokud je k pouštěnému videu dostupný anotační soubor (pojmenovaný formou nazev\_videa\_gt.txt) z aplikace CVAT, umí program ukazovat zelenou barvou \emph{ground truth} boxy. Tato utilita se zapíná tlačítkem \uv{Show GT boxes} a může posloužit k vizuální kontrole detekce uživatelem.
 
 \section{Nástroje pro experimenty}
 \label{sekce:nastroje_pro_experimenty}
+Nástroje pro porovnávání modelů a experimenty s nimi jsou potřeba proto, aby bylo možné zhodnotit rozdíly mezi akcelerovaným a neakcelerovaným řešením a porovnat implementované detektory s existujícími. Tato část popisuje skripty pro zpracování výsledků detektorů obličejů a způsoby jejich porovnávání pro možnosti experimentů v další kapitole. Je zde vylíčeno jak se každá měřená metrika vyhodnocuje a jak vypadají výstupy experimentačních programů.
 
-\subsection*{Zpracování vstupů}
+\subsection*{Data pro experimenty}
+Mezi data, která jsou hodnocena za účelem srovnání detekčních sítí, nepatří jen data získaná z GUI aplikace, ale také evaluace modelů na validačních datasetech. 
 
-\subsection*{Podoba výstupů}
+\subsection*{Výstupy}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
