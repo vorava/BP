@@ -674,10 +674,18 @@ Framework TensorFlow poskytuje open\,--\,source API pro práci s modely pro dete
 
 TF OD API ke každému předtrénovanému modelu poskytuje základní informace o rychlosti detekce, o přesnosti změřené na validačních datech z výše zmíněného COCO datasetu a také informaci o tvaru výstupu neuronové sítě (souřadnice/klíčové body). Souřadnicový systém ohraničujích obdélníků odpovídá formátu PascalVOC. 
 
-S modely se pracuje pomocí skriptů v jazyce Python (trénování, evaluace, export), nastavování se provádí skrze editaci konfiguračních souborů, které jsou poskytovány pro každý model zvlášť. Při trénování pak dochází k vytváření tzv. \emph{checkpointů}, vytvoření souborů s údaji o vahách neuronů. Trénování neprobíhá v epochách jak je tomu u TensorFlow běžné, ale v krocích, kdy jeden krok znamená, že síť zpracuje počet obrázků daných velikostí \textbf{batch}. Z toho vyplývá nasledující vztah:
+S modely se pracuje pomocí skriptů v jazyce Python (trénování, evaluace, export), nastavování se provádí skrze editaci konfiguračních souborů, které jsou poskytovány pro každý model zvlášť. Při trénování pak dochází k vytváření tzv. \emph{checkpointů}, vytvoření souborů s údaji o vahách neuronů. Trénování neprobíhá v epochách jak je tomu běžné, ale v krocích, kdy jeden krok znamená, že síť zpracuje počet obrázků daných velikostí \textbf{batch}. Z toho vyplývá nasledující vztah:
 
 \begin{equation}
-  epocha = \frac{pocetObrazku}{batch}  \;\;[kroky]  
+  \label{vzorec:krokuzaepochu}
+  krokuZaEpochu = \frac{pocetObrazku}{batch}  \;\;[kroky]  
+\end{equation}
+
+\noindent Celkový počet proběhlých epoch pak lze vypočítat jako:
+
+\begin{equation}
+  \label{vzorec:celkemepoch}
+  celkemEpoch = \frac{pocetKroku}{krokuZaEpochu}
 \end{equation}
 
 
@@ -831,7 +839,23 @@ Skript pro učení modelu automaticky každých 1000 provedených kroků uklád�
 \end{figure}
 
 \subsection*{Natrénované modely}
-Celkově byly natrénovány 4 modely. Oba modely popsané v sekci \ref{sekce:detektor_obliceju_implementace} s oběma datasety ze sekce \ref{sekce:priprava_dat}. Jednotlivé parametry trénovaných modelů zachycuje tabulka.
+Celkově byly natrénovány 4 modely. Oba modely popsané v sekci \ref{sekce:detektor_obliceju_implementace} s oběma datasety ze sekce \ref{sekce:priprava_dat}. Jednotlivé parametry trénovaných modelů zachycuje tabulka \ref{tabulka:trenovanimodely}. Zkratky  DF a WF v názvech modelů odpovídají názvu datasetu, který byl použit při tréninku (DF = DARK FACE, WF = WIDER FACE). Počet kroků je metrika, kterou používá k počítání průběhu trénování TF OD API. Počet epoch je pak vypočítán dle vzorce \ref{vzorec:celkemepoch}. Velikost batche byla nastavena na hodnotu 32 z toho důvodu, aby nedocházelo při trénování k problémům s nedostatkem video paměti. Počty trénovacích obrázků odpovídají velikostem augmentovaným datasetům, které byly popsány výše.
+
+\begin{table}[h]
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \rowcolor[HTML]{E0DBDB} 
+    {\color[HTML]{333333} \textbf{Model}} & {\color[HTML]{333333} \textbf{Kroků}} & {\color[HTML]{333333} \textbf{Epoch}} & {\color[HTML]{333333} \textbf{Doba trénování}} & {\color[HTML]{333333} \textbf{Batch}} & {\color[HTML]{333333} \textbf{Počet tr. obrázků}} \\ \hline
+    DF Mobilenet  & 100 000 & $\sim$333 & 5,5 h  & 32  & 9 600        \\ \hline
+    DF Resnet50  & 500 000  & $\sim$1667   & 4 dny  & 32  & 9 600   \\ \hline
+    WF Mobilenet    & 362 000      & $\sim$483 & 40 h   & 32  & 24 000  \\ \hline
+    WF Resnet50   & 500 000  & $\sim$667  & 3,5 dnů   & 32  & 24 000  \\ \hline
+  \end{tabular}
+  \label{tabulka:trenovanimodely}
+  \caption{Parametry modelů natrénovaných v rámci práce}
+\end{table}
+
+Checkpointy, které trénováním vznikly pak byly pomocí TF OD API převedeny exportérem na tzv \emph{saved model} formát. Tento formát je klasický TensorFlow formát modelů, jenž se dá v dalších aplikacích načíst a použít k detekci.
 
 \subsection*{Mirnet}
 Poněvadž je práce zaměřena na detekci ve zhoršených světelných podmínkách a využívá metodu Mirnet, která je sama neuronovou sítí, bylo třeba natrénovat i ji. K tomuto účelu postačila vlastní grafická karta autora a nebylo třeba využívat služeb Metacentra. Kód neuronové sítě Mirnetu byl převzat z \cite{mirnet}. Trénování sítě bylo spuštěno po dobu 70 epoch a byl použit dataset LoL. 350 obrázků z tohoto datasetu bylo využito k trénování a zbylých 135 pak k validaci modelu. Vzhledem k vysoké náročnosti na video paměť, byl batch nastaven na velikost 1. 
@@ -928,13 +952,129 @@ Pokud je k pouštěnému videu dostupný anotační soubor (pojmenovaný formou 
 
 \section{Nástroje pro experimenty}
 \label{sekce:nastroje_pro_experimenty}
-Nástroje pro porovnávání modelů a experimenty s nimi jsou potřeba proto, aby bylo možné zhodnotit rozdíly mezi akcelerovaným a neakcelerovaným řešením a porovnat implementované detektory s existujícími. Tato část popisuje skripty pro zpracování výsledků detektorů obličejů a způsoby jejich porovnávání pro možnosti experimentů v další kapitole. Je zde vylíčeno jak se každá měřená metrika vyhodnocuje a jak vypadají výstupy experimentačních programů.
+Nástroje pro porovnávání modelů a experimenty s nimi jsou potřeba proto, aby bylo možné zhodnotit rozdíly mezi akcelerovaným a neakcelerovaným řešením a porovnat implementované detektory s existujícími.
 
-\subsection*{Data pro experimenty}
-Mezi data, která jsou hodnocena za účelem srovnání detekčních sítí, nepatří jen data získaná z GUI aplikace, ale také evaluace modelů na validačních datasetech. 
+% přepsat TODO
+Tato část popisuje skripty pro zpracování výsledků detektorů obličejů a způsoby jejich porovnávání pro možnosti experimentů v další kapitole. Je zde vylíčeno jak se každá měřená metrika vyhodnocuje a jak vypadají výstupy experimentačních programů.
+%konec přepsat
 
-\subsection*{Výstupy}
+\subsection*{Evaluace}
+Modely jsou v této práci porovnávány ve dvou kategoriích: \textbf{detekce ve videu} a \textbf{detekce v obrázcích z validačního datasetu}. K validaci je nutno stanovit některé pojmy a rovnice podle nichž dochází k vyhodnocování. Tyto měřící metody vycházejí z \cite{detekceMetriky}. Základním prvkem je výpočet \textbf{IoU} (průnik nad sjednocením, anglicky \emph{Intersection over Union}). IoU udává poměr průniku plochy detekovaného obličeje s plochou \emph{ground truth} ohraničujícího boxu a sjednocení těchto ploch. Ukázka výpočtu viz obrázek \ref{obrazek:iou}.
 
+\begin{figure}[H] % TODO
+  \begin{center}
+      \scalebox{0.54}{\includegraphics{obrazky-figures/gui.png}}
+  \label{obrazek:iou}
+  \caption{Výpočet IoU}
+  \end{center}
+\end{figure}
+
+Hodnota IoU pak slouží k určení, zda byl překonán práh $t$ pro to, aby se dala detekce považovat za úspěšnou ($IoU \ge t$). Detekce tak může dopadnout jedním z následujících 4 způsobů:
+
+\begin{itemize}
+  \item True Positive (TP) -- správná detekce \emph{ground truth} boxu,
+  \item False Positive (FP) -- detekce objektu tam, kde ve skutečnosti není,
+  \item False Negative (FN) -- objekt nebyl detektorem detekován, přestože se zde nachází,
+  \item True Negative (TN) -- objekt správně nebyl detekován.
+\end{itemize}
+
+Z těchto dat pak vychází 2 metriky, které se používají k měření úspěšnosti detekce. Přesnost detekce - poměr správných detekcí ke všem detekcím (dále jako \emph{precision}) a poměr správných detekcí ke všem \emph{ground truth} boxům (dále jako \emph{recall}). Tyto dvě čísla jsou vypočítána pomocí následujících rovnic:
+
+\begin{equation}
+  precision = \frac{TP}{TP + FP}
+\end{equation}
+
+\begin{equation}
+  recall = \frac{TP}{TP + FN}
+\end{equation}
+
+\noindent Hodnoty obou metrik se nejčastěji vyjadřují v procentech.
+
+
+\subsection*{Experimenty s videii}
+Pro detekci ve videu slouží vytvořená GUI aplikace zaznamenávající data do csv souborů. Mezi hodnocené metriky patří:
+
+\begin{itemize}
+  \item průměrné FPS,
+  \item průměrná přesnost detekce (\emph{precision}) v rámci jednotlivých snímků (framů),
+  \item průměrná hodnota IoU mezi snímky.
+\end{itemize}
+
+Pro měření přesnosti a hodnoty IoU slouží skript zpracovávající výstupní soubor se souřadnicemi detekovaných obličejů. Průměrná hodnota FPS je pak vyčtena z grafu, který vytváří skript pro vizualizaci počtu FPS a počtu detekcí napříč snímky (ukázka viz obrázek). %TODO
+
+Výpočet průměrné přesnosti je zpracován jako 11 bodová interpolace \cite{interpolace} \emph{precision} $\times$ \emph{recall} křivky (PR křivka). Tato křivka je tvořena z hodnot \emph{recall} na ose x a hodnot \emph{precision} na ose y. Hodnoty jsou zde vypočítány pomocí kumulativního součtu jednotlivých detekcí obličejů v obrázku, viz následující rovnice:
+
+\begin{equation}
+  precision_k = \frac{\sum_{i=0}^{k} TP}{\sum_{i=0}^{k} TP + \sum_{i=0}^{k} FP}
+\end{equation}
+
+\begin{equation}
+  recall_k = \frac{\sum_{i=0}^{k} TP}{\sum_{i=0}^{k} TP + \sum_{i=0}^{k} FN}
+\end{equation}
+
+Tabulka \ref{tabulka:prkrivka} ukazuje příklad výpočtu hodnot \emph{precision} a \emph{recall} pro vytvoření křivky na obrázku s 6 obličeji (celkový počet \emph{ground truth} boxů je tak roven 6). Na obrázku \ref{obrazek:prkrivka} jsou tyto hodnoty přeneseny do grafu a je vykreslena spojovací křivka. Do pole hodnot pro vykreslení se navíc přidává bod na souřadnicích $[0, 1]$ aby byla křivka kompletní pro další výpočet.
+
+\begin{table}[H]
+  \begin{tabular}{|c|c|c|c|c|}
+  \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \textbf{Výsledek detekce} & \textbf{K. součet TP} & \textbf{K. součet FP} & \textbf{Precision} & \textbf{Recall} \\ \hline
+  TP         & {\color[HTML]{3531FF} 1} & {\color[HTML]{FE0000} 0} & {\color[HTML]{3531FF} 1}/({\color[HTML]{3531FF} 1}+{\color[HTML]{FE0000} 0}) = 1 & {\color[HTML]{3531FF} 1}/6 = 0,166     \\ \hline
+  FP    & 1   & 1     & 1/(1+1) = 0,5    & 1/6 = 0,166 \\ \hline
+  TP   & 2    & 1   & 2/(2+1) = 0,66   & 2/6 = 0,33      \\ \hline
+  TP    & 3    & 1   & 3/(3+1) = 0,75     & 3/6 = 0,5       \\ \hline
+  FP   & 3     & 2     & 3/(3+2) = 0,6     & 3/6 = 0,5       \\ \hline
+  TP  & 4    & 2   & 4/(4+2) = 0,66  & 4/6 = 0,66    \\ \hline
+  \end{tabular}
+  \label{tabulka:prkrivka}
+  \caption{Příklad výpočtu \emph{precision} a \emph{recall} pro 11 bodovou interpolaci}
+\end{table}
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.8}{\includegraphics{obrazky-figures/prkrivka.png}}
+  \label{obrazek:prkrivka}
+  \caption{Graf PR přivky z příkladu z tabulky \ref{tabulka:prkrivka}}
+  \end{center}
+\end{figure}
+
+Výsledká průměrná přesnost je vypočítána jako plocha pod křivkou. Tuto plochu můžeme vypočítat pomocí zmíněné 11 bodové interpolace. Tato metoda byla představena v roce 2007 v rámci detekční soutěže PASCAL VOC. Interpolace je prováděna na ose x (\emph{recall}) v bodech 0 až 1 s krokem 0,1 a jsou interpolovány hodnoty \emph{precision}, které v daném bodě odpovídají \textbf{nejvyšší hodnotě napravo}. Pro náš příklad by 11 interpolace vypadala tak, jak ukazuje graf na obrázku \ref{obrazek:interpolace}.
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.8}{\includegraphics{obrazky-figures/interpolace.png}}
+  \label{obrazek:interpolace}
+  \caption{Graf interpolované přesnosti z příkladu}
+  \end{center}
+\end{figure}
+
+\noindent Finální výpočet přesnosti pak vypadá následovně \cite{interpolace, detekceMetriky} (P = \emph{precision}, R = \emph{recall}):
+
+\begin{equation}
+  AP_{11} = \frac{1}{11} * \sum_{R \in \{0;0,1;...;0,9;1\}} P_{interpolovane} (R)
+\end{equation}
+
+Pro názorný příklad jsou interpolované hodnoty H rovny [1, 1, 0,75, 0,75, 0,75, 0,6666, 0,6666, 0, 0]. Výsledná přesnost tak je $AP = \frac{1}{11} * \sum H$ což se rovná cca 50,756 \%.
+
+\subsection*{Experimenty s datasetem}
+K měření úspěšnosti detekce v datasetu je využit validační dataset popsaný dále v sekci \ref{sekce:podklady}. Skripty měřící \emph{precision} a \emph{recall} umožňují nastavit model a zařízení na nichž se bude měřit. Evaluace je pak prováděna pomocí COCO evaluace\footnote{\url{https://cocodataset.org/\#detection-eval}}. 
+
+COCO evaluace detekčních modelů počítá přesnost detekce s různými prahy $t$ pro hodnotu IoU. V experimentech v kapitole \ref{kapitola:experimenty} jsou naměřené hodnoty \emph{precision} pro tyto prahy:
+
+\begin{enumerate}
+  \item průměr mezi 0,5 až 0,95 s krokem 0,05
+  \item 0,5
+  \item 0,75
+\end{enumerate}
+
+\noindent Hodnota \emph{recall} se pak počítá pro:
+
+\begin{enumerate}
+  \item 1 detekci na 1 obrázek,
+  \item 10 detekcí na 1 obrázek,
+  \item 100 detekcí na 1 obrázek.
+\end{enumerate}
+ 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA Experimenty
@@ -943,7 +1083,14 @@ Mezi data, která jsou hodnocena za účelem srovnání detekčních sítí, nep
 \label{kapitola:experimenty}
 
 \section{Podklady}
-videa
+\label{sekce:podklady}
+
+
+Mezi data, která jsou hodnocena za účelem srovnání detekčních sítí, patří nejen data získaná z GUI aplikace, ale také výsledky evaluace modelů na validačním datasetu. Jako validační dataset byla vybrána část WIDER FACE datasetu určená k validaci s některými úpravami:
+\begin{itemize}
+  \item odebrání snímků s více než 100 obličeji,
+  \item augmentace snímků, tak aby spadaly do kategorii zhoršených světelných podmínek.
+\end{itemize}
 
 \section{Porovnání akcelerovaného a normálního řešení}
 
@@ -951,6 +1098,10 @@ videa
 \section{Detekce s a bez Mirnetu}
 
 \section{Porovnání s YOLOFacev7}
+
+\section{Porovnání s Viola--Jones}
+
+\section{Porovnání s MTCNN}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA ZÁVĚR
