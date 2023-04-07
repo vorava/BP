@@ -15,6 +15,7 @@ from pathlib import Path
 from functools import partial
 import csv
 import datetime
+from mtcnn import MTCNN
 
 # tf importy
 import tensorflow as tf
@@ -33,6 +34,13 @@ global model
 global compiled_model
 
 global model_tf
+
+# VJ
+face_cascade = cv2.CascadeClassifier()
+face_cascade.load("models/Viola-Jones/haarcascade_frontal.xml")
+
+# MTCNN
+mtcnn_detector = MTCNN()
     
 @tf.function
 def detect_faces_tf(image):
@@ -92,7 +100,7 @@ def get_devices():
     return device_list
 
 # pomocne detekcni funkce
-def apply_bboxes(image, bboxes, conf, threshold=0.5, color = (255,0,0)):
+def apply_bboxes(image, bboxes, conf, threshold=0.5, color = (0,0,255)):
     """ Prida do framu bounding boxy 
 
     Args:
@@ -136,7 +144,57 @@ def apply_bboxes(image, bboxes, conf, threshold=0.5, color = (255,0,0)):
                     (x_min, y_min - 10),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.8,
-                    (0,0,255),
+                    (255,0,0),
+                    1,
+                    cv2.LINE_AA,
+                )
+            
+            
+            # konec castecne prevzate casti
+            output_bboxes.append([x_min, y_min, x_max - x_min, y_max-y_min])
+            
+    return image, nof_detections, output_bboxes
+
+def apply_bboxes_tf(image, bboxes, conf, threshold=0.5, color = (0,0,255)):
+    """ Prida do framu bounding boxy 
+
+    Args:
+        image (np.darray): zpracovavany frame ve vychozim rozliseni
+        bboxes (np.darray): bboxy z funkce detect_faces(_tf)
+        conf (np.darray): pole confidence pro jednotlive bboxy z funkce detect_faces(_tf)
+        threshold (prah conf pro zobrazeni, optional): prahova hodnota verohodnosti. Defaults to 0.5.
+        color (tuple, optional): barva bboxu
+
+    Returns:
+        image: puvodni obrazek jako np array s pridanymi bboxy
+        nof_detections: pocet detekovanych obliceju, 
+        output_bboxes: souradnice ve formatu coco (xywh) pro vystup do txt
+    """
+    bboxes[:,1::2] *= image.shape[1] # width
+    bboxes[:,::2] *= image.shape[0] #height
+    
+    print(bboxes)
+    
+    nof_detections = 0
+    output_bboxes = []
+    # iterace nad bboxy a zakresleni obdelniku a conf
+    for i, box in enumerate(bboxes):
+        
+        # tato cast vychazi z https://hub.gke2.mybinder.org/user/openvinotoolkit-nvino_notebooks-59sp5s7q/notebooks/notebooks/004-hello-detection/004-hello-detection.ipynb
+        if(conf[i] > threshold):
+            nof_detections+=1
+            box = [int(x) for x in box]
+            (x_min, y_min, x_max, y_max) = box[1], box[0], box[3], box[2]
+            
+            image = cv2.rectangle(image, (x_min, y_min), (x_max, y_max), color, 2)
+                      
+            image = cv2.putText(
+                    image,
+                    f"{float(conf[i]):.2f}",
+                    (x_min, y_min - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8,
+                    (255,0,0),
                     1,
                     cv2.LINE_AA,
                 )
@@ -199,19 +257,21 @@ class JobRunner(QRunnable):
         self.new_val = 0
         self.is_captured = False
         self.use_openvino = True
+        self.use_violajones = False
+        self.use_mtcnn = False
         self.path = path # cesta k souboru videa
 
     @pyqtSlot()
     def run(self):    
         # zpracovani nazvu souboru z cesty pro vytvoreni vystupu
         filename = self.path.split("\\")[-1].split(".")[0]
-        self.gt_file = open(f"{filename}_gt.txt", "r")
+        self.bbox_file = open(f"{filename}_output.txt", "w")
       
         # vystupni soubor s bboxy ve formatu COCO
         try:
-            self.bbox_file = open(f"{filename}_output.txt", "w")
+            self.gt_file = open(f"{filename}_gt.txt", "r")
         except Exception:
-            self.bbox_file = None
+            self.gt_file = None
         
         self.cap = cv2.VideoCapture(self.path)
         frame_count = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -245,6 +305,47 @@ class JobRunner(QRunnable):
                 
                 if self.bbox_file is not None:
                     self.bbox_file.write(f"frame - {current_frame_number}\n")
+                
+                if(self.use_violajones):
+                    frame_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+                    frame_gray = cv2.equalizeHist(frame_gray)
+                    
+                    out_bboxes = []
+                    start = time.time()
+                    faces = face_cascade.detectMultiScale(frame_gray)
+
+                    for (x,y,w,h) in faces:
+                        image = cv2.rectangle(image, (x,y), (x+w,y+h), (255,0,0), 2)
+                        out_bboxes.append([x,y,w,h])
+                    end = time.time()
+                    nof_detections = len(faces)
+                    
+                elif(self.use_mtcnn):
+                    out_bboxes = []
+                    start = time.time()
+                    res = mtcnn_detector.detect_faces(image)
+                    for r in res:
+                        box = r["box"]
+                        image = cv2.rectangle(image, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (255,0,0), 2)
+                        out_bboxes.append([box[0], box[1], box[2], box[3]])
+                    
+                    end = time.time()
+                    nof_detections = len(res)
+                        
+                else:
+                    # provedeni detekce
+                    if(self.use_openvino):
+                        start = time.time()
+                        bboxes, conf = detect_faces(image)
+                        image, nof_detections, out_bboxes = apply_bboxes(image, bboxes, conf, threshold=0.25)
+                        end = time.time()
+                            
+                    else:
+                        start = time.time()
+                        bboxes, conf = detect_faces_tf(image)
+                        image, nof_detections, out_bboxes = apply_bboxes_tf(image, bboxes.numpy(), conf.numpy(), threshold=0.25)
+                        end = time.time()
+                    
                     
                 if self.gt_file is not None:                            
                     try:
@@ -264,19 +365,6 @@ class JobRunner(QRunnable):
                                     image = cv2.rectangle(image, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (0,255,0), 2)
                     except Exception:
                         pass
-                
-                # provedeni detekce
-                if(self.use_openvino):
-                    start = time.time()
-                    bboxes, conf = detect_faces(image)
-                    image, nof_detections, out_bboxes = apply_bboxes(image, bboxes, conf, threshold=0.3)
-                    end = time.time()
-                        
-                else:
-                    start = time.time()
-                    bboxes, conf = detect_faces_tf(image)
-                    image, nof_detections, out_bboxes = apply_bboxes(image, bboxes.numpy(), conf.numpy(), threshold=0.3)
-                    end = time.time()
                     
                 # zapis do souboru s bboxy    
                 self.bbox_file.write(f"{nof_detections}\n")
@@ -350,6 +438,12 @@ class JobRunner(QRunnable):
         
     def use_ov(self, val):
         self.use_openvino = val
+        
+    def use_vj(self, val):
+        self.use_violajones = val
+        
+    def use_mtcnn_det(self, val):
+        self.use_mtcnn = val
 
 # hlavni GUI
 class MainWindow(QWidget):
@@ -363,7 +457,8 @@ class MainWindow(QWidget):
         # zobrazovaci plocha videa (16:9)
         self.video_width = 896
         self.video_height = 504
-        self.image_label = QLabel("No video loaded")
+        self.image_label = QLabel("No video loaded - use Browse button to load")
+        self.image_label.setStyleSheet("font-size: 20px")
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.resize(self.video_width, self.video_height)
         self.image_label.setMinimumHeight(self.video_height)
@@ -416,13 +511,30 @@ class MainWindow(QWidget):
         
         # radek dat
         data_layout = QHBoxLayout()
-        self.frame_counter_label = QLabel("0/0")
-        self.frame_counter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        data_layout.addWidget(self.frame_counter_label)
         
-        self.duration_label = QLabel("0:0 -- 0:0")
+        frame_layout = QVBoxLayout()
+        top_frame_counter_label = QLabel("Frame:")
+        top_frame_counter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        top_frame_counter_label.setStyleSheet("font-size: 18px")
+        self.frame_counter_label = QLabel("0/0")
+        self.frame_counter_label.setStyleSheet("font-size: 18px")
+        self.frame_counter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        frame_layout.addWidget(top_frame_counter_label)
+        frame_layout.addWidget(self.frame_counter_label)
+        
+        data_layout.addLayout(frame_layout)
+        
+        duration_layout = QVBoxLayout()
+        top_duration_counter_label = QLabel("Duration:")
+        top_duration_counter_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        top_duration_counter_label.setStyleSheet("font-size: 18px")
+        self.duration_label = QLabel("00:00 - 00:00")
+        self.duration_label.setStyleSheet("font-size: 18px")
         self.duration_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        data_layout.addWidget(self.duration_label)
+        duration_layout.addWidget(top_duration_counter_label)
+        duration_layout.addWidget(self.duration_label)
+        
+        data_layout.addLayout(duration_layout)
         
         # radek FPS
         fps_layout = QVBoxLayout()
@@ -499,6 +611,9 @@ class MainWindow(QWidget):
         self.detections_writer = None
         
         self.runner = None
+        
+        self.vj_state = False
+        self.mtcnn_state = False
 
         self.show()
         
@@ -529,19 +644,36 @@ class MainWindow(QWidget):
         global model_tf
         model_list = get_models()
         
-        # openvino
-        if self.ov_checkbox.isChecked():
-            if self.qz_checkbox.isChecked(): # kvantovani on/off
-                path = f"models/{model_list[idx]}/quantized/saved_model.xml"
-            else:
-                path = f"models/{model_list[idx]}/accelerated/saved_model.xml"
-                            
-            model = ie.read_model(model=path)
-            self.select_device(self.device_cb.currentIndex())
+        if model_list[idx] == "Viola-Jones":
+            self.vj_state = True
+            self.mtcnn_state = False
+            self.ov_checkbox.setEnabled(False)
+            self.qz_checkbox.setEnabled(False)
             
-        #tf
+        elif model_list[idx] == "MTCNN":
+            self.vj_state = False
+            self.mtcnn_state = True
+            self.ov_checkbox.setEnabled(False)
+            self.qz_checkbox.setEnabled(False)
+            
         else:
-            model_tf = tf.saved_model.load(f"models/{model_list[idx]}/default/saved_model")
+            self.ov_checkbox.setEnabled(True)
+            self.qz_checkbox.setEnabled(True)
+            self.vj_state = False
+            self.mtcnn_state = False
+            # openvino
+            if self.ov_checkbox.isChecked():
+                if self.qz_checkbox.isChecked(): # kvantovani on/off
+                    path = f"models/{model_list[idx]}/quantized/saved_model.xml"
+                else:
+                    path = f"models/{model_list[idx]}/accelerated/saved_model.xml"
+                                
+                model = ie.read_model(model=path)
+                self.select_device(self.device_cb.currentIndex())
+                
+            #tf
+            else:
+                model_tf = tf.saved_model.load(f"models/{model_list[idx]}/default/saved_model")
             
         
     def select_device(self, idx):
@@ -572,7 +704,7 @@ class MainWindow(QWidget):
         current = self.slider.value()
         end = self.end_value
         self.duration_label.setText(
-            f"{int(current/60):02d}:{int(current%60):02d} -- {int(end/60):02d}:{int(end%60):02d}" 
+            f"{int(current/60):02d}:{int(current%60):02d} - {int(end/60):02d}:{int(end%60):02d}" 
             )
         self.slider.sliderMoved.connect(partial(self.runner.change_frame, current))
        
@@ -680,7 +812,7 @@ class MainWindow(QWidget):
             self.btn_pause_toggle.setEnabled(False)
             
             self.image_label.clear()
-            self.image_label.setText("No video loaded")
+            self.image_label.setText("No video loaded - use Browse button to load")
            
         else: 
             # otevreni noveho souboru
@@ -726,14 +858,18 @@ class MainWindow(QWidget):
                     self.btn_pause_toggle.pressed.connect(partial(self.runner.pause, self.play_state))
                     
                     self.btn_bboxes_toggle.setEnabled(True)
-                    self.btn_bboxes_toggle.pressed.connect(partial(self.runner.show_bboxes, self.show_bboxes_state))
+                    #self.btn_bboxes_toggle.pressed.connect(partial(self.runner.show_bboxes, self.show_bboxes_state))
                     
                     self.btn_rewind.pressed.connect(partial(self.runner.update_time, -SKIP_VAL))
                     self.btn_skip.pressed.connect(partial(self.runner.update_time, SKIP_VAL))
                     
                     self.btn_capture.pressed.connect(self.runner.capture)
                     
-                    self.runner.use_ov(self.ov_checkbox.isChecked())                
+                    self.runner.use_ov(self.ov_checkbox.isChecked())     
+                    
+                    self.runner.use_vj(self.vj_state)  
+                    
+                    self.runner.use_mtcnn_det(self.mtcnn_state)         
                                  
                     # nastaveni povoleni tlacitek a prepinacu   
                     self.ov_checkbox.setDisabled(True)
@@ -747,7 +883,7 @@ class MainWindow(QWidget):
                  
                 
     # aktualizace framu
-    # nasledujic 2 funkce vychazeji z
+    # nasledujici 2 funkce vychazeji z
     # https://gist.github.com/docPhil99/ca4da12c9d6f29b9cea137b617c7b8b1
     @pyqtSlot(np.ndarray)
     def update_image(self, cv_img):
@@ -758,7 +894,7 @@ class MainWindow(QWidget):
         """
         if self.runner == None:
             self.image_label.clear()
-            self.image_label.setText("No video loaded")
+            self.image_label.setText("No video loaded - use Browse button to load")
         else:
             qt_img = self.convert_cv_qt(cv_img)
             self.image_label.setPixmap(qt_img)
