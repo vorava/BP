@@ -935,10 +935,6 @@ Při přehrávání videa nedochází pouze k detekci tváří, ale jsou zazname
 Ke každému snímku je do souboru nazev\_videa\_output.txt zapsán \textbf{počet detekovaných obličejů a jejich souřadnice} v anotačním formátu COCO. Textový soubor odpovídá formátu, který používá dataset WIDER FACE. Formát COCO byl zvolen z toho důvodu, že stejný formát mají anotační soubory testovacích videí a je tak usnadněna práce s vyhodnocováním přesnosti detekce napříč snímky videa. Program, který pracuje s tímto výstupem je popsán v oddílu \ref{sekce:nastroje_pro_experimenty}.
 
 
-\subsection*{Příprava videí}
-K otestování schopností detektorů byly vybrány 2 testovací videa. Obě videa bylo třeba oanotovat, k čemuž byl použit webový nástroj CVAT\footnote{\url{https://www.cvat.ai}} (Computer Vision Anottation Tool). 
-Tento program umožňuje ve zpracovávaném videu projít každý jeden snímek (frame) a nastavit v něm ohraničující boxy jednotlivých tváří. Tento úkon bylo nutno udělat ručně a výstup slouží jak \emph{ground truth} údaje pro validaci a porovnávání modelů mezi sebou. Formát výstupu je možné zvolit v několika tvarech, pro zpracovaná videa byl zvolen výstup podobný anotaci WIDER FACE datasetu (číslo snímku, počet obličejů ve snímku, COCO souřadnice). Konkrétní vybraná videa jsou popsána v další kapitole. 
-
 \subsection*{Detekce}
 Detekce, správa ovládání a zápis statistických informací probíhá v aplikaci v separátním vláknu. Vlákno je vytvořeno pomocí PyQt6 knihovních tříd QThreadPool a QRunnable. Pomocí PyQt6 signálů jsou mezi hlavním vláknem aplikace a detekčním vláknem předávány informace o snímkové frekvenci a aktuálním snímku s využitím slotových funkcí v rámci hlavního aplikačního vlákna. Další funkcionalita detekčního vlákna je zápis výstupních informací do csv souborů a předávání snímku s detekovanými obličeji pro vykreslení v hlavním vlákně.
 
@@ -948,24 +944,23 @@ O detekci se starají dvě hlavní funkce, obě jsou globální. Funkce \texttt{
 
 Detekováné tváře, respektive jejich ohraničující body a důvěra modelu ve správnost detekce (\emph{confidence}), jsou hlavním výstupem obou vvýše zmíněných funkcí. Na vykreslení obdélníků do snímku dbá funkce \texttt{apply\_bboxes}, jenž zároveň vrací souřadnice v COCO formátu pro uložení do výstupního souboru k dalšímu zpracování.
 
-Pokud je k pouštěnému videu dostupný anotační soubor (pojmenovaný formou nazev\_videa\_gt.txt) z aplikace CVAT, umí program ukazovat zelenou barvou \emph{ground truth} boxy. Tato utilita se zapíná tlačítkem \uv{Show GT boxes} a může posloužit k vizuální kontrole detekce uživatelem.
+Pokud je k pouštěnému videu dostupný anotační soubor (pojmenovaný formou nazev\_videa\_gt.txt), umí program ukazovat zelenou barvou \emph{ground truth} boxy. Tato utilita se zapíná tlačítkem \uv{Show GT boxes} a může posloužit k vizuální kontrole detekce uživatelem.
 
 \section{Nástroje pro experimenty}
 \label{sekce:nastroje_pro_experimenty}
 Nástroje pro porovnávání modelů a experimenty s nimi jsou potřeba proto, aby bylo možné zhodnotit rozdíly mezi akcelerovaným a neakcelerovaným řešením a porovnat implementované detektory s existujícími.
+Tato část popisuje metody a postupy využité k evaluaci modelů 
+a způsoby jejich porovnávání pro možnosti experimentů v další kapitole. Je zde vylíčeno jak se která měřená metrika vyhodnocuje a jak vypadají výstupy experimentačních programů.
 
-% přepsat TODO
-Tato část popisuje skripty pro zpracování výsledků detektorů obličejů a způsoby jejich porovnávání pro možnosti experimentů v další kapitole. Je zde vylíčeno jak se každá měřená metrika vyhodnocuje a jak vypadají výstupy experimentačních programů.
-%konec přepsat
 
 \subsection*{Evaluace}
 Modely jsou v této práci porovnávány ve dvou kategoriích: \textbf{detekce ve videu} a \textbf{detekce v obrázcích z validačního datasetu}. K validaci je nutno stanovit některé pojmy a rovnice podle nichž dochází k vyhodnocování. Tyto měřící metody vycházejí z \cite{detekceMetriky}. Základním prvkem je výpočet \textbf{IoU} (průnik nad sjednocením, anglicky \emph{Intersection over Union}). IoU udává poměr průniku plochy detekovaného obličeje s plochou \emph{ground truth} ohraničujícího boxu a sjednocení těchto ploch. Ukázka výpočtu viz obrázek \ref{obrazek:iou}.
 
-\begin{figure}[H] % TODO
+\begin{figure}[H] 
   \begin{center}
-      \scalebox{0.54}{\includegraphics{obrazky-figures/gui.png}}
+      \scalebox{0.64}{\includegraphics{obrazky-figures/iou.png}}
   \label{obrazek:iou}
-  \caption{Výpočet IoU}
+  \caption{Výpočet IoU. Obrázek vychází z \cite{detekceMetriky}}
   \end{center}
 \end{figure}
 
@@ -1002,7 +997,7 @@ Pro detekci ve videu slouží vytvořená GUI aplikace zaznamenávající data d
 
 Pro měření přesnosti a hodnoty IoU slouží skript zpracovávající výstupní soubor se souřadnicemi detekovaných obličejů. Průměrná hodnota FPS je pak vyčtena z grafu, který vytváří skript pro vizualizaci počtu FPS a počtu detekcí napříč snímky (ukázka viz obrázek). %TODO
 
-Výpočet průměrné přesnosti je zpracován jako 11 bodová interpolace \cite{interpolace} \emph{precision} $\times$ \emph{recall} křivky (PR křivka). Tato křivka je tvořena z hodnot \emph{recall} na ose x a hodnot \emph{precision} na ose y. Hodnoty jsou zde vypočítány pomocí kumulativního součtu jednotlivých detekcí obličejů v obrázku, viz následující rovnice:
+Výpočet průměrné přesnosti je zpracován jako 11bodová interpolace \cite{interpolace} \emph{precision} $\times$ \emph{recall} křivky (PR křivka). Tato křivka je tvořena z hodnot \emph{recall} na ose x a hodnot \emph{precision} na ose y. Hodnoty jsou zde vypočítány pomocí kumulativního součtu jednotlivých detekcí obličejů v obrázku, viz následující rovnice:
 
 \begin{equation}
   precision_k = \frac{\sum_{i=0}^{k} TP}{\sum_{i=0}^{k} TP + \sum_{i=0}^{k} FP}
@@ -1027,7 +1022,7 @@ Tabulka \ref{tabulka:prkrivka} ukazuje příklad výpočtu hodnot \emph{precisio
   TP  & 4    & 2   & 4/(4+2) = 0,66  & 4/6 = 0,66    \\ \hline
   \end{tabular}
   \label{tabulka:prkrivka}
-  \caption{Příklad výpočtu \emph{precision} a \emph{recall} pro 11 bodovou interpolaci}
+  \caption{Příklad výpočtu \emph{precision} a \emph{recall} pro 11bodovou interpolaci}
 \end{table}
 
 \begin{figure}[H] 
@@ -1038,7 +1033,7 @@ Tabulka \ref{tabulka:prkrivka} ukazuje příklad výpočtu hodnot \emph{precisio
   \end{center}
 \end{figure}
 
-Výsledká průměrná přesnost je vypočítána jako plocha pod křivkou. Tuto plochu můžeme vypočítat pomocí zmíněné 11 bodové interpolace. Tato metoda byla představena v roce 2007 v rámci detekční soutěže PASCAL VOC. Interpolace je prováděna na ose x (\emph{recall}) v bodech 0 až 1 s krokem 0,1 a jsou interpolovány hodnoty \emph{precision}, které v daném bodě odpovídají \textbf{nejvyšší hodnotě napravo}. Pro náš příklad by 11 interpolace vypadala tak, jak ukazuje graf na obrázku \ref{obrazek:interpolace}.
+Výsledká průměrná přesnost je vypočítána jako plocha pod křivkou. Tuto plochu můžeme vypočítat pomocí zmíněné 11bodové interpolace. Tato metoda byla představena v roce 2007 v rámci detekční soutěže PASCAL VOC. Interpolace je prováděna na ose x (\emph{recall}) v bodech 0 až 1 s krokem 0,1 a jsou interpolovány hodnoty \emph{precision}, které v daném bodě odpovídají \textbf{nejvyšší hodnotě napravo}. Pro náš příklad by 11 interpolace vypadala tak, jak ukazuje graf na obrázku \ref{obrazek:interpolace}.
 
 \begin{figure}[H] 
   \begin{center}
@@ -1081,16 +1076,63 @@ COCO evaluace detekčních modelů počítá přesnost detekce s různými prahy
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Experimenty}
 \label{kapitola:experimenty}
+Kapitola experimenty je zaměřena na otestování nově vzniklých detektorů obličejů ve zhoršených světelných podmínkách, a jejich praktickému porovnání s existujícími detektory. Provedené testy využívají skripty a aplikace navržené a implementované v předchozích kapitolách. Výsledky testů umožňují identifikovat problémy jednotlivých detektorů a mohou určit, který z detektorů je vhodnější k řešení daného konkrétního problému.
+
+Následující oddíly jsou zacíleny jak na testovací data tak na testovací přístupy. Každý oddíl věnující se konkrétnímu testu se skládá z popisu testovaných modelů, procesu testování a shrnutí dosažených výsledků.
 
 \section{Podklady}
 \label{sekce:podklady}
+Jak již bylo zmíněno, testování je prováděno na validačním datasetu a na dvou testovacích oanotovaných videích. Tato část je věnována popisu jejich tvorby.
 
-
+\subsection*{Příprava validačního datasetu}
 Mezi data, která jsou hodnocena za účelem srovnání detekčních sítí, patří nejen data získaná z GUI aplikace, ale také výsledky evaluace modelů na validačním datasetu. Jako validační dataset byla vybrána část WIDER FACE datasetu určená k validaci s některými úpravami:
 \begin{itemize}
   \item odebrání snímků s více než 100 obličeji,
   \item augmentace snímků, tak aby spadaly do kategorii zhoršených světelných podmínek.
 \end{itemize}
+
+Vyběr obrázků s  $\le 100$ obličeji byl zvolen z toho důvodu, že evaluční příkazy validátoru COCO ve výchozím nastavení detekují pouze maximálně 100 obličejů v jednom snímku. Vznikl tak validační dataset s 3167 fotografiemi. Typický snímek z datasetu viz obrázek \ref{obrazek:valdataset}.
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.35}{\includegraphics{obrazky-figures/valdataset.jpg}}
+  \label{obrazek:valdataset}
+  \caption{Snímek z validačního datasetu}
+  \end{center}
+\end{figure}
+
+COCO validátor bere na vstupu anotační data ve speciálním formátu (\textbf{Data Format}) v podobě JSON souboru. Byl vytvořen skript převádějící \emph{ground truth} souřadnice obličejů na tento formát. Dále pak validátor potřebuje ke svému fungování výstupní data detektoru (souřadnice obličejů a číslo obrázku ke kterému se informace vztahují) opět ve specifickém formátu \textbf{Result Format}. Skripty pro spuštění detekce na každém z vytvořených detektorů i na každém použitém existujícím řešení, vytvářejí přímo tento výsledkový soubor.
+
+Následující ukázky obsahují data v obou zmíněných formátech pro první snímek z validačního datasetu.
+
+% TODO ukazka data foramtu coco a result formatu pro 1 obrazek
+
+Naprogramovaný skript \texttt{eval.py} zpracuje výstupy (JSON result soubor) všech detektorů a zapíše do souboru statistiky vypočítané COCO evaluátorem. Tyto statistiky pak posloužily jako data do některých tabulek a grafů v následujících testech. Pokud není v textu řečeno jinak, byly detektory spouštěny vždy s prahem jistoty detekce (\emph{confidence}) $c = 0.25$.
+
+
+\subsection*{Příprava videí}
+K otestování schopností detektorů byly vybrány 2 testovací videa. Obě videa bylo třeba oanotovat, k čemuž byl použit webový nástroj CVAT\footnote{\url{https://www.cvat.ai}} (Computer Vision Anottation Tool). 
+Tento program umožňuje ve zpracovávaném videu projít každý jeden snímek (frame) a nastavit v něm ohraničující boxy jednotlivých tváří. Tento úkon bylo nutno udělat ručně a výstup slouží jak \emph{ground truth} údaje pro validaci a porovnávání modelů mezi sebou. Formát výstupu je možné zvolit v několika tvarech, pro zpracovaná videa byl zvolen výstup podobný anotaci WIDER FACE datasetu (číslo snímku, počet obličejů ve snímku, COCO souřadnice). Anotační soubory videí lze použít jak k hodnocení přesnosti detekce, tak při přehrávání pro zobrazování \emph{ground truth} boxů. 
+
+První video (na obrázku \ref{obrazek:videa} vlevo) je 9 sekund dlouhé, skládá se z 241 snímků o snímkové frekvenci 25 FPS. Zachycuje městskou ulici v podvečer a obsahuje cca 10 obličejů. Druhé video (na obrázku \ref{obrazek:videa} vpravo) trvá 23 sekund, je natočeno ve 29 FPS a obsahuje 700 framů. Jeho meritem je průchod většího počtu lidí po pobřežním molu večer.
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.22}{\includegraphics{obrazky-figures/videa.png}}
+  \label{obrazek:videa}
+  \caption{Snímky z obou testovacích videí}
+  \end{center}
+\end{figure}
+
+Původním záměrem bylo real--timové využití Mirnetu pro detektory, které nebyly trénovány na datasetu DARK FACE. Tento úmysl se ovšem ukázal jako nerealizovatelný kvůli vysoké výpočetní a paměťové náročnosti převodu framu videa sítí Mirnet. Nebylo by tak možné dosáhnout únosné snímkové frekvence. Proto byly obě videa převedeny Mirnetem (výstupy viz obrázek \ref{obrazek:videamirnet}) separátně od GUI aplikace. Lze je samozřejmě spustit v aplikaci stejným způsobem jako originály, čímž je simulována detekce s použitím Mirnetu.
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.22}{\includegraphics{obrazky-figures/videamirnet.png}}
+  \label{obrazek:videamirnet}
+  \caption{Snímky z obou videí po úpravě Mirnetem}
+  \end{center}
+\end{figure}
 
 \section{Porovnání akcelerovaného a normálního řešení}
 

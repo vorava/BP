@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  7 APR 2023 14:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  7 APR 2023 20:12
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -634,7 +634,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.35 ...er}{\numberline {8}Závěr}{50}{chapter.8}
+l.35 ...er}{\numberline {8}Závěr}{53}{chapter.8}
                                                   % [1
 
 
@@ -1174,46 +1174,68 @@ File: obrazky-figures/gui.png Graphic file (type png)
 <use obrazky-figures/gui.png>
 Package pdftex.def Info: obrazky-figures/gui.png  used on input line 917.
 (pdftex.def)             Requested size: 789.54782pt x 551.65965pt.
- [43 <./obrazky-figures/gui.png>] [44]
+ [43 <./obrazky-figures/gui.png>]
 
-LaTeX Warning: Citation `detekceMetriky' on page 45 undefined on input line 962.
+LaTeX Warning: Citation `detekceMetriky' on page 44 undefined on input line 957.
 
-File: obrazky-figures/gui.png Graphic file (type png)
-<use obrazky-figures/gui.png>
-Package pdftex.def Info: obrazky-figures/gui.png  used on input line 966.
-(pdftex.def)             Requested size: 789.54782pt x 551.65965pt.
-[45]
+[44]
+<obrazky-figures/iou.png, id=677, 601.24625pt x 259.97125pt>
+File: obrazky-figures/iou.png Graphic file (type png)
+<use obrazky-figures/iou.png>
+Package pdftex.def Info: obrazky-figures/iou.png  used on input line 961.
+(pdftex.def)             Requested size: 601.24477pt x 259.97061pt.
 
-LaTeX Warning: Citation `interpolace' on page 46 undefined on input line 1005.
+
+LaTeX Warning: Citation `detekceMetriky' on page 45 undefined on input line 963.
+
+[45 <./obrazky-figures/iou.png>]
+
+LaTeX Warning: Citation `interpolace' on page 46 undefined on input line 1000.
 
 
-Overfull \hbox (2.2079pt too wide) in paragraph at lines 1018--1030
+Overfull \hbox (2.2079pt too wide) in paragraph at lines 1013--1025
 [][]
  []
 
-[46]
-<obrazky-figures/prkrivka.png, id=701, 409.7709pt x 312.2064pt>
+<obrazky-figures/prkrivka.png, id=689, 409.7709pt x 312.2064pt>
 File: obrazky-figures/prkrivka.png Graphic file (type png)
 <use obrazky-figures/prkrivka.png>
-Package pdftex.def Info: obrazky-figures/prkrivka.png  used on input line 1035.
+Package pdftex.def Info: obrazky-figures/prkrivka.png  used on input line 1030.
 (pdftex.def)             Requested size: 409.7699pt x 312.20564pt.
-<obrazky-figures/interpolace.png, id=704, 409.7709pt x 312.2064pt>
+[46]
+<obrazky-figures/interpolace.png, id=702, 409.7709pt x 312.2064pt>
 File: obrazky-figures/interpolace.png Graphic file (type png)
 <use obrazky-figures/interpolace.png>
-Package pdftex.def Info: obrazky-figures/interpolace.png  used on input line 1045.
+Package pdftex.def Info: obrazky-figures/interpolace.png  used on input line 1040.
 (pdftex.def)             Requested size: 409.7699pt x 312.20564pt.
  [47 <./obrazky-figures/prkrivka.png>]
 
-LaTeX Warning: Citation `interpolace' on page 48 undefined on input line 1051.
+LaTeX Warning: Citation `interpolace' on page 48 undefined on input line 1046.
 
 
-LaTeX Warning: Citation `detekceMetriky' on page 48 undefined on input line 1051.
+LaTeX Warning: Citation `detekceMetriky' on page 48 undefined on input line 1046.
 
 [48 <./obrazky-figures/interpolace.png>]
 Kapitola 7.
+<obrazky-figures/valdataset.jpg, id=728, 1027.84pt x 743.77875pt>
+File: obrazky-figures/valdataset.jpg Graphic file (type jpg)
+<use obrazky-figures/valdataset.jpg>
+Package pdftex.def Info: obrazky-figures/valdataset.jpg  used on input line 1098.
+(pdftex.def)             Requested size: 1027.8375pt x 743.77693pt.
 [49
 
-]
+] [50 <./obrazky-figures/valdataset.jpg>]
+<obrazky-figures/videa.png, id=745, 1927.2pt x 522.95375pt>
+File: obrazky-figures/videa.png Graphic file (type png)
+<use obrazky-figures/videa.png>
+Package pdftex.def Info: obrazky-figures/videa.png  used on input line 1121.
+(pdftex.def)             Requested size: 1927.19533pt x 522.95247pt.
+<obrazky-figures/videamirnet.png, id=747, 1927.2pt x 522.95375pt>
+File: obrazky-figures/videamirnet.png Graphic file (type png)
+<use obrazky-figures/videamirnet.png>
+Package pdftex.def Info: obrazky-figures/videamirnet.png  used on input line 1131.
+(pdftex.def)             Requested size: 1927.19533pt x 522.95247pt.
+ [51 <./obrazky-figures/videa.png> <./obrazky-figures/videamirnet.png>] [52]
 Kapitola 8.
 )
 
@@ -1222,7 +1244,7 @@ No file projekt.bbl.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
-[50
+[53
 
 ] (projekt.aux)
 
@@ -1232,17 +1254,17 @@ Package rerunfilecheck Info: File `projekt.out' has not changed.
 (rerunfilecheck)             Checksum: DA53CDC0A5EBF696D5B99C32F70BF9F9;5432.
  ) 
 Here is how much of TeX's memory you used:
- 16671 strings out of 475385
- 272935 string characters out of 2776907
- 640218 words of memory out of 3000000
- 37405 multiletter control sequences out of 15000+600000
+ 16709 strings out of 475385
+ 273876 string characters out of 2776907
+ 640366 words of memory out of 3000000
+ 37432 multiletter control sequences out of 15000+600000
  553631 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,10n,77p,1174b,620s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt9.pfb>
-Output written on projekt.pdf (53 pages, 9426883 bytes).
+Output written on projekt.pdf (56 pages, 13373052 bytes).
 PDF statistics:
- 843 PDF objects out of 1000 (max. 8388607)
- 205 named destinations out of 1000 (max. 500000)
- 489 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 872 PDF objects out of 1000 (max. 8388607)
+ 212 named destinations out of 1000 (max. 500000)
+ 509 words of extra memory for PDF output out of 10000 (max. 10000000)
 
