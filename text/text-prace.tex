@@ -1224,9 +1224,81 @@ Nejlepším natrénovaným modelem se tak ukázal být model SSD Resnet50 ve ver
 K experimentům a měření metrik ve videích bylo využito vytvořené GUI rozhraní. Jak již bylo zmíněno v sekci \ref{sekce:nastroje_pro_experimenty}, posuzovány byly tyto ukazatele: \textbf{průměrné FPS}, \textbf{průměrná přesnost mezi snímky -- APF} a \textbf{průměrné IoU mezi snímky}. Následující tabulky obsahují naměřené informace. Jednotkou každého čísla je \% a měření probíhalo s prahem jistoty detekce (\emph{confidence}) $c = 0.3$.
 
 
+\begin{table}[H]
+  \centering
+  \begin{tabular}{cc|ccc|ccc|}
+  \cline{3-8}
+                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{17,083}                                 & \multicolumn{1}{c|}{14,64}                                  & 36,24          & \multicolumn{1}{c|}{17,171}                                 & \multicolumn{1}{c|}{5,52}                                   & 22,44          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{48,036}                                 & \multicolumn{1}{c|}{13,34}                                  & 33,89          & \multicolumn{1}{c|}{41,996}                                 & \multicolumn{1}{c|}{5,16}                                   & 22,46          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{22,775}                                 & \multicolumn{1}{c|}{13,31}                                  & 33,73          & \multicolumn{1}{c|}{17,754}                                 & \multicolumn{1}{c|}{5,09}                                   & 22,47          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{2,792}                                  & \multicolumn{1}{c|}{12,87}                                  & 34,42          & \multicolumn{1}{c|}{2,786}                                  & \multicolumn{1}{c|}{4,70}                                   & 23,51          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{56,927}                                 & \multicolumn{1}{c|}{12,89}                                  & 34,80          & \multicolumn{1}{c|}{43,308}                                 & \multicolumn{1}{c|}{5,15}                                   & 21,73          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{48,774}                                 & \multicolumn{1}{c|}{12,60}                                  & 33,70          & \multicolumn{1}{c|}{49,732}                                 & \multicolumn{1}{c|}{5,25}                                   & 21,45          \\ \hline
+  \end{tabular}
+  \label{tabulka:dfmvidea}
+  \caption{Model DARK FACE MobileNet -- výsledky detekce na testovacích videích}
+\end{table}
 
-\section{Detekce s a bez Mirnetu}
-V tomto testu byly modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření pak byly porovnány s detekcemi v originálech. 
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{cc|ccc|ccc|}
+  \cline{3-8}
+                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{4,767}                                  & \multicolumn{1}{c|}{0}                                      & 4,3            & \multicolumn{1}{c|}{4,773}                                  & \multicolumn{1}{c|}{5,19}                                   & 42,04          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{7,644}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{7,888}                                  & \multicolumn{1}{c|}{3,24}                                   & 37,16          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{1,516}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{1,446}                                  & \multicolumn{1}{c|}{3,03}                                   & 36,76          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{0,992}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{0,992}                                  & \multicolumn{1}{c|}{3,68}                                   & 36,15          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{14,082}                                 & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{13,657}                                 & \multicolumn{1}{c|}{1,98}                                   & 34,26          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{5,381}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{5,413}                                  & \multicolumn{1}{c|}{2,37}                                   & 33,26          \\ \hline
+  \end{tabular}
+  \label{tabulka:dfrvidea}
+  \caption{Model DARK FACE Resnet50 -- výsledky detekce na testovacích videích}
+\end{table}
+
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{cc|ccc|ccc|}
+  \cline{3-8}
+                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{17,327}                                 & \multicolumn{1}{c|}{20,03}                                  & 36,34          & \multicolumn{1}{c|}{16,855}                                 & \multicolumn{1}{c|}{6,5}                                    & 22,14          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{35,649}                                 & \multicolumn{1}{c|}{20,26}                                  & 35,69          & \multicolumn{1}{c|}{40,890}                                 & \multicolumn{1}{c|}{6,96}                                   & 22,76          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{19,192}                                 & \multicolumn{1}{c|}{20,73}                                  & 35,95          & \multicolumn{1}{c|}{17,234}                                 & \multicolumn{1}{c|}{6,97}                                   & 22,67          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{2,782}                                  & \multicolumn{1}{c|}{22,47}                                  & 38,11          & \multicolumn{1}{c|}{2,797}                                  & \multicolumn{1}{c|}{8,22}                                   & 26,08          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{47,944}                                 & \multicolumn{1}{c|}{19,79}                                  & 43,08          & \multicolumn{1}{c|}{44,808}                                 & \multicolumn{1}{c|}{8,97}                                   & 30,82          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{45,272}                                 & \multicolumn{1}{c|}{19,73}                                  & 42,25          & \multicolumn{1}{c|}{42,600}                                 & \multicolumn{1}{c|}{8,78}                                   & 30,58          \\ \hline
+  \end{tabular}
+  \label{tabulka:wfmvidea}
+  \caption{Model WIDER FACE MobileNet -- výsledky detekce na testovacích videích}
+\end{table}
+
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{cc|ccc|ccc|}
+  \cline{3-8}
+                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{4,773}                                  & \multicolumn{1}{c|}{28,53}                                  & 51,55          & \multicolumn{1}{c|}{4,772}                                  & \multicolumn{1}{c|}{5,10}                                   & 32,88          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{7,547}                                  & \multicolumn{1}{c|}{29,01}                                  & 51,65          & \multicolumn{1}{c|}{7,686}                                  & \multicolumn{1}{c|}{5,07}                                   & 32,73          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{1,462}                                  & \multicolumn{1}{c|}{29,03}                                  & 51,82          & \multicolumn{1}{c|}{1,438}                                  & \multicolumn{1}{c|}{5,01}                                   & 32,65          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{0,991}                                  & \multicolumn{1}{c|}{28,69}                                  & 52,00          & \multicolumn{1}{c|}{0,991}                                  & \multicolumn{1}{c|}{4,95}                                   & 33,09          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{13,924}                                 & \multicolumn{1}{c|}{28,18}                                  & 51,52          & \multicolumn{1}{c|}{13,727}                                 & \multicolumn{1}{c|}{4,68}                                   & 32,39          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{5,465}                                  & \multicolumn{1}{c|}{27,32}                                  & 52,11          & \multicolumn{1}{c|}{5,279}                                  & \multicolumn{1}{c|}{4,70}                                   & 32,56          \\ \hline
+  \end{tabular}
+  \label{tabulka:wfrvidea}
+  \caption{Model WIDER FACE Resnet50 -- výsledky detekce na testovacích videích}
+\end{table}
+
 
 \section{Porovnání s YOLOv7--face}
 \label{sekce:yolov7}
@@ -1236,14 +1308,16 @@ Prvním existujícím řešením, s nímž byly nově vytvořené modely srovná
 Repozitář obsahuje skript \texttt{detect.py} s jehož pomocí je možné spustit detekci v obrázcích nebo ve videu. Skript tak byl spuštěn nad validačním datasetem a výstupní souřadnice obličejů byly převedeny do výsledného COCO formátu. Následně bylo provedeno vyhodnocení jako u všech ostatních modelů a byly naměřeny výsledky, které ukazuje tabulka \ref{tabulka:yolov7face} (všechny čísla mají jako jednotku \%, práh jistoty $c=0.25$). K měření posloužila stejná grafická karta nVidia MX 450.
 
 \begin{table}[H]
-  \begin{tabular}{|l|c|c|c|c|c|c|}
-  \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \textbf{Model}                      & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
-  \cellcolor[HTML]{E0DBDB}YOLOv7-face & 21,4        & 42,8            & 19,6             & 5,6              & 20,8              & 30,7               \\ \hline
-  \end{tabular}
-  \label{tabulka:yolov7face}
-  \caption{Model YOLOv7--face -- výsledky detekce na validačním datasetu}
+  \begin{center}
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \hline
+    \rowcolor[HTML]{E0DBDB} 
+    \textbf{Model}                      & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
+    \cellcolor[HTML]{E0DBDB}YOLOv7-face & 21,4        & 42,8            & 19,6             & 5,6              & 20,8              & 30,7               \\ \hline
+    \end{tabular}
+    \label{tabulka:yolov7face}
+    \caption{Model YOLOv7--face -- výsledky detekce na validačním datasetu}
+  \end{center}
 \end{table}
 
 Z výsledků lze vypozorovat, že průměrná přesnost je nižší než u nejlepšího natrénovaného modelu (SSD ResNet50 s přesností AP@0.50 47,1 \% -- viz tabulka \ref{tabulka:wfrdataset}). O něco hůře vychází ze srovnání YOLOv7--face také v případě hodnoty \emph{recall}, která je nižší o 2,7 \% (5,6 \% $\times$ 8,7 \%) až 7,4 \% (30,7 \% $\times$ 38,1 \%). 
@@ -1253,6 +1327,23 @@ V porovnání s architekturou MobileNet + SSD (tabulka \ref{tabulka:wfmdataset} 
 
 \subsection*{Testování ve videích}
 
+video1 čas 42,789 s
+
+video2 čas 115,998 s
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{c|ccc|ccc|}
+  \cline{2-7}
+                                                               & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}YOLOv7-face}    & \multicolumn{1}{c|}{5,632}                                  & \multicolumn{1}{c|}{28,46}                                  & 43,68          & \multicolumn{1}{c|}{6,034}                                  & \multicolumn{1}{c|}{11,76}                                  & 39,29          \\ \hline
+  \end{tabular}
+  \label{tabulka:yolov7facevidea}
+  \caption{Model YOLOv7--face -- výsledky detekce na testovacích videích}
+\end{table}
+
 \section{Porovnání s Viola--Jones}
 \label{sekce:vj}
 Další zvoleným existujícím řešením je klasický algoritmus \textbf{Viola--Jones/Haar Cascades}. Tato část se zaměřuje na porovnání vytvořených detektorů s tímto detektorem. Detektor Viola--Jones, který byl použit k testování je obsažen v knihovně OpenCV\footnote{\url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}}. Pomocí příkazu \texttt{cv2.CascadeClassifier()} je možné vytvořit objekt detektoru. Detektor ke správnému fungování potřebuje speciální XML soubor\footnote{\url{https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_alt.xml}}. Po načtení souboru je možné funkcí \texttt{detectMultiScale()} detekovat obličeje v černobílé verzi vstupního obrázku.
@@ -1260,15 +1351,100 @@ Další zvoleným existujícím řešením je klasický algoritmus \textbf{Viola
 Detekce byla opět provedena jak na validačním datasetu, tak ve videích, kdy byl detektor Viola--Jones přímo zabudován do GUI aplikace. Lze tak v libovolném mp4 videu spustit detekci tímto detektorem. Následující oddíly se věnují pokusům s detektorem.
 
 \subsection*{Testování na datasetu}
+Výsledky měření (viz tabulka \ref{tabulka:violajones}) ukazují velmi nízkou úspěšnost detekce. Ta je dána jak zastaralostí a nedokonalostí této technologie, tak také omezením detekce podle specifického XML souboru. Použitý soubor (\emph{haarcascade\_frontalface\_alt.xml}) se zaměřuje na detekci tváří, které jsou v přímém pohledu do kamery/fotoaparátu, což je značně limitní. 
+
+Přesnost detekce i poměr správných detekcí zhruba odpovídají vytvořenému detektoru SSD MobileNet, který byl natrénován na datasetu DARK FACE (tabulka \ref{tabulka:dfmdataset}). Nejlepší natrénovaný model SSD Resnet50 má cca 5 $\times$ vyšší přesnost detekce AP@0.50.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \hline
+    \rowcolor[HTML]{E0DBDB} 
+    \textbf{Model}                      & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
+    \cellcolor[HTML]{E0DBDB}Viola-Jones & 3,8         & 9,8             & 0,9              & 1,6              & 4,3               & 5,2                \\ \hline
+    \end{tabular}
+    \label{tabulka:violajones}
+    \caption{Model Viola--Jones -- výsledky detekce na validačním datasetu}
+  \end{center}
+\end{table}
 
 \subsection*{Testování ve videích}
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{c|ccc|ccc|}
+  \cline{2-7}
+                                                               & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Viola-Jones}    & \multicolumn{1}{c|}{3,141}                                  & \multicolumn{1}{c|}{22,54}                                  & 42,95          & \multicolumn{1}{c|}{5,182}                                  & \multicolumn{1}{c|}{0,23}                                   & 1,44           \\ \hline
+  \end{tabular}
+  \label{tabulka:violajonesvidea}
+  \caption{Model Viola--Jones -- výsledky detekce na testovacích videích}
+\end{table}
 
 \section{Porovnání s MTCNN}
 \label{sekce:mtcnn}
+Detektor MTCNN (Multi-task Cascaded Convolutional Network) \cite{mtcnn, mtcnnpaper} byl vybrán jako poslední existující řešení ke srovnání úspěšnosti detekce. Jedná se o kaskádu neuronových síť, která se používá k detekci a zarovnání obličejů. Není příliš rychlá, ovšem dle \cite{mtcnnpaper} dosahuje dobrých výsledků detekce v základním neupraveném datasetu WIDER FACE.
+
+V práci byla síť testována opět jak na validačním datasetu, tak v testovacích videích. Díky tomu, že lze síť stáhnout jako Python balíček v prostředí pip, bylo možné ji implementovat do GUI aplikace. Měření ve videích tak probíhá ve stejném prostředí jako v případě natrénovaných modelů a v případě detektoru Viola--Jones. Pro provedení detekce v datasetu byl vytvořen speciální Python skript.
 
 \subsection*{Testování na datasetu}
+Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti jako téměr poloviční oproti detektoru WIDER FACE ResNet50. Hodnota \emph{recall} ovšem dopadla pro MTCNN výrazně hůře (14,8 \% $\times$ 38,1 \%). Výsledky jsou horší i v případě srovnání s YOLOv7--face, ze srovnání se starým algoritmem Viola--Jones pak vychází MTCNN o poznání lépe. Největším problémem MTCNN je však rychlost zpracování obrázku, což demonstruje následující text.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|c|c|c|c|c|}
+    \hline
+    \rowcolor[HTML]{E0DBDB} 
+    \textbf{Model}                & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
+    \cellcolor[HTML]{E0DBDB}MTCNN & 11,7        & 23,1            & 9,9              & 4,4              & 12,2              & 14,8               \\ \hline
+    \end{tabular}
+    \label{tabulka:mtcnn}
+    \caption{Model MTCNN -- výsledky detekce na validačním datasetu}
+  \end{center}
+\end{table}
 
 \subsection*{Testování ve videích}
+
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{c|ccc|ccc|}
+  \cline{2-7}
+                                                               & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}MTCNN}          & \multicolumn{1}{c|}{1,490}                                  & \multicolumn{1}{c|}{15,40}                                  & 53,79          & \multicolumn{1}{c|}{1,497}                                  & \multicolumn{1}{c|}{0}                                      & 11,08          \\ \hline
+  \end{tabular}
+  \label{tabulka:mtcnnvidea}
+  \caption{Model MTCNN -- výsledky detekce na testovacích videích}
+\end{table}
+
+\section{Detekce s a bez Mirnetu}
+V tomto testu byly modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření pak byly porovnány s detekcemi v originálech. 
+
+yolo čas 1 - 46.008 S
+yolo čas 2 - 128.909 s
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{c|ccc|ccc|}
+  \cline{2-7}
+                                                                             & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Mirnet Video 1}}                                                                       & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Mirnet Video 2}}                                                                       \\ \hline
+  \rowcolor[HTML]{E0DBDB} 
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}}               & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF MobileNet (TF+GPU)}      & \multicolumn{1}{c|}{16,844}                                 & \multicolumn{1}{c|}{14,32}                                  & 28,24          & \multicolumn{1}{c|}{16,922}                                 & \multicolumn{1}{c|}{9,38}                                   & 24,07          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF ResNet50 (TF+GPU)}       & \multicolumn{1}{c|}{4,760}                                  & \multicolumn{1}{c|}{27,19}                                  & 49,00          & \multicolumn{1}{c|}{4,649}                                  & \multicolumn{1}{c|}{11,80}                                  & 40,04          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF MobileNet (kv.+iGPU)} & \multicolumn{1}{c|}{46,193}                                 & \multicolumn{1}{c|}{14,51}                                  & 33,40          & \multicolumn{1}{c|}{46,570}                                 & \multicolumn{1}{c|}{9,54}                                   & 31,70          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF ResNet50 (kv.+iGPU)}  & \multicolumn{1}{c|}{13,157}                                 & \multicolumn{1}{c|}{27,06}                                  & 48,18          & \multicolumn{1}{c|}{13,74}                                  & \multicolumn{1}{c|}{11,77}                                  & 40,95          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Viola-Jones}                  & \multicolumn{1}{c|}{3,156}                                  & \multicolumn{1}{c|}{27,15}                                  & 59,38          & \multicolumn{1}{c|}{3,973}                                  & \multicolumn{1}{c|}{9,57}                                   & 54,07          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}MTCNN}                        & \multicolumn{1}{c|}{1,332}                                  & \multicolumn{1}{c|}{11,75}                                  & 4788           & \multicolumn{1}{c|}{1,317}                                  & \multicolumn{1}{c|}{9,85}                                   & 45,61          \\ \hline
+  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}YOLOv7-face}                  & \multicolumn{1}{c|}{5,238}                                  & \multicolumn{1}{c|}{23,86}                                  & 35,90          & \multicolumn{1}{c|}{5,430}                                  & \multicolumn{1}{c|}{13,66}                                  & 37,22          \\ \hline
+  \end{tabular}
+  \label{tabulka:mirnet}
+  \caption{Mirnet -- výsledky detekce na testovacích videích}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA ZÁVĚR

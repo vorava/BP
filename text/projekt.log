@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  8 APR 2023 17:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  11 APR 2023 18:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -634,7 +634,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.35 ...er}{\numberline {8}Závěr}{55}{chapter.8}
+l.35 ...er}{\numberline {8}Závěr}{58}{chapter.8}
                                                   % [1
 
 
@@ -1255,15 +1255,26 @@ Overfull \hbox (3.43272pt too wide) in paragraph at lines 1203--1216
 [][]
  []
 
-
-LaTeX Warning: Citation `yolov7' on page 53 undefined on input line 1233.
-
 [53]
-Underfull \hbox (badness 10000) in paragraph at lines 1258--1258
+
+LaTeX Warning: Citation `yolov7' on page 54 undefined on input line 1305.
+
+[54]
+Underfull \hbox (badness 10000) in paragraph at lines 1349--1349
 [][][][][]$\T1/lmtt/m/n/9 https : / / github\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 com / opencv / opencv / blob / master / data / haarcascades /
  []
 
-[54]
+[55]
+
+LaTeX Warning: Citation `mtcnn' on page 56 undefined on input line 1388.
+
+
+LaTeX Warning: Citation `mtcnnpaper' on page 56 undefined on input line 1388.
+
+
+LaTeX Warning: Citation `mtcnnpaper' on page 56 undefined on input line 1388.
+
+[56] [57]
 Kapitola 8.
 )
 
@@ -1272,27 +1283,27 @@ No file projekt.bbl.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
-[55
+[58
 
 ] (projekt.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `projekt.out' has not changed.
-(rerunfilecheck)             Checksum: D005ABD7CAAAA62065D5917416E70A41;5440.
+(rerunfilecheck)             Checksum: 3016DB276CCAE0E5661559F3E8A7F4C6;5440.
  ) 
 Here is how much of TeX's memory you used:
- 16735 strings out of 475385
- 274196 string characters out of 2776907
- 656766 words of memory out of 3000000
- 37440 multiletter control sequences out of 15000+600000
+ 16758 strings out of 475385
+ 274506 string characters out of 2776907
+ 665268 words of memory out of 3000000
+ 37450 multiletter control sequences out of 15000+600000
  553631 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  73i,10n,77p,1174b,620s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt9.pfb>
-Output written on projekt.pdf (58 pages, 13394397 bytes).
+Output written on projekt.pdf (61 pages, 13409059 bytes).
 PDF statistics:
- 923 PDF objects out of 1000 (max. 8388607)
- 230 named destinations out of 1000 (max. 500000)
+ 951 PDF objects out of 1000 (max. 8388607)
+ 243 named destinations out of 1000 (max. 500000)
  509 words of extra memory for PDF output out of 10000 (max. 10000000)
 

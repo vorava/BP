@@ -33,7 +33,7 @@ ie = Core()
 global model
 global compiled_model
 
-global model_tf
+model_tf_id = 0
 
 # VJ
 face_cascade = cv2.CascadeClassifier()
@@ -43,7 +43,7 @@ face_cascade.load("models/Viola-Jones/haarcascade_frontal.xml")
 mtcnn_detector = MTCNN()
     
 @tf.function
-def detect_faces_tf(image):
+def detect_faces_tf(model, image):
     """Detekuje obliceje v obrazku
 
     Args:
@@ -52,12 +52,12 @@ def detect_faces_tf(image):
     Returns:
         bboxy obliceju (pascalvoc), confidence detekce
     """
-    global model_tf
+    
     
     input_tensor = tf.convert_to_tensor(image)
     
     input_tensor = input_tensor[tf.newaxis, ...]
-    detections = model_tf(input_tensor)
+    detections = model(input_tensor)
     
     return detections['detection_boxes'][0], detections["detection_scores"][0]
 
@@ -145,7 +145,7 @@ def apply_bboxes(image, bboxes, conf, threshold=0.5, color = (0,0,255)):
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.8,
                     (255,0,0),
-                    1,
+                    2,
                     cv2.LINE_AA,
                 )
             
@@ -173,8 +173,6 @@ def apply_bboxes_tf(image, bboxes, conf, threshold=0.5, color = (0,0,255)):
     bboxes[:,1::2] *= image.shape[1] # width
     bboxes[:,::2] *= image.shape[0] #height
     
-    print(bboxes)
-    
     nof_detections = 0
     output_bboxes = []
     # iterace nad bboxy a zakresleni obdelniku a conf
@@ -195,7 +193,7 @@ def apply_bboxes_tf(image, bboxes, conf, threshold=0.5, color = (0,0,255)):
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.8,
                     (255,0,0),
-                    1,
+                    2,
                     cv2.LINE_AA,
                 )
             
@@ -260,9 +258,15 @@ class JobRunner(QRunnable):
         self.use_violajones = False
         self.use_mtcnn = False
         self.path = path # cesta k souboru videa
+        self.threshold = 0.3
 
     @pyqtSlot()
     def run(self):    
+        if self.use_openvino == False: # nacteni tf modelu
+            _model_list = get_models()
+            tf_model = tf.saved_model.load(f"models/{_model_list[model_tf_id]}/default/saved_model")
+        
+        
         # zpracovani nazvu souboru z cesty pro vytvoreni vystupu
         filename = self.path.split("\\")[-1].split(".")[0]
         self.bbox_file = open(f"{filename}_output.txt", "w")
@@ -337,13 +341,13 @@ class JobRunner(QRunnable):
                     if(self.use_openvino):
                         start = time.time()
                         bboxes, conf = detect_faces(image)
-                        image, nof_detections, out_bboxes = apply_bboxes(image, bboxes, conf, threshold=0.25)
+                        image, nof_detections, out_bboxes = apply_bboxes(image, bboxes, conf, threshold=self.threshold)
                         end = time.time()
                             
                     else:
                         start = time.time()
-                        bboxes, conf = detect_faces_tf(image)
-                        image, nof_detections, out_bboxes = apply_bboxes_tf(image, bboxes.numpy(), conf.numpy(), threshold=0.25)
+                        bboxes, conf = detect_faces_tf(tf_model, image)
+                        image, nof_detections, out_bboxes = apply_bboxes_tf(image, bboxes.numpy(), conf.numpy(), threshold=self.threshold)
                         end = time.time()
                     
                     
@@ -428,6 +432,9 @@ class JobRunner(QRunnable):
         self.is_bboxes = False
         self.is_frame_changed = True
         self.time_spot = time_s
+        
+    def change_confidence(self, val):
+        self.threshold = float(val/100)
 
     def update_time(self, new_val):
         self.is_bboxes = False
@@ -463,6 +470,29 @@ class MainWindow(QWidget):
         self.image_label.resize(self.video_width, self.video_height)
         self.image_label.setMinimumHeight(self.video_height)
         self.image_label.setMinimumWidth(self.video_width)
+        
+        # slider pro confidence threshold
+        self.thresh_slider = QSlider(orientation=Qt.Orientation.Vertical)
+        self.thresh_slider.setRange(0, 100)
+        self.thresh_slider.setSingleStep(5)
+        self.thresh_slider.setValue(30)
+        self.thresh_slider.setTickPosition(QSlider.TickPosition.TicksLeft)
+        self.thresh_slider.valueChanged.connect(self.thresh_slider_moved)
+        
+        
+        self.thresh_label = QLabel("30 %")
+        self.thresh_label.setStyleSheet("font-weight: bold")
+        self.thresh_label.setFixedWidth(50)
+        
+        thresh_layout = QVBoxLayout()
+        thresh_layout.addWidget(self.thresh_label)
+        thresh_layout.addWidget(self.thresh_slider)
+        thresh_layout.setContentsMargins(0, 20, 0, 40)
+        
+        
+        display_layout = QHBoxLayout()
+        display_layout.addWidget(self.image_label)
+        display_layout.addLayout(thresh_layout)
         
         # horni radek pro otevreni souboru + nastaveni zarizeni
         top_layout = QHBoxLayout()
@@ -593,7 +623,7 @@ class MainWindow(QWidget):
         main_layout = QVBoxLayout()
         self.setLayout(main_layout)
         main_layout.addLayout(top_layout)
-        main_layout.addWidget(self.image_label)
+        main_layout.addLayout(display_layout)
         main_layout.addWidget(self.slider)
         main_layout.addLayout(data_layout)
         main_layout.addLayout(control_layout)
@@ -629,8 +659,10 @@ class MainWindow(QWidget):
         self.select_model(self.model_cb.currentIndex())
         
         if(self.ov_checkbox.isChecked() == False):
+            self.device_cb.setEnabled(False)
             self.qz_checkbox.setEnabled(False)
         else:
+            self.device_cb.setEnabled(True)
             self.qz_checkbox.setEnabled(True)
         
         
@@ -641,7 +673,7 @@ class MainWindow(QWidget):
             idx (int): index v comboboxu modelu
         """
         global model
-        global model_tf
+        global model_tf_id
         model_list = get_models()
         
         if model_list[idx] == "Viola-Jones":
@@ -672,8 +704,9 @@ class MainWindow(QWidget):
                 self.select_device(self.device_cb.currentIndex())
                 
             #tf
-            else:
-                model_tf = tf.saved_model.load(f"models/{model_list[idx]}/default/saved_model")
+            else:                
+                model_tf_id = idx
+                
             
         
     def select_device(self, idx):
@@ -707,6 +740,16 @@ class MainWindow(QWidget):
             f"{int(current/60):02d}:{int(current%60):02d} - {int(end/60):02d}:{int(end%60):02d}" 
             )
         self.slider.sliderMoved.connect(partial(self.runner.change_frame, current))
+        
+    def thresh_slider_moved(self):
+        """Nastavi prah jistoty (confidence) pro detektor
+        """
+        
+        val = self.thresh_slider.value()
+        self.thresh_label.setText(f"{val} %")
+        
+        if (self.runner != None):
+            self.thresh_slider.valueChanged.connect(partial(self.runner.change_confidence, val))
        
         
     def rewind(self):
@@ -802,15 +845,20 @@ class MainWindow(QWidget):
            
             self.file_browser_btn.setText("Browse")
             self.runner = None
-            self.ov_checkbox.setEnabled(True)
-            self.qz_checkbox.setEnabled(True)
+            
+            if(self.model_cb.currentText() != "Viola-Jones" and self.model_cb.currentText() != "MTCNN"):
+                self.ov_checkbox.setEnabled(True)
+                self.qz_checkbox.setEnabled(True)
             self.slider.setEnabled(False)
             self.btn_rewind.setEnabled(False)
             self.btn_skip.setEnabled(False)
             self.btn_capture.setEnabled(False)
             self.btn_bboxes_toggle.setEnabled(False)
             self.btn_pause_toggle.setEnabled(False)
+            self.model_cb.setEnabled(True)
             
+            self.btn_pause_toggle.setText("Pause")
+             
             self.image_label.clear()
             self.image_label.setText("No video loaded - use Browse button to load")
            
@@ -855,10 +903,12 @@ class MainWindow(QWidget):
                     self.threadpool.start(self.runner)
 
                     self.btn_pause_toggle.setEnabled(True)
+                    self.play_state = False
                     self.btn_pause_toggle.pressed.connect(partial(self.runner.pause, self.play_state))
-                    
+                                        
                     self.btn_bboxes_toggle.setEnabled(True)
-                    #self.btn_bboxes_toggle.pressed.connect(partial(self.runner.show_bboxes, self.show_bboxes_state))
+                    self.show_bboxes_state = True
+                    self.btn_bboxes_toggle.pressed.connect(partial(self.runner.show_bboxes, self.show_bboxes_state))
                     
                     self.btn_rewind.pressed.connect(partial(self.runner.update_time, -SKIP_VAL))
                     self.btn_skip.pressed.connect(partial(self.runner.update_time, SKIP_VAL))
@@ -869,11 +919,16 @@ class MainWindow(QWidget):
                     
                     self.runner.use_vj(self.vj_state)  
                     
-                    self.runner.use_mtcnn_det(self.mtcnn_state)         
+                    self.runner.use_mtcnn_det(self.mtcnn_state)   
+                    
+                    self.thresh_slider.sliderMoved.connect(partial(self.runner.change_confidence, self.thresh_slider.value()))      
+                    
+                    self.runner.change_confidence(self.thresh_slider.value())
                                  
                     # nastaveni povoleni tlacitek a prepinacu   
                     self.ov_checkbox.setDisabled(True)
                     self.qz_checkbox.setDisabled(True)
+                    self.model_cb.setDisabled(True)
                     self.slider.setEnabled(True)
                     self.btn_rewind.setEnabled(True)
                     self.btn_skip.setEnabled(True)
@@ -924,7 +979,7 @@ class MainWindow(QWidget):
         
     @pyqtSlot(int, int)
     def update_duration(self, current, end):
-        text = f"{int(current/60):02d}:{int(current%60):02d} -- {int(end/60):02d}:{int(end%60):02d}" 
+        text = f"{int(current/60):02d}:{int(current%60):02d} - {int(end/60):02d}:{int(end%60):02d}" 
         self.duration_label.setText(text)
         self.end_value = end
         self.slider.setMaximum(end)  
