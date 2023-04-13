@@ -28,9 +28,10 @@
 \contentsline {chapter}{\numberline {7}Experimenty}{49}{chapter.7}%
 \contentsline {section}{\numberline {7.1}Podklady}{49}{section.7.1}%
 \contentsline {section}{\numberline {7.2}Porovnání akcelerovaného a normálního řešení}{51}{section.7.2}%
-\contentsline {section}{\numberline {7.3}Porovnání s YOLOv7--face}{54}{section.7.3}%
-\contentsline {section}{\numberline {7.4}Porovnání s Viola--Jones}{55}{section.7.4}%
-\contentsline {section}{\numberline {7.5}Porovnání s MTCNN}{56}{section.7.5}%
-\contentsline {section}{\numberline {7.6}Detekce s a bez Mirnetu}{57}{section.7.6}%
-\contentsline {chapter}{\numberline {8}Závěr}{58}{chapter.8}%
+\contentsline {section}{\numberline {7.3}Porovnání s YOLOv7--face}{55}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Porovnání s Viola--Jones}{56}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Porovnání s MTCNN}{57}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Detekce s metodou Mirnet}{58}{section.7.6}%
+\contentsline {section}{\numberline {7.7}Zhodnocení experimentů}{59}{section.7.7}%
+\contentsline {chapter}{\numberline {8}Závěr}{60}{chapter.8}%
 \contentsfinish 

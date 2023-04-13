@@ -995,7 +995,7 @@ Pro detekci ve videu slouží vytvořená GUI aplikace zaznamenávající data d
   \item průměrná hodnota IoU mezi snímky.
 \end{itemize}
 
-Pro měření přesnosti a hodnoty IoU slouží skript zpracovávající výstupní soubor se souřadnicemi detekovaných obličejů. Průměrná hodnota FPS je pak vyčtena z grafu, který vytváří skript pro vizualizaci počtu FPS a počtu detekcí napříč snímky (ukázka viz obrázek). %TODO
+Pro měření přesnosti a hodnoty IoU slouží skript zpracovávající výstupní soubor se souřadnicemi detekovaných obličejů. Průměrná hodnota FPS je pak vyčtena z rozhraní aplikace.
 
 Výpočet průměrné přesnosti je zpracován jako 11bodová interpolace \cite{interpolace} \emph{precision} $\times$ \emph{recall} křivky (PR křivka). Tato křivka je tvořena z hodnot \emph{recall} na ose x a hodnot \emph{precision} na ose y. Hodnoty jsou zde vypočítány pomocí kumulativního součtu jednotlivých detekcí obličejů v obrázku, viz následující rovnice:
 
@@ -1177,7 +1177,7 @@ Z tabulky \ref{tabulka:dfmdataset} je patrné, že model SSD MobileNet natrénov
   \caption{Model DARK FACE ResNet50 -- výsledky detekce na validačním datasetu}
 \end{table}
 
-Při záměně MobileNetu za ResNet50 nedošlo k žádnému zlepšení, jak vyplývý z tabulky \ref{tabulka:dfrdataset}. Oba modely trénované na datech datasetu DARK FACE jsou nevyhovující pro detekci ve validačním datasetu. Jejich přínos je viditelný v extrémně tmavých a nočních fotografií nebo videích, což ukazuje test na testovacím videu 2 níže.
+Při záměně MobileNetu za ResNet50 nedošlo k žádnému zlepšení, jak vyplývá z tabulky \ref{tabulka:dfrdataset}. Oba modely trénované na datech datasetu DARK FACE jsou nevyhovující pro detekci ve validačním datasetu. 
 
 
 \begin{table}[H]
@@ -1197,7 +1197,7 @@ Při záměně MobileNetu za ResNet50 nedošlo k žádnému zlepšení, jak vypl
   \caption{Model WIDER FACE MobileNet -- výsledky detekce na validačním datasetu}
 \end{table}
 
-Změna trénovacích dat přinesla kýžený efekt v podobě výrazného zlepšení detekčních výsledků. Z tabulky \ref{tabulka:wfmdataset} je patrné 350 \% zlepšení přesnosti detekce v kategorii AP@0.5. Trochu překvapivě dosáhl nejvyšších výsledků přesnosti kvantovaný model, konkrétně 37,5 \%. Tyto hodnoty nemusejí vypadat dobře, ale v porovnání s existujícími modely (viz sekce \ref{sekce:yolov7}, \ref{sekce:vj} a \ref{sekce:mtcnn}) nejsou výsledky vůbec špatné. Model obsahující MobileNet je navíc rychlý, což ukazují měření v další části této části.
+Změna trénovacích dat přinesla kýžený efekt v podobě výrazného zlepšení detekčních výsledků. Z tabulky \ref{tabulka:wfmdataset} je patrné 350 \% zlepšení přesnosti detekce v kategorii AP@0.5. Trochu překvapivě dosáhl nejvyšších výsledků přesnosti kvantovaný model, konkrétně 37,5 \%. Tyto hodnoty nemusejí vypadat dobře, ale v porovnání s existujícími modely (viz sekce \ref{sekce:yolov7}, \ref{sekce:vj} a \ref{sekce:mtcnn}) nejsou výsledky vůbec špatné. Model obsahující MobileNet je navíc rychlý, což ukazují měření v další části této sekce.
 
 \begin{table}[H]
   \begin{tabular}{|
@@ -1216,12 +1216,12 @@ Změna trénovacích dat přinesla kýžený efekt v podobě výrazného zlepše
   \caption{Model WIDER FACE ResNet50 -- výsledky detekce na validačním datasetu}
 \end{table}
 
-Nahrazení MobileNetu Resnetem50 přineslo zvýšení přesnosti o 10 procentních bodů. Hodnota 47,1 \% AP@0.5 je vůbec nejvyšší naměřená přesnost ze všech měření na validačním datasetu. S akcelerací modelu a kvantováním, se rapidně snížila velikost modelu, ale došlo jen k nepatrnému snížení přesnosti a hodnoty \emph{recall} v řádech procent.
+Nahrazení MobileNetu ResNetem50 přineslo zvýšení přesnosti o 10 procentních bodů. Hodnota 47,1 \% AP@0.5 je vůbec nejvyšší naměřená přesnost ze všech měření na validačním datasetu. S akcelerací modelu a kvantováním, se rapidně snížila velikost modelu, ale došlo jen k nepatrnému snížení přesnosti a hodnoty \emph{recall} v řádech procent.
 
-Nejlepším natrénovaným modelem se tak ukázal být model SSD Resnet50 ve verzi WIDER FACE, který byl dále porovnán s existujícimi řešeními v rámci testů na validačním datasetu.
+Nejlepším natrénovaným modelem se tak ukázal být model SSD ResNet50 ve verzi WIDER FACE, který byl dále porovnán s existujícimi řešeními v rámci testů na validačním datasetu.
 
 \subsection*{Testování ve videích}
-K experimentům a měření metrik ve videích bylo využito vytvořené GUI rozhraní. Jak již bylo zmíněno v sekci \ref{sekce:nastroje_pro_experimenty}, posuzovány byly tyto ukazatele: \textbf{průměrné FPS}, \textbf{průměrná přesnost mezi snímky -- APF} a \textbf{průměrné IoU mezi snímky}. Následující tabulky obsahují naměřené informace. Jednotkou každého čísla je \% a měření probíhalo s prahem jistoty detekce (\emph{confidence}) $c = 0.3$.
+K experimentům a měření metrik ve videích bylo využito vytvořené GUI rozhraní. Jak již bylo zmíněno v sekci \ref{sekce:nastroje_pro_experimenty}, posuzovány byly tyto ukazatele: \textbf{průměrné FPS}, \textbf{průměrná přesnost mezi snímky -- APF} a \textbf{průměrné IoU mezi snímky}. Následující tabulky obsahují naměřené informace. Jednotkou každého čísla u APF a IoU je \%, u FPS je to počet snímků za sekundu. Měření probíhalo s prahem jistoty detekce (\emph{confidence}) $c = 0.3$. Pro hodnotu FPS je určující čas mezi začátkem detekce a vykreslením hraničních obdélníků. Tento čas je počítán i s vykreslením, aby simuloval detektor v reálném čase.
 
 
 \begin{table}[H]
@@ -1242,6 +1242,10 @@ K experimentům a měření metrik ve videích bylo využito vytvořené GUI roz
   \caption{Model DARK FACE MobileNet -- výsledky detekce na testovacích videích}
 \end{table}
 
+Dle předpokladů se ukázala rychlost detektoru MobileNet jak je vidno z tabulky \ref{tabulka:dfmvidea}. Kvantovaný model dosahuje rychlosti téměř 57 FPS u prvního videa, což z něj dělá nejrychlejší model v testování. Přesnost napříč snímky v tomto videu se pohybuje okolo 13 \%. 
+
+Experimenty provedené ve druhém z testovacích videích ukazují na to, že video je z hlediska detektoru náročnější (APF cca 5 \%). Nejrychlejší modelem je zde překvapivě kvantovaná verze běžící na procesoru. Průměrná hodnota IoU se v obou případech pohybuje kolem 35 \%, respektive 22 \%.
+
 
 \begin{table}[H]
   \centering
@@ -1260,6 +1264,10 @@ K experimentům a měření metrik ve videích bylo využito vytvořené GUI roz
   \label{tabulka:dfrvidea}
   \caption{Model DARK FACE Resnet50 -- výsledky detekce na testovacích videích}
 \end{table}
+
+Model založený na ResNet50 (viz tabulka \ref{tabulka:dfrvidea}), který byl trénován datasetem DARK FACE nedokázal v prvním videu detekovat nic. Tento jev byl pravděpodobně dán možným přetrénováním modelu (overfitting), kdy model dokáže detekovat obličeje v datasetu DARK FACE, ale jinde jsou jeho výsledky špatné. 
+
+V případě druhého videa se přesnost detekce zásadně neliší od ostatních modelů, alespoň u TensorFlow verze. Maximální rychlost detekce pak byla naměřena modelu, který byl kvantovaný a běžel na integrované grafické kartě Intel (14,082 FPS).
 
 
 \begin{table}[H]
@@ -1280,6 +1288,7 @@ K experimentům a měření metrik ve videích bylo využito vytvořené GUI roz
   \caption{Model WIDER FACE MobileNet -- výsledky detekce na testovacích videích}
 \end{table}
 
+Se změnou trénovacích dat přišlo, podobně jako v případě detekce na validačním datasetu, navýšení přesnosti. Podle naměřených hodnot z tabulky \ref{tabulka:wfmvidea} je v případě prvního videa APF nejvyšší při spuštění optimalizovaného modelu na NCS2 (22,47 \%). Nejvyššího poměru průniku detekčních obdélníků k jejich sjednocení (IoU) dosáhl kvantovaný model detekující na iGPU (43,08 \%). Ten je zároveň i nejrychlejším modelem pro obě videa (47,944 a 44,808 FPS).
 
 \begin{table}[H]
   \centering
@@ -1298,6 +1307,10 @@ K experimentům a měření metrik ve videích bylo využito vytvořené GUI roz
   \label{tabulka:wfrvidea}
   \caption{Model WIDER FACE Resnet50 -- výsledky detekce na testovacích videích}
 \end{table}
+
+Model WIDER FACE ResNet50 (jehož výsledky shrnuje tabulka \ref{tabulka:wfrvidea}) je jediným natrénovaným modelem, jehož průměrná hodnota IoU u prvního z experimentačních videí neklesla pod 50 \%. Dosahuje také nejlepších výsledků přesnosti detekce v prvním videu. 
+
+V situaci kdy porovnáme výsledky přesnosti mezi modely u druhého testovacího videa, je nejlepší modelem MobileNet, který dosahuje 8,97 \% APF. Nízké hodnoty přesnosti jsou dány charakterem videa číslo 2, které je velmi tmavé a obsahuje i velmi malé obličeje.
 
 
 \section{Porovnání s YOLOv7--face}
@@ -1326,10 +1339,11 @@ V porovnání s architekturou MobileNet + SSD (tabulka \ref{tabulka:wfmdataset} 
 
 
 \subsection*{Testování ve videích}
+Model YOLOv7--face nebylo možné importovat do GUI aplikace z důvodu nekompatibility některých knihoven mezi PyTorch a TF OD API. Proto byla spuštěna detekce v obou testovacích videích pomocí skriptu \texttt{detect.py}. Skript na konci běhu vypisuje dobu zpracovávání detekce. Tento čas byl u videa 1 roven 42,789 s, u videa 2 pak 115,998 s. Ze známosti času a frekvence videí (25 FPS a 29 FPS) bylo vypočteno průměrné FPS, které je zapsáno v tabulce \ref{tabulka:yolov7facevidea}. 
 
-video1 čas 42,789 s
+Z dalších naměřených výsledků je patrné, že přesnost detekce v prvním videu je podobná přesnosti modelu WIDER FACE ResNet50 (tabulka \ref{tabulka:wfrvidea}). U druhého videa pak YOLOv7--face předčilo v přesnosti detekce (11,76 \%) všechny testovaná existující i nová řešení. Rychlost okolo 6 FPS v obou nahrávkách je zhruba poloviční ve srovnání s kvantovaným modelem WIDER FACE ResNet50.
 
-video2 čas 115,998 s
+
 
 \begin{table}[H]
   \centering
@@ -1369,6 +1383,7 @@ Přesnost detekce i poměr správných detekcí zhruba odpovídají vytvořeném
 \end{table}
 
 \subsection*{Testování ve videích}
+Detektor překvapil vysokou úspěšností detekce v 1. testovacím videu (22,54 \% průměrná přesnost mezi snímky). Rychlostně byl detektor pomalejší než výše zmíněné YOLOv7--face i většina natrénovaných detektorů. Ve druhé nahrávce nedetekoval model téměř nic a ukázal se tak velmi nevhodný pro detekci ve zhoršených světelných podmínkách. Všechny naměřené metriky v obou záznamech zobrazuje tabulka \ref{tabulka:violajonesvidea}.
 
 \begin{table}[H]
   \centering
@@ -1406,7 +1421,7 @@ Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti
 \end{table}
 
 \subsection*{Testování ve videích}
-
+MTCNN z měření vyšlo jako jeden z nejpomalejších detektorů, kdy naměřené hodnoty průměrné snímkové frekvence nepřekročily ani v jednom případě hranici 1,5 FPS. Podobně jako detektor Viola--Jones, byl model schopen detekovat obličeje jen v 1. záznamu (APF 15,40 \%). Výsledek je podobný jako v případě detektoru DARK FACE MobileNet (tabulka \ref{tabulka:dfmvidea}), který je však díky architektuře MobileNetu výrazně rychlejší.
 
 \begin{table}[H]
   \centering
@@ -1421,11 +1436,9 @@ Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti
   \caption{Model MTCNN -- výsledky detekce na testovacích videích}
 \end{table}
 
-\section{Detekce s a bez Mirnetu}
-V tomto testu byly modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření pak byly porovnány s detekcemi v originálech. 
-
-yolo čas 1 - 46.008 S
-yolo čas 2 - 128.909 s
+\section{Detekce s metodou Mirnet}
+\label{sekce:mirnetexperimenty}
+V tomto testu byly vybrané modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření přináší tabulka \ref{tabulka:mirnet}. Všechny měření kromě YOLOv7--face byly opět provedeny pomocí GUI aplikace. Pro model YOLOv7--face byl výpočet FPS proveden stejným způsobem, který byl popsán sekci \ref{sekce:yolov7} (časy jednotlivých detekcí jsou 46,008 s a 128,909 s).
 
 \begin{table}[H]
   \centering
@@ -1446,11 +1459,29 @@ yolo čas 2 - 128.909 s
   \caption{Mirnet -- výsledky detekce na testovacích videích}
 \end{table}
 
+
+K měření byly vybrány všechny existující řešení a modely natrénované na datasetu WIDER FACE (základní TF verze a kvantovaná verze). Změřené rychlosti detekce se příliš neliší od hodnot naměřených na originálních videích. 
+
+Výsledky přesnosti u videa číslo 1 jsou, až na jednu výjimku (Viola--Jones), horší než při měření originálu. To je dáno tím, že toto video není dostatečně špatně osvětlené, tak aby se projevil účinek sítě Mirnet. 
+
+V případě druhého videa, je patrné zlepšení přesnosti všech modelů. Model MobileNet dokázal detekovat obličeje s průměrnou přesností 6,5 \% bez použití Mirnetu, s Mirnetem pak s přesností 9,38 \% v TensorFlow verzi. Kvantovaná verze dosahuje téměř stejného výsledku (8,97 \% $\times$ 9,54 \%). Dvojnásobný nárůst APF zaznamenalo použití Mirnetu u detektoru SSD + ResNet50, kdy bez použití metody byla APF 5,10 \% pro TensorFlow verzi a 4,68 \% pro kvantovanou verzi modelu. S Mirnetem se průměrná přesnost TensorFlow varianty zvedla na 11,80 \% a na 11,77 \% v případě kvantované verze.
+
+Pro detektor YOLOv7--face pak došlo k nárůstu o cca 2 procentní body (11,76 \% $\times$ 13,66 \%). Viola--Jones i MTCNN zaznamenaly APF na hranici 10 \%, přičemž bez použití Mirnetu měly oba detektory (téměř) nulovou průměrnou přesnost.
+
+
+\section{Zhodnocení experimentů}
+\label{sekce:shnutiexperimentu}
+
+TODO
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA ZÁVĚR
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Závěr}
 \label{kapitola:zaver}
+
+TODO
+
 V~rámci tohoto textu byla představena problematika detekce obličejů v~reálných podmínkách, dále byly popsány problémy omezující detekci a~klasické algoritmy detekce obličejů. V~samostatných kapitolách a~sekcích byly popsány neuronové sítě (obecně, konvoluční) a~algortimy pro detekci založené na neuronových sítích. Dále pak existující komerční a~nekomerční řešení, systémy detekce a možnosti akcelerace neuronových sítí specializovaným hardawarem.
 
 V~této práci bude pokračováno návrhem neuronové sítě pro detekci ve špatných světelných podmínkách, návrhem Python aplikace, její implementací a provedením experimentů s~vytvořeným řešením a existujícími řešeními.

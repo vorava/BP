@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  11 APR 2023 18:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.8.28) (preloaded format=pdflatex 2022.10.8)  13 APR 2023 22:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -585,7 +585,7 @@ File: t1qhv.fd 2009/09/25 v1.2 font definition file for T1/qhv
 \@sirkartext=\skip84
 \@vyskaobr=\skip85
 \@sirkaobr=\skip86
-<template-fig/VUT_symbol_barevne_CMYK_CZ.pdf, id=140, 167.13641pt x 165.87971pt>
+<template-fig/VUT_symbol_barevne_CMYK_CZ.pdf, id=144, 167.13641pt x 165.87971pt>
 File: template-fig/VUT_symbol_barevne_CMYK_CZ.pdf Graphic file (type pdf)
 <use template-fig/VUT_symbol_barevne_CMYK_CZ.pdf>
 Package pdftex.def Info: template-fig/VUT_symbol_barevne_CMYK_CZ.pdf  used on input line 206.
@@ -634,7 +634,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.35 ...er}{\numberline {8}Závěr}{58}{chapter.8}
+l.35 ...Zhodnocení experimentů}{59}{section.7.7}
                                                   % [1
 
 
@@ -668,7 +668,7 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 34
 (C:\Users\vojta\AppData\Local\Programs\MiKTeX\tex/latex/lm\ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<obrazky-figures/fdexample.png, id=233, 1299.6555pt x 338.4645pt>
+<obrazky-figures/fdexample.png, id=238, 1299.6555pt x 338.4645pt>
 File: obrazky-figures/fdexample.png Graphic file (type png)
 <use obrazky-figures/fdexample.png>
 Package pdftex.def Info: obrazky-figures/fdexample.png  used on input line 48.
@@ -682,7 +682,7 @@ LaTeX Warning: Citation `fdReview' on page 5 undefined on input line 57.
 
 LaTeX Warning: Citation `feature-based-fd-review' on page 5 undefined on input line 62.
 
-<obrazky-figures/fddeleni.png, id=242, 329.43076pt x 178.86826pt>
+<obrazky-figures/fddeleni.png, id=247, 329.43076pt x 178.86826pt>
 File: obrazky-figures/fddeleni.png Graphic file (type png)
 <use obrazky-figures/fddeleni.png>
 Package pdftex.def Info: obrazky-figures/fddeleni.png  used on input line 65.
@@ -697,7 +697,7 @@ LaTeX Warning: Citation `feature-based-fd-review' on page 6 undefined on input l
 
 LaTeX Warning: Citation `fdReview' on page 6 undefined on input line 86.
 
-<obrazky-figures/fdproblems.png, id=255, 673.51625pt x 470.75874pt>
+<obrazky-figures/fdproblems.png, id=260, 673.51625pt x 470.75874pt>
 File: obrazky-figures/fdproblems.png Graphic file (type png)
 <use obrazky-figures/fdproblems.png>
 Package pdftex.def Info: obrazky-figures/fdproblems.png  used on input line 90.
@@ -713,7 +713,7 @@ LaTeX Warning: Citation `frReview' on page 6 undefined on input line 92.
 LaTeX Warning: Citation `emotionDetector' on page 7 undefined on input line 103.
 
 [7 <./obrazky-figures/fdproblems.png>]
-<obrazky-figures/illuminationexample.png, id=273, 432.4155pt x 111.41624pt>
+<obrazky-figures/illuminationexample.png, id=278, 432.4155pt x 111.41624pt>
 File: obrazky-figures/illuminationexample.png Graphic file (type png)
 <use obrazky-figures/illuminationexample.png>
 Package pdftex.def Info: obrazky-figures/illuminationexample.png  used on input line 127.
@@ -728,7 +728,7 @@ LaTeX Warning: Citation `localBinaryPatterns' on page 8 undefined on input line 
 
 LaTeX Warning: Citation `localBinaryPatternsTests' on page 8 undefined on input line 138.
 
-<obrazky-figures/lbp.png, id=276, 502.87875pt x 91.542pt>
+<obrazky-figures/lbp.png, id=281, 502.87875pt x 91.542pt>
 File: obrazky-figures/lbp.png Graphic file (type png)
 <use obrazky-figures/lbp.png>
 Package pdftex.def Info: obrazky-figures/lbp.png  used on input line 143.
@@ -737,7 +737,7 @@ Package pdftex.def Info: obrazky-figures/lbp.png  used on input line 143.
 LaTeX Warning: Citation `localBinaryPatterns' on page 8 undefined on input line 145.
 
 [8 <./obrazky-figures/illuminationexample.png>]
-<obrazky-figures/lbpPrimitives.png, id=291, 366.168pt x 221.02576pt>
+<obrazky-figures/lbpPrimitives.png, id=296, 366.168pt x 221.02576pt>
 File: obrazky-figures/lbpPrimitives.png Graphic file (type png)
 <use obrazky-figures/lbpPrimitives.png>
 Package pdftex.def Info: obrazky-figures/lbpPrimitives.png  used on input line 155.
@@ -755,7 +755,7 @@ LaTeX Warning: Citation `violaJones' on page 9 undefined on input line 163.
 
 LaTeX Warning: Citation `violaJones' on page 9 undefined on input line 163.
 
-<obrazky-figures/haarfeatures.png, id=295, 497.4585pt x 376.40625pt>
+<obrazky-figures/haarfeatures.png, id=300, 497.4585pt x 376.40625pt>
 File: obrazky-figures/haarfeatures.png Graphic file (type png)
 <use obrazky-figures/haarfeatures.png>
 Package pdftex.def Info: obrazky-figures/haarfeatures.png  used on input line 169.
@@ -767,7 +767,7 @@ LaTeX Warning: Citation `violaJonesArticle' on page 9 undefined on input line 17
 LaTeX Warning: Citation `violaJonesArticle' on page 9 undefined on input line 172.
 
 [9 <./obrazky-figures/lbp.png> <./obrazky-figures/lbpPrimitives.png>]
-<obrazky-figures/haarexample.png, id=307, 973.6375pt x 453.695pt>
+<obrazky-figures/haarexample.png, id=312, 973.6375pt x 453.695pt>
 File: obrazky-figures/haarexample.png Graphic file (type png)
 <use obrazky-figures/haarexample.png>
 Package pdftex.def Info: obrazky-figures/haarexample.png  used on input line 178.
@@ -776,7 +776,7 @@ Package pdftex.def Info: obrazky-figures/haarexample.png  used on input line 178
 
 LaTeX Warning: Citation `violaJones' on page 10 undefined on input line 184.
 
-<obrazky-figures/integralimage.png, id=311, 439.6425pt x 220.4235pt>
+<obrazky-figures/integralimage.png, id=316, 439.6425pt x 220.4235pt>
 File: obrazky-figures/integralimage.png Graphic file (type png)
 <use obrazky-figures/integralimage.png>
 Package pdftex.def Info: obrazky-figures/integralimage.png  used on input line 189.
@@ -794,7 +794,7 @@ LaTeX Warning: Citation `hog' on page 11 undefined on input line 199.
 
 LaTeX Warning: Citation `hog2' on page 11 undefined on input line 199.
 
-<obrazky-figures/hogexample.png, id=321, 592.2125pt x 401.5pt>
+<obrazky-figures/hogexample.png, id=326, 592.2125pt x 401.5pt>
 File: obrazky-figures/hogexample.png Graphic file (type png)
 <use obrazky-figures/hogexample.png>
 Package pdftex.def Info: obrazky-figures/hogexample.png  used on input line 209.
@@ -816,7 +816,7 @@ LaTeX Warning: Citation `ns1994' on page 13 undefined on input line 226.
 [13
 
 ]
-<obrazky-figures/perceptron.png, id=346, 995.72pt x 449.68pt>
+<obrazky-figures/perceptron.png, id=351, 995.72pt x 449.68pt>
 File: obrazky-figures/perceptron.png Graphic file (type png)
 <use obrazky-figures/perceptron.png>
 Package pdftex.def Info: obrazky-figures/perceptron.png  used on input line 247.
@@ -825,7 +825,7 @@ Package pdftex.def Info: obrazky-figures/perceptron.png  used on input line 247.
 
 LaTeX Warning: Citation `deeplearningbook' on page 14 undefined on input line 254.
 
-<obrazky-figures/nsexample.png, id=349, 1903.11pt x 957.5775pt>
+<obrazky-figures/nsexample.png, id=354, 1903.11pt x 957.5775pt>
 File: obrazky-figures/nsexample.png Graphic file (type png)
 <use obrazky-figures/nsexample.png>
 Package pdftex.def Info: obrazky-figures/nsexample.png  used on input line 275.
@@ -835,7 +835,7 @@ Package pdftex.def Info: obrazky-figures/nsexample.png  used on input line 275.
 LaTeX Warning: Citation `deeplearningbook' on page 15 undefined on input line 282.
 
 [15 <./obrazky-figures/nsexample.png>]
-<obrazky-figures/fitting.png, id=375, 2250.4075pt x 991.705pt>
+<obrazky-figures/fitting.png, id=380, 2250.4075pt x 991.705pt>
 File: obrazky-figures/fitting.png Graphic file (type png)
 <use obrazky-figures/fitting.png>
 Package pdftex.def Info: obrazky-figures/fitting.png  used on input line 305.
@@ -844,7 +844,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 31
  (C:\Users\vojta\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<obrazky-figures/celeba.png, id=378, 657.657pt x 225.84375pt>
+<obrazky-figures/celeba.png, id=383, 657.657pt x 225.84375pt>
 File: obrazky-figures/celeba.png Graphic file (type png)
 <use obrazky-figures/celeba.png>
 Package pdftex.def Info: obrazky-figures/celeba.png  used on input line 321.
@@ -853,7 +853,7 @@ Package pdftex.def Info: obrazky-figures/celeba.png  used on input line 321.
 
 LaTeX Warning: Citation `digiface1m' on page 17 undefined on input line 327.
 
-<obrazky-figures/digiface.png, id=393, 665.48625pt x 115.02975pt>
+<obrazky-figures/digiface.png, id=398, 665.48625pt x 115.02975pt>
 File: obrazky-figures/digiface.png Graphic file (type png)
 <use obrazky-figures/digiface.png>
 Package pdftex.def Info: obrazky-figures/digiface.png  used on input line 331.
@@ -886,13 +886,13 @@ LaTeX Warning: Citation `cnnCv' on page 18 undefined on input line 359.
 
 LaTeX Warning: Citation `cnnIntro' on page 18 undefined on input line 359.
 
-<obrazky-figures/principkonvoluce.png, id=403, 1587.9325pt x 509.905pt>
+<obrazky-figures/principkonvoluce.png, id=408, 1587.9325pt x 509.905pt>
 File: obrazky-figures/principkonvoluce.png Graphic file (type png)
 <use obrazky-figures/principkonvoluce.png>
 Package pdftex.def Info: obrazky-figures/principkonvoluce.png  used on input line 365.
 (pdftex.def)             Requested size: 1587.92863pt x 509.90375pt.
 [18 <./obrazky-figures/principkonvoluce.png>]
-<obrazky-figures/cnnpipeline.png, id=412, 781.92125pt x 212.795pt>
+<obrazky-figures/cnnpipeline.png, id=417, 781.92125pt x 212.795pt>
 File: obrazky-figures/cnnpipeline.png Graphic file (type png)
 <use obrazky-figures/cnnpipeline.png>
 Package pdftex.def Info: obrazky-figures/cnnpipeline.png  used on input line 377.
@@ -901,7 +901,7 @@ Package pdftex.def Info: obrazky-figures/cnnpipeline.png  used on input line 377
 
 LaTeX Warning: Citation `cnnNlp' on page 19 undefined on input line 379.
 
-<obrazky-figures/cnnpooling.png, id=416, 1174.3875pt x 732.7375pt>
+<obrazky-figures/cnnpooling.png, id=421, 1174.3875pt x 732.7375pt>
 File: obrazky-figures/cnnpooling.png Graphic file (type png)
 <use obrazky-figures/cnnpooling.png>
 Package pdftex.def Info: obrazky-figures/cnnpooling.png  used on input line 396.
@@ -929,7 +929,7 @@ LaTeX Warning: Citation `yolo' on page 20 undefined on input line 413.
 LaTeX Warning: Citation `fdCNNComparison' on page 20 undefined on input line 417.
 
 [20 <./obrazky-figures/cnnpooling.png (PNG copy)>]
-<obrazky-figures/cnncomparison.png, id=434, 398.6895pt x 129.48375pt>
+<obrazky-figures/cnncomparison.png, id=439, 398.6895pt x 129.48375pt>
 File: obrazky-figures/cnncomparison.png Graphic file (type png)
 <use obrazky-figures/cnncomparison.png>
 Package pdftex.def Info: obrazky-figures/cnncomparison.png  used on input line 421.
@@ -941,7 +941,7 @@ LaTeX Warning: Citation `fdCNNComparison' on page 21 undefined on input line 423
 
 LaTeX Warning: Citation `lowLightFdReview' on page 21 undefined on input line 430.
 
-<obrazky-figures/iepostup.png, id=435, 904.37875pt x 61.22874pt>
+<obrazky-figures/iepostup.png, id=440, 904.37875pt x 61.22874pt>
 File: obrazky-figures/iepostup.png Graphic file (type png)
 <use obrazky-figures/iepostup.png>
 Package pdftex.def Info: obrazky-figures/iepostup.png  used on input line 451.
@@ -956,7 +956,7 @@ LaTeX Warning: Citation `lowLightFdReview' on page 21 undefined on input line 45
 
 LaTeX Warning: Citation `lowLightFdReview' on page 22 undefined on input line 457.
 
-<obrazky-figures/psnrssim.png, id=447, 416.757pt x 263.18324pt>
+<obrazky-figures/psnrssim.png, id=452, 416.757pt x 263.18324pt>
 File: obrazky-figures/psnrssim.png Graphic file (type png)
 <use obrazky-figures/psnrssim.png>
 Package pdftex.def Info: obrazky-figures/psnrssim.png  used on input line 461.
@@ -994,7 +994,7 @@ LaTeX Warning: Citation `suspectIdentification' on page 24 undefined on input li
 
 LaTeX Warning: Citation `securityCamsWeb2' on page 24 undefined on input line 537.
 
-<obrazky-figures/nest-hello.png, id=461, 542.025pt x 303.38344pt>
+<obrazky-figures/nest-hello.png, id=466, 542.025pt x 303.38344pt>
 File: obrazky-figures/nest-hello.png Graphic file (type png)
 <use obrazky-figures/nest-hello.png>
 Package pdftex.def Info: obrazky-figures/nest-hello.png  used on input line 541.
@@ -1039,7 +1039,7 @@ LaTeX Warning: Citation `ncs2' on page 26 undefined on input line 575.
 
 LaTeX Warning: Citation `openvino' on page 26 undefined on input line 575.
 
-<obrazky-figures/ncs2.png, id=476, 1284.8pt x 722.7pt>
+<obrazky-figures/ncs2.png, id=481, 1284.8pt x 722.7pt>
 File: obrazky-figures/ncs2.png Graphic file (type png)
 <use obrazky-figures/ncs2.png>
 Package pdftex.def Info: obrazky-figures/ncs2.png  used on input line 579.
@@ -1050,7 +1050,7 @@ LaTeX Warning: Citation `ncs2' on page 26 undefined on input line 581.
 
 LaTeX Warning: Citation `ncs2testYolo' on page 26 undefined on input line 585.
 
-<obrazky-figures/ncs2test.png, id=479, 844.95676pt x 254.1495pt>
+<obrazky-figures/ncs2test.png, id=484, 844.95676pt x 254.1495pt>
 File: obrazky-figures/ncs2test.png Graphic file (type png)
 <use obrazky-figures/ncs2test.png>
 Package pdftex.def Info: obrazky-figures/ncs2test.png  used on input line 595.
@@ -1062,7 +1062,7 @@ LaTeX Warning: Citation `ncs2testYolo' on page 26 undefined on input line 597.
 LaTeX Warning: Citation `ncs2testYolo' on page 26 undefined on input line 597.
 
 [26 <./obrazky-figures/ncs2.png>]
-<obrazky-figures/ovchart.png, id=490, 1927.2pt x 1084.05pt>
+<obrazky-figures/ovchart.png, id=495, 1927.2pt x 1084.05pt>
 File: obrazky-figures/ovchart.png Graphic file (type png)
 <use obrazky-figures/ovchart.png>
 Package pdftex.def Info: obrazky-figures/ovchart.png  used on input line 609.
@@ -1084,7 +1084,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 627--627
 
 LaTeX Warning: Citation `annotace_formaty' on page 29 undefined on input line 647.
 
-<obrazky-figures/annotation_formats.png, id=513, 1234.6125pt x 412.54124pt>
+<obrazky-figures/annotation_formats.png, id=518, 1234.6125pt x 412.54124pt>
 File: obrazky-figures/annotation_formats.png Graphic file (type png)
 <use obrazky-figures/annotation_formats.png>
 Package pdftex.def Info: obrazky-figures/annotation_formats.png  used on input line 653.
@@ -1093,20 +1093,20 @@ Package pdftex.def Info: obrazky-figures/annotation_formats.png  used on input l
 
 LaTeX Warning: Citation `mirnet' on page 31 undefined on input line 693.
 
-<obrazky-figures/mirnet_arch.png, id=536, 950.55125pt x 464.73625pt>
+<obrazky-figures/mirnet_arch.png, id=541, 950.55125pt x 464.73625pt>
 File: obrazky-figures/mirnet_arch.png Graphic file (type png)
 <use obrazky-figures/mirnet_arch.png>
 Package pdftex.def Info: obrazky-figures/mirnet_arch.png  used on input line 697.
 (pdftex.def)             Requested size: 950.54893pt x 464.7351pt.
 [31]
-<obrazky-figures/loldataset.png, id=547, 1205.50375pt x 403.5075pt>
+<obrazky-figures/loldataset.png, id=552, 1205.50375pt x 403.5075pt>
 File: obrazky-figures/loldataset.png Graphic file (type png)
 <use obrazky-figures/loldataset.png>
 Package pdftex.def Info: obrazky-figures/loldataset.png  used on input line 706.
 (pdftex.def)             Requested size: 1205.50082pt x 403.50652pt.
  [32 <./obrazky-figures/mirnet_arch.png> <./obrazky-figures/loldataset.png>] [33]
 Kapitola 6.
-<obrazky-figures/widerface_example.jpg, id=566, 1027.84pt x 642.4pt>
+<obrazky-figures/widerface_example.jpg, id=571, 1027.84pt x 642.4pt>
 File: obrazky-figures/widerface_example.jpg Graphic file (type jpg)
 <use obrazky-figures/widerface_example.jpg>
 Package pdftex.def Info: obrazky-figures/widerface_example.jpg  used on input line 737.
@@ -1114,13 +1114,13 @@ Package pdftex.def Info: obrazky-figures/widerface_example.jpg  used on input li
 [34
 
 ]
-<obrazky-figures/darkfaceexample.png, id=574, 1084.05pt x 722.7pt>
+<obrazky-figures/darkfaceexample.png, id=579, 1084.05pt x 722.7pt>
 File: obrazky-figures/darkfaceexample.png Graphic file (type png)
 <use obrazky-figures/darkfaceexample.png>
 Package pdftex.def Info: obrazky-figures/darkfaceexample.png  used on input line 747.
 (pdftex.def)             Requested size: 1084.04736pt x 722.69823pt.
  [35 <./obrazky-figures/widerface_example.jpg> <./obrazky-figures/darkfaceexample.png (PNG copy)>]
-<obrazky-figures/augmentedexample.jpg, id=584, 1027.84pt x 642.4pt>
+<obrazky-figures/augmentedexample.jpg, id=589, 1027.84pt x 642.4pt>
 File: obrazky-figures/augmentedexample.jpg Graphic file (type jpg)
 <use obrazky-figures/augmentedexample.jpg>
 Package pdftex.def Info: obrazky-figures/augmentedexample.jpg  used on input line 772.
@@ -1137,7 +1137,7 @@ LaTeX Warning: Citation `resnet' on page 38 undefined on input line 811.
 LaTeX Warning: Citation `mobilenet' on page 38 undefined on input line 816.
 
 [38] [39]
-<obrazky-figures/trenink.png, id=621, 605.8635pt x 84.91725pt>
+<obrazky-figures/trenink.png, id=626, 605.8635pt x 84.91725pt>
 File: obrazky-figures/trenink.png Graphic file (type png)
 <use obrazky-figures/trenink.png>
 Package pdftex.def Info: obrazky-figures/trenink.png  used on input line 835.
@@ -1151,7 +1151,7 @@ Overfull \hbox (26.5755pt too wide) in paragraph at lines 872--872
 [][][][][]$\T1/lmtt/m/n/9 https : / / docs\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 openvino\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 ai / latest / openvino[]docs[]MO[]DG[]Deep[]Learning[]Model[]Optimizer[]DevGuide\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 html$[][]| 
  []
 
-<obrazky-figures/moworkflow.png, id=640, 767.86874pt x 201.75375pt>
+<obrazky-figures/moworkflow.png, id=645, 767.86874pt x 201.75375pt>
 File: obrazky-figures/moworkflow.png Graphic file (type png)
 <use obrazky-figures/moworkflow.png>
 Package pdftex.def Info: obrazky-figures/moworkflow.png  used on input line 876.
@@ -1160,7 +1160,7 @@ Package pdftex.def Info: obrazky-figures/moworkflow.png  used on input line 876.
 
 LaTeX Warning: Citation `quantization' on page 42 undefined on input line 889.
 
-<obrazky-figures/kvantovani.png, id=651, 769.6755pt x 291.489pt>
+<obrazky-figures/kvantovani.png, id=656, 769.6755pt x 291.489pt>
 File: obrazky-figures/kvantovani.png Graphic file (type png)
 <use obrazky-figures/kvantovani.png>
 Package pdftex.def Info: obrazky-figures/kvantovani.png  used on input line 895.
@@ -1169,7 +1169,7 @@ Package pdftex.def Info: obrazky-figures/kvantovani.png  used on input line 895.
 LaTeX Warning: Citation `quantization' on page 42 undefined on input line 897.
 
 [42 <./obrazky-figures/kvantovani.png>]
-<obrazky-figures/gui.png, id=660, 789.54974pt x 551.661pt>
+<obrazky-figures/gui.png, id=665, 789.54974pt x 551.661pt>
 File: obrazky-figures/gui.png Graphic file (type png)
 <use obrazky-figures/gui.png>
 Package pdftex.def Info: obrazky-figures/gui.png  used on input line 917.
@@ -1179,7 +1179,7 @@ Package pdftex.def Info: obrazky-figures/gui.png  used on input line 917.
 LaTeX Warning: Citation `detekceMetriky' on page 44 undefined on input line 957.
 
 [44]
-<obrazky-figures/iou.png, id=677, 601.24625pt x 259.97125pt>
+<obrazky-figures/iou.png, id=682, 601.24625pt x 259.97125pt>
 File: obrazky-figures/iou.png Graphic file (type png)
 <use obrazky-figures/iou.png>
 Package pdftex.def Info: obrazky-figures/iou.png  used on input line 961.
@@ -1197,13 +1197,13 @@ Overfull \hbox (2.2079pt too wide) in paragraph at lines 1013--1025
 [][]
  []
 
-<obrazky-figures/prkrivka.png, id=689, 409.7709pt x 312.2064pt>
+<obrazky-figures/prkrivka.png, id=694, 409.7709pt x 312.2064pt>
 File: obrazky-figures/prkrivka.png Graphic file (type png)
 <use obrazky-figures/prkrivka.png>
 Package pdftex.def Info: obrazky-figures/prkrivka.png  used on input line 1030.
 (pdftex.def)             Requested size: 409.7699pt x 312.20564pt.
 [46]
-<obrazky-figures/interpolace.png, id=702, 409.7709pt x 312.2064pt>
+<obrazky-figures/interpolace.png, id=707, 409.7709pt x 312.2064pt>
 File: obrazky-figures/interpolace.png Graphic file (type png)
 <use obrazky-figures/interpolace.png>
 Package pdftex.def Info: obrazky-figures/interpolace.png  used on input line 1040.
@@ -1217,7 +1217,7 @@ LaTeX Warning: Citation `detekceMetriky' on page 48 undefined on input line 1046
 
 [48 <./obrazky-figures/interpolace.png>]
 Kapitola 7.
-<obrazky-figures/valdataset.jpg, id=728, 1027.84pt x 743.77875pt>
+<obrazky-figures/valdataset.jpg, id=733, 1027.84pt x 743.77875pt>
 File: obrazky-figures/valdataset.jpg Graphic file (type jpg)
 <use obrazky-figures/valdataset.jpg>
 Package pdftex.def Info: obrazky-figures/valdataset.jpg  used on input line 1098.
@@ -1225,12 +1225,12 @@ Package pdftex.def Info: obrazky-figures/valdataset.jpg  used on input line 1098
 [49
 
 ] [50 <./obrazky-figures/valdataset.jpg>]
-<obrazky-figures/videa.png, id=745, 1927.2pt x 522.95375pt>
+<obrazky-figures/videa.png, id=750, 1927.2pt x 522.95375pt>
 File: obrazky-figures/videa.png Graphic file (type png)
 <use obrazky-figures/videa.png>
 Package pdftex.def Info: obrazky-figures/videa.png  used on input line 1121.
 (pdftex.def)             Requested size: 1927.19533pt x 522.95247pt.
-<obrazky-figures/videamirnet.png, id=747, 1927.2pt x 522.95375pt>
+<obrazky-figures/videamirnet.png, id=752, 1927.2pt x 522.95375pt>
 File: obrazky-figures/videamirnet.png Graphic file (type png)
 <use obrazky-figures/videamirnet.png>
 Package pdftex.def Info: obrazky-figures/videamirnet.png  used on input line 1131.
@@ -1250,31 +1250,31 @@ Overfull \hbox (3.43272pt too wide) in paragraph at lines 1184--1197
 [][]
  []
 
-[52]
+
 Overfull \hbox (3.43272pt too wide) in paragraph at lines 1203--1216
 [][]
  []
 
-[53]
+[52] [53] [54]
 
-LaTeX Warning: Citation `yolov7' on page 54 undefined on input line 1305.
+LaTeX Warning: Citation `yolov7' on page 55 undefined on input line 1318.
 
-[54]
-Underfull \hbox (badness 10000) in paragraph at lines 1349--1349
+[55]
+Underfull \hbox (badness 10000) in paragraph at lines 1363--1363
 [][][][][]$\T1/lmtt/m/n/9 https : / / github\OML/cmm/m/it/9 :\T1/lmtt/m/n/9 com / opencv / opencv / blob / master / data / haarcascades /
  []
 
-[55]
+[56]
 
-LaTeX Warning: Citation `mtcnn' on page 56 undefined on input line 1388.
-
-
-LaTeX Warning: Citation `mtcnnpaper' on page 56 undefined on input line 1388.
+LaTeX Warning: Citation `mtcnn' on page 57 undefined on input line 1403.
 
 
-LaTeX Warning: Citation `mtcnnpaper' on page 56 undefined on input line 1388.
+LaTeX Warning: Citation `mtcnnpaper' on page 57 undefined on input line 1403.
 
-[56] [57]
+
+LaTeX Warning: Citation `mtcnnpaper' on page 57 undefined on input line 1403.
+
+[57] [58] [59]
 Kapitola 8.
 )
 
@@ -1283,27 +1283,27 @@ No file projekt.bbl.
 \tf@ptc=\write5
 \openout5 = `projekt.ptc'.
 
-[58
+[60
 
 ] (projekt.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `projekt.out' has not changed.
-(rerunfilecheck)             Checksum: 3016DB276CCAE0E5661559F3E8A7F4C6;5440.
+(rerunfilecheck)             Checksum: 2F5E4F86E7C9CAF7A11EA0E8BD46E99C;5616.
  ) 
 Here is how much of TeX's memory you used:
- 16758 strings out of 475385
- 274506 string characters out of 2776907
- 665268 words of memory out of 3000000
- 37450 multiletter control sequences out of 15000+600000
+ 16764 strings out of 475385
+ 274594 string characters out of 2776907
+ 662373 words of memory out of 3000000
+ 37453 multiletter control sequences out of 15000+600000
  553631 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 73i,10n,77p,1174b,620s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 73i,10n,77p,1174b,638s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ts1.enc}{C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/a_jg4h6q.enc}<C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmbx12.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr6.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmr8.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmri10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/vojta/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt9.pfb>
-Output written on projekt.pdf (61 pages, 13409059 bytes).
+Output written on projekt.pdf (63 pages, 13418288 bytes).
 PDF statistics:
- 951 PDF objects out of 1000 (max. 8388607)
- 243 named destinations out of 1000 (max. 500000)
- 509 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 974 PDF objects out of 1000 (max. 8388607)
+ 246 named destinations out of 1000 (max. 500000)
+ 517 words of extra memory for PDF output out of 10000 (max. 10000000)
 
