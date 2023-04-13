@@ -408,6 +408,8 @@ Tato část popisuje vybrané existující detektory obličejů založené na ne
 
 Single shot detector \textbf{SSD} \cite{ssd} je konvoluční neuronová síť opět složená ze 2 částí, sloužící obecně k~detekci objektů. Tyto části jsou: a) natrénovaný detekční model (VGG--16 nebo jiný) a b) část SSD -- další konvoluční vrstva, která rozděluje obrázek pomocí mřížky (\emph{grid}) s~rozměry 4 $\times$ 4 nebo 8 $\times$ 8. V~každém takto vytvořeném bloku je pak hledán objekt (obličej).
 
+Již výše zmíněný detekční/rozpoznávací algoritmus/neuronová síť \textbf{VGG--16} \cite{vgg-16} používá k~detekci konvoluční filtry o~rozměrech $3 \times 3$ v~několika konvolučních vrstvách za sebou (počet filtrů se s~každou další vrstvou navyšuje). Používá se zde stride o~hodnotě 1.
+
 Detekční model \textbf{RetinaFace} \cite{lowLightFdReview} používá multitasking pro učení. Detekce probíhá určením pozice obličeje podle vyhledání pixelů, které tvář obsahuje. Model má 2 struktury: \emph{Multi--task loss} -- minimalizace chyb modelu a \emph{Dense Regression Branch} -- renderer, který filtruje obličeje a získává pixely z~vyrenderovaných obličejů.
 
 \textbf{YOLO} (You Only Look Once) \cite{yolo} je stejně jako SSD tzv. single shot detektor -- rozděluje vstupní obrázek do mřížky a provádí detekci případně rekognici nad jednotlivými bloky mřížky. Pro každý blok je určena hodnota jistoty výskytu objektu. Na vstupu sítě YOLO jsou barevné obrázky o~velikosti 448 $\times$ 448 pixelů. Architektura neuronové sítě je složena ze 7 konvolučních vrstev následovaných pooling vrstvami a 3 plně propojenými vrstvami na výstupu.
@@ -674,18 +676,10 @@ Framework TensorFlow poskytuje open\,--\,source API pro práci s modely pro dete
 
 TF OD API ke každému předtrénovanému modelu poskytuje základní informace o rychlosti detekce, o přesnosti změřené na validačních datech z výše zmíněného COCO datasetu a také informaci o tvaru výstupu neuronové sítě (souřadnice/klíčové body). Souřadnicový systém ohraničujích obdélníků odpovídá formátu PascalVOC. 
 
-S modely se pracuje pomocí skriptů v jazyce Python (trénování, evaluace, export), nastavování se provádí skrze editaci konfiguračních souborů, které jsou poskytovány pro každý model zvlášť. Při trénování pak dochází k vytváření tzv. \emph{checkpointů}, vytvoření souborů s údaji o vahách neuronů. Trénování neprobíhá v epochách jak je tomu běžné, ale v krocích, kdy jeden krok znamená, že síť zpracuje počet obrázků daných velikostí \textbf{batch}. Z toho vyplývá nasledující vztah:
+S modely se pracuje pomocí skriptů v jazyce Python (trénování, evaluace, export), nastavování se provádí skrze editaci konfiguračních souborů, které jsou poskytovány pro každý model zvlášť. Při trénování pak dochází k vytváření tzv. \emph{checkpointů}, vytvoření souborů s údaji o vahách neuronů. Trénování neprobíhá v epochách jak je tomu u TensorFlow běžné, ale v krocích, kdy jeden krok znamená, že síť zpracuje počet obrázků daných velikostí \textbf{batch}. Z toho vyplývá nasledující vztah:
 
 \begin{equation}
-  \label{vzorec:krokuzaepochu}
-  krokuZaEpochu = \frac{pocetObrazku}{batch}  \;\;[kroky]  
-\end{equation}
-
-\noindent Celkový počet proběhlých epoch pak lze vypočítat jako:
-
-\begin{equation}
-  \label{vzorec:celkemepoch}
-  celkemEpoch = \frac{pocetKroku}{krokuZaEpochu}
+  epocha = \frac{pocetObrazku}{batch}  \;\;[kroky]  
 \end{equation}
 
 
@@ -725,7 +719,7 @@ Předchozí kapitola pojednávala o návrhu nástrojů a postupů pro vytvořen�
 
 \section{Příprava dat}
 \label{sekce:priprava_dat}
-Tématem této frakce je příprava fotografií z datasetů k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
+Tématem této části je příprava fotografií z datasetů k trénování neuronové sítě. Proces předchystání dat spočívá ve zvolení vhodného datasetu pro detekci obličejů, anotováním obličejů ve fotografií (pokud toto není dostupné přímo s datasetem) a provedením augmentace za účelem znásobení počtu dat a provedení případných úprav pro konkrétní zadání (v tomto případě mj. ztmavení). Konečným bodem přípravy je převod dat do TensorFlow formátu \textbf{TFRecords}. Takto nachystané prostředky pak lze použít k trénování.
 
 \subsection*{Použité datasety}
 Pro detekci obličejů bylo zásadní zvolit vhodný dataset. V průběhu práce byly zvažovány a zkoušeny různé datasety a nakonec bylo rozhodnuto, že budou použity 2 datasety. Konkrétně dataset WIDER FACE a dataset DARK FACE, oba uvedené v sekci \ref{sekce:datasety}.
@@ -803,63 +797,19 @@ Jak již bylo avizováno výše, původní záměr spočíval ve vytvoření vla
 
 Novým způsobem, který bylo možné zkusit zrealizovat byla celková implementace SSD detektoru. Poměrně složité matematické operace s jednotlivými vrstvami výstupů detekční sítě se ukázaly být příliš náročné na implementaci. Bylo tak rozhodnuto, o využití existujícího řešení s implementací vlastní augmentace vstupních dat a vlastního natrénování. Při trénování muselo být využito dostupného předtrénovaného stavu sítě, protože kompletní trénování sítě tzv \uv{od nuly} by zabralo neúnosně mnoho výpočetního i reálného času.
 
-Použité modely tak vycházejí z detektorů objektů a jsou přetrénovány tak, aby detekovaly jen 1 třídu objektů (obličeje), místo výchozích 90 tříd. V tom se také odlišují od konkrétně zaměřených detektorů tváří jako je například RetinaFace, která byla trénována přímo pro detekci obličejů.
+Použité modely tak vycházejí z detektorů objektů a jsou přetrénovány tak, aby detekovaly jen 1 třídu objektů (obličeje), místo výchozích 90 tříd. V tom se také odlišují od konkrétně zaměřených detektorů tváří jako je například RetinaFace, která byla trénována pro detekci obličejů.
 
-\subsection*{SSD ResNet50 V1 FPN}
-Prvním zvoleným modelem z TensorFlow 2 Detection Model Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} (TF DMZ) byl model SSD ResNet50 V1 FPN 640x640 (RetinaNet50). Jak název napovídá, jedná se o neuronovou síť ResNet50 spojenou s kaskádou SSD. Model má na vstupu preprocessingovou část, která se stará o změnu rozlišení vstupního obrázku na 640 $\times$ 640 pixelů. Dle stránek TF DMZ dosahuje ve výchozím předtrénovaném stavu model rychlosti detekce 46 ms a má průměrnou přesnost 34,3 \% na datasetu COCO 2017.
+\subsection*{SSD Mobilenet}
 
-SSD část tohoto modelu je popsána v sekci \ref{sekce:NSdetektory}. Síť ResNet50 (Residual Network) \cite{resnet} je konvoluční neuronová síť patřící mezi skupinu ResNet modelů, mající 50 vrstev. Vychází z původního 18, respektive 34 vrstvého ResNetu. Každá vrstva obsahuje konvoluční filtr 3 $\times$ 3. Konkurentem ResNetu je například síť VGG--16. Další verze ResNetu mají 101 nebo 152 konvolučních vrstev.
-
-Tento model byl natrénován na datasetech popsaných výše. Samotné trénování popisuje sekce \ref{sekce:trenovani}. Po natrénování byl model vyzkoušen při detekci. Bez konkrétního měření přesnosti (konkrétní hodnoty byly změřeny později a jsou zaznamenány v experimentech v kapitole \ref{kapitola:experimenty}) dosahoval model obstojných výsledků detekce obličejů, ovšem ukázalo se, že detekce je pomalá a nelze s ním detekovat tváře ve videu v reálném čase. Proto byl hledán jiný, rychlejší model a nakonec byl ustanoven model SSD MobileNet V2 FPNLite.
-
-\subsection*{SSD MobileNet V2 FPNLite}
-SSD MobileNet V2 FPNLite 640 $\times$ 640 je model složený z SSD části a neuronové sítě MobileNet. MobileNet \cite{mobilenet} je pro svou efektivitu a rychlost určen převážně pro mobilní zařízení (například v Android telefonech jej lze použít s TensorFlow Lite), ale může posloužit i jako real--time detektor na běžném počítači. MobileNet používá stejně jak ostatní  detekční sítě konvoluční vrstvy, ale konvoluce v něm je rozdělena na tzv \emph{depthwise} a \emph{pointwise} část. Depthwise konvoluce je aplikována na každý vstupní kanál a pointwise konvoluce pak na tento výstup aplikuje konvoluci s filtrem o velikosti 1 $\times$ 1. Velikost sítě v počtu vrstev je poloviční oproti ResNet50. Velikost na disku je v případě MobileNetu 10$\times$ nižší než v případě ResNet50.
-
-MobileNet podle dat z TF DMZ dosahuje rychlosti zpracování 1 obrázku za 39 ms a průměrná úspěšnost na datasetu COCO 2017 je 28,2 \%. Model stejně jako předcházející ResNet50 pracuje s rozlišením 640 $\times$ 640 pixelů. V práci byly nakonec použity oba modely a během experimentů byly porovnány mezi sebou.
+\subsection*{SSD Resnet 50}
 
 \section{Trénování}
 \label{sekce:trenovani}
-Následující blok je věnován problematice trénování vybraných neuronových sítí z předcházející sekce. Neboť je trénování detekčních neuronových sítí velmi výpočetně a časově náročná akce, je potřeba mít výkonnou grafickou kartu nebo využít trénování v cloudu (například Google Colab). Autor textu nejprve zkoušel trénovat síť na vlastní grafické kartě nVidia GTX 1070 Ti s 8 GB video paměti RAM. To se ukázalo jako příliš pomalé a tak bylo trénování přesunuto na servery služby Metacetrum. Podrobněji Metacentrum popisuje text níže.
+Následující sekce je věnována problematice trénování vybraných neuronových sítí z předcházející sekce.
 
 \subsection*{Metacentrum}
-Metacentrum je virtuální organizace spravovaná organizací Cesnet, která poskytuje zdarma akademickým pracovníkům a studentům vypočetní zdroje na několika serverech po celé ČR. Spouštění úloh je realizováno interaktivě nebo dávkově. Pro potřeby trénování bylo využito dávkových úloh, které spočívají v přípravě bash skriptu a jeho následném předání plánovači úloh. Skripty dávkových úloh mají danou počáteční syntaxi dle pravidel Metacentra (nastavení požadovaných zdrojů, požadovaná délka běhu atd.). Po těcto pravidlech následuje klasický kód v bashi.
-
-Aby mohlo trénování běžet, bylo potřeba předpřipravit prostředí na serverech Metacentra. Příprava sestávala z vytvoření virtuálního prostředí (pomocí aplikace micromamba) pro běh TF OD API, samotná instalace TF OD API a instalace potřebných knihoven pro práci s grafickými kartami nVidia (cuDNN 8.1.0 a CUDA 11.2). Pro trénování pak byl vybrán téměř vždy server Galdor s využitím dvou grafických karet nVidia A40.
-
-Trénink modelu z TF OD API se spouští speciálním Python skriptem, který je obsažen v repozitáři TF OD API. Skript ke spuštění potřebuje znát místo uložení trénovaného modelu a také konfigurační soubor \texttt{pipeline.config}. V tomto konfiguračním souboru se nastavují parametry trénování (optimizér, počet kroků, batch velikost, míra učení -- \emph{learning rate}, maximální počet detekcí v obrázku, počet detekovaných tříd, druhy a váhy jednotlivých chybových funkcí a další parametry) a také místo uložení trénovacích a evaluačních TFRecord souborů a lokace výchozího předtrénovaného bodu modelu.
-
-Skript pro učení modelu automaticky každých 1000 provedených kroků ukládá aktuální stav modelu do tzv. checkpointů. Tyto checkpointy je pak možno převést na klasický TensorFlow \emph{saved model} formát a následně použít k detekci. Výstupní hodnoty jednotlivých chybových funkcí jsou při běhu trénování vypisovány na standardní chybový výstup ve formátu, který zachycuje obrázek \ref{obrazek:trenovani}.
-
-\begin{figure}[H]
-  \begin{center}
-      \scalebox{0.7}{\includegraphics{obrazky-figures/trenink.png}}
-  \label{obrazek:trenovani}
-  \caption{Výstup trénovacího skriptu během trénování}
-  \end{center}
-\end{figure}
-
-\subsection*{Natrénované modely}
-Celkově byly natrénovány 4 modely. Oba modely popsané v sekci \ref{sekce:detektor_obliceju_implementace} s oběma datasety ze sekce \ref{sekce:priprava_dat}. Jednotlivé parametry trénovaných modelů zachycuje tabulka \ref{tabulka:trenovanimodely}. Zkratky  DF a WF v názvech modelů odpovídají názvu datasetu, který byl použit při tréninku (DF = DARK FACE, WF = WIDER FACE). Počet kroků je metrika, kterou používá k počítání průběhu trénování TF OD API. Počet epoch je pak vypočítán dle vzorce \ref{vzorec:celkemepoch}. Velikost batche byla nastavena na hodnotu 32 z toho důvodu, aby nedocházelo při trénování k problémům s nedostatkem video paměti. Počty trénovacích obrázků odpovídají velikostem augmentovaným datasetům, které byly popsány výše.
-
-\begin{table}[h]
-  \begin{tabular}{|c|c|c|c|c|c|}
-    \hline
-    \rowcolor[HTML]{E0DBDB} 
-    {\color[HTML]{333333} \textbf{Model}} & {\color[HTML]{333333} \textbf{Kroků}} & {\color[HTML]{333333} \textbf{Epoch}} & {\color[HTML]{333333} \textbf{Doba trénování}} & {\color[HTML]{333333} \textbf{Batch}} & {\color[HTML]{333333} \textbf{Počet tr. obrázků}} \\ \hline
-    DF Mobilenet  & 100 000 & $\sim$333 & 5,5 h  & 32  & 9 600        \\ \hline
-    DF Resnet50  & 500 000  & $\sim$1667   & 4 dny  & 32  & 9 600   \\ \hline
-    WF Mobilenet    & 362 000      & $\sim$483 & 40 h   & 32  & 24 000  \\ \hline
-    WF Resnet50   & 500 000  & $\sim$667  & 3,5 dnů   & 32  & 24 000  \\ \hline
-  \end{tabular}
-  \label{tabulka:trenovanimodely}
-  \caption{Parametry modelů natrénovaných v rámci práce}
-\end{table}
-
-Checkpointy, které trénováním vznikly pak byly pomocí TF OD API převedeny exportérem na tzv \emph{saved model} formát. Tento formát je klasický TensorFlow formát modelů, jenž se dá v dalších aplikacích načíst a použít k detekci.
 
 \subsection*{Mirnet}
-Poněvadž je práce zaměřena na detekci ve zhoršených světelných podmínkách a využívá metodu Mirnet, která je sama neuronovou sítí, bylo třeba natrénovat i ji. K tomuto účelu postačila vlastní grafická karta autora a nebylo třeba využívat služeb Metacentra. Kód neuronové sítě Mirnetu byl převzat z \cite{mirnet}. Trénování sítě bylo spuštěno po dobu 70 epoch a byl použit dataset LoL. 350 obrázků z tohoto datasetu bylo využito k trénování a zbylých 135 pak k validaci modelu. Vzhledem k vysoké náročnosti na video paměť, byl batch nastaven na velikost 1. 
-
 
 
 \section{Akcelerace detekce}
@@ -902,549 +852,43 @@ Skript starající se o kvantování modelů používaných v rámci této prác
 
 \section{Grafické uživatelské rozhraní}
 \label{sekce:gui}
-Grafické uživatelské rozhraní (GUI) aplikace vytvořené k praktickému zkoušení modelů bylo vytvořeno tak, aby nejen zobrazovalo video a detekované obličeje, ale také tak, aby umožňovalo vytvářet soubory s naměřenými metrikami pro další zpracování. Funkce a schopnosti GUI, způsoby měření, provádění detekce a organizaci výstupů jsou shrnuty v následujím oddílu. 
+Grafické uživatelské rozhraní (GUI) aplikace vytvořené k praktickému zkoušení modelů bylo vytvořeno tak, aby nejen zobrazovalo video a detekované obličeje, ale také tak, aby umožňovalo vytvářet soubory s naměřenými metrikami pro další zpracování. Funkce a schopnosti GUI, způsoby měření, provádění detekce a organizaci výstupů jsou shrnuty níže v textu. 
 
-\subsection*{Rozhraní}
-Kostra aplikace je postavena na knihovně PyQt6 a jejích signálech a slotech (události a reakce na ně). Rozhraní (viz obrázek \ref{obrazek:gui}) se skládá z několika sekcí. Horní část slouží k výběru přehrávaného videa ve formátu mp4 a výběru modelu pro detekci (jeden ze čtyř natrénovaných z předcházející části). Dále lze pak vybrat zařízení na němž detekce poběží v případě spuštění akcelerované OpenVINO verze modelu (NCS2, CPU, GPU), a nakonec je možno určit zda se má použít akcelerovaný model (políčko OpenVINO?) a pokud ano, tak zda jeho kvantovaná verze (políčko Quantization?).
-
-Následuje plocha s promítaným načteným videem, v němž jsou modře ohraničeny detekované obličeje. Na každým takovým boxem je červeným písmem napsána přesnost (\emph{confidence}) detekce.
-
-Ve spodní části je umístěn posuvník pro pohyb ve videu, dále pak ukazatele statistických informací (číslo aktuálního snímku/počet snímků celkem, uběhlý čas/celková délka videa a aktuální, průměrné a výchozí FPS). Na samém spodním kraji se nachází tlačítka ovládání přehrávání, tlačítko pro zobrazení správných (\emph{ground truth}) boxů (pokud je anotační soubor videa k dispozici) a tlačítko pro uložení aktuálního snímku.
-
-
-\begin{figure}[H]
-  \begin{center}
-      \scalebox{0.54}{\includegraphics{obrazky-figures/gui.png}}
-  \label{obrazek:gui}
-  \caption{Aplikace pro detekci obličejů ve zhoršených světelných podmínkách}
-  \end{center}
-\end{figure}
+\subsection*{Implementace rozhraní}
 
 \subsection*{Měřené metriky}
-Při přehrávání videa nedochází pouze k detekci tváří, ale jsou zaznamenávány i metriky detekce. Mezi tyto metriky patří:
 
-\begin{itemize}
-  \item aktuální FPS,
-  \item počet detekcí v aktuálním snímku,
-  \item počet a polohy detekovaných obličejů ve formátu COCO.
-\end{itemize}
-
-\textbf{Aktuální FPS} jsou vypočítány pomocí doby uběhlé mezi začátkem detekce a zakreslením hraničních boxů kolem detekovaných tváří do snímku. 
-\textbf{Počet detekcí} aplikace zaznamenává pro každý snímek zvlášť. Tyto dvě metriky jsou exportovány v csv souborech k dalšímu zpracování (viz sekce \ref{sekce:nastroje_pro_experimenty}).
-
-Ke každému snímku je do souboru nazev\_videa\_output.txt zapsán \textbf{počet detekovaných obličejů a jejich souřadnice} v anotačním formátu COCO. Textový soubor odpovídá formátu, který používá dataset WIDER FACE. Formát COCO byl zvolen z toho důvodu, že stejný formát mají anotační soubory testovacích videí a je tak usnadněna práce s vyhodnocováním přesnosti detekce napříč snímky videa. Program, který pracuje s tímto výstupem je popsán v oddílu \ref{sekce:nastroje_pro_experimenty}.
+\subsection*{Příprava videí}
 
 
 \subsection*{Detekce}
-Detekce, správa ovládání a zápis statistických informací probíhá v aplikaci v separátním vláknu. Vlákno je vytvořeno pomocí PyQt6 knihovních tříd QThreadPool a QRunnable. Pomocí PyQt6 signálů jsou mezi hlavním vláknem aplikace a detekčním vláknem předávány informace o snímkové frekvenci a aktuálním snímku s využitím slotových funkcí v rámci hlavního aplikačního vlákna. Další funkcionalita detekčního vlákna je zápis výstupních informací do csv souborů a předávání snímku s detekovanými obličeji pro vykreslení v hlavním vlákně.
 
-Nastavení druhu používaného modelu, výběr zda využít jeho akcelerovanou nebo případně kvatovanou verzi je v gesci hlavního vlákna. Modely se nastavují jako globální proměnné, takže jsou dostupné ve všech funkcích a třídách aplikace.
 
-O detekci se starají dvě hlavní funkce, obě jsou globální. Funkce \texttt{detect\_faces} je funkce pro detekci OpenVINO verzí modelu, podobně pojmenovaná funkce \texttt{detect\_faces\_tf} pak spouští detekci na TensorFlow variantě modelu. Která z funkcí bude využita definuje uživatelem dané nastavení v horním ovládacím řádku aplikace. Toto nastavení nelze již během zpracovávání videa měnit. Pro nastavení jiného modelu je třeba video uzavřít, změnit nastavení a video soubor znovu načíst.
-
-Detekováné tváře, respektive jejich ohraničující body a důvěra modelu ve správnost detekce (\emph{confidence}), jsou hlavním výstupem obou vvýše zmíněných funkcí. Na vykreslení obdélníků do snímku dbá funkce \texttt{apply\_bboxes}, jenž zároveň vrací souřadnice v COCO formátu pro uložení do výstupního souboru k dalšímu zpracování.
-
-Pokud je k pouštěnému videu dostupný anotační soubor (pojmenovaný formou nazev\_videa\_gt.txt), umí program ukazovat zelenou barvou \emph{ground truth} boxy. Tato utilita se zapíná tlačítkem \uv{Show GT boxes} a může posloužit k vizuální kontrole detekce uživatelem.
+\subsection*{Výstupy}
 
 \section{Nástroje pro experimenty}
 \label{sekce:nastroje_pro_experimenty}
-Nástroje pro porovnávání modelů a experimenty s nimi jsou potřeba proto, aby bylo možné zhodnotit rozdíly mezi akcelerovaným a neakcelerovaným řešením a porovnat implementované detektory s existujícími.
-Tato část popisuje metody a postupy využité k evaluaci modelů 
-a způsoby jejich porovnávání pro možnosti experimentů v další kapitole. Je zde vylíčeno jak se která měřená metrika vyhodnocuje a jak vypadají výstupy experimentačních programů.
 
+\subsection*{Zpracování vstupů}
 
-\subsection*{Evaluace}
-Modely jsou v této práci porovnávány ve dvou kategoriích: \textbf{detekce ve videu} a \textbf{detekce v obrázcích z validačního datasetu}. K validaci je nutno stanovit některé pojmy a rovnice podle nichž dochází k vyhodnocování. Tyto měřící metody vycházejí z \cite{detekceMetriky}. Základním prvkem je výpočet \textbf{IoU} (průnik nad sjednocením, anglicky \emph{Intersection over Union}). IoU udává poměr průniku plochy detekovaného obličeje s plochou \emph{ground truth} ohraničujícího boxu a sjednocení těchto ploch. Ukázka výpočtu viz obrázek \ref{obrazek:iou}.
+\subsection*{Podoba výstupů}
 
-\begin{figure}[H] 
-  \begin{center}
-      \scalebox{0.64}{\includegraphics{obrazky-figures/iou.png}}
-  \label{obrazek:iou}
-  \caption{Výpočet IoU. Obrázek vychází z \cite{detekceMetriky}}
-  \end{center}
-\end{figure}
-
-Hodnota IoU pak slouží k určení, zda byl překonán práh $t$ pro to, aby se dala detekce považovat za úspěšnou ($IoU \ge t$). Detekce tak může dopadnout jedním z následujících 4 způsobů:
-
-\begin{itemize}
-  \item True Positive (TP) -- správná detekce \emph{ground truth} boxu,
-  \item False Positive (FP) -- detekce objektu tam, kde ve skutečnosti není,
-  \item False Negative (FN) -- objekt nebyl detektorem detekován, přestože se zde nachází,
-  \item True Negative (TN) -- objekt správně nebyl detekován.
-\end{itemize}
-
-Z těchto dat pak vychází 2 metriky, které se používají k měření úspěšnosti detekce. Přesnost detekce - poměr správných detekcí ke všem detekcím (dále jako \emph{precision}) a poměr správných detekcí ke všem \emph{ground truth} boxům (dále jako \emph{recall}). Tyto dvě čísla jsou vypočítána pomocí následujících rovnic:
-
-\begin{equation}
-  precision = \frac{TP}{TP + FP}
-\end{equation}
-
-\begin{equation}
-  recall = \frac{TP}{TP + FN}
-\end{equation}
-
-\noindent Hodnoty obou metrik se nejčastěji vyjadřují v procentech.
-
-
-\subsection*{Experimenty s videii}
-Pro detekci ve videu slouží vytvořená GUI aplikace zaznamenávající data do csv souborů. Mezi hodnocené metriky patří:
-
-\begin{itemize}
-  \item průměrné FPS,
-  \item průměrná přesnost detekce (\emph{precision}) v rámci jednotlivých snímků (framů),
-  \item průměrná hodnota IoU mezi snímky.
-\end{itemize}
-
-Pro měření přesnosti a hodnoty IoU slouží skript zpracovávající výstupní soubor se souřadnicemi detekovaných obličejů. Průměrná hodnota FPS je pak vyčtena z grafu, který vytváří skript pro vizualizaci počtu FPS a počtu detekcí napříč snímky (ukázka viz obrázek). %TODO
-
-Výpočet průměrné přesnosti je zpracován jako 11bodová interpolace \cite{interpolace} \emph{precision} $\times$ \emph{recall} křivky (PR křivka). Tato křivka je tvořena z hodnot \emph{recall} na ose x a hodnot \emph{precision} na ose y. Hodnoty jsou zde vypočítány pomocí kumulativního součtu jednotlivých detekcí obličejů v obrázku, viz následující rovnice:
-
-\begin{equation}
-  precision_k = \frac{\sum_{i=0}^{k} TP}{\sum_{i=0}^{k} TP + \sum_{i=0}^{k} FP}
-\end{equation}
-
-\begin{equation}
-  recall_k = \frac{\sum_{i=0}^{k} TP}{\sum_{i=0}^{k} TP + \sum_{i=0}^{k} FN}
-\end{equation}
-
-Tabulka \ref{tabulka:prkrivka} ukazuje příklad výpočtu hodnot \emph{precision} a \emph{recall} pro vytvoření křivky na obrázku s 6 obličeji (celkový počet \emph{ground truth} boxů je tak roven 6). Na obrázku \ref{obrazek:prkrivka} jsou tyto hodnoty přeneseny do grafu a je vykreslena spojovací křivka. Do pole hodnot pro vykreslení se navíc přidává bod na souřadnicích $[0, 1]$ aby byla křivka kompletní pro další výpočet.
-
-\begin{table}[H]
-  \begin{tabular}{|c|c|c|c|c|}
-  \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \textbf{Výsledek detekce} & \textbf{K. součet TP} & \textbf{K. součet FP} & \textbf{Precision} & \textbf{Recall} \\ \hline
-  TP         & {\color[HTML]{3531FF} 1} & {\color[HTML]{FE0000} 0} & {\color[HTML]{3531FF} 1}/({\color[HTML]{3531FF} 1}+{\color[HTML]{FE0000} 0}) = 1 & {\color[HTML]{3531FF} 1}/6 = 0,166     \\ \hline
-  FP    & 1   & 1     & 1/(1+1) = 0,5    & 1/6 = 0,166 \\ \hline
-  TP   & 2    & 1   & 2/(2+1) = 0,66   & 2/6 = 0,33      \\ \hline
-  TP    & 3    & 1   & 3/(3+1) = 0,75     & 3/6 = 0,5       \\ \hline
-  FP   & 3     & 2     & 3/(3+2) = 0,6     & 3/6 = 0,5       \\ \hline
-  TP  & 4    & 2   & 4/(4+2) = 0,66  & 4/6 = 0,66    \\ \hline
-  \end{tabular}
-  \label{tabulka:prkrivka}
-  \caption{Příklad výpočtu \emph{precision} a \emph{recall} pro 11bodovou interpolaci}
-\end{table}
-
-\begin{figure}[H] 
-  \begin{center}
-      \scalebox{0.8}{\includegraphics{obrazky-figures/prkrivka.png}}
-  \label{obrazek:prkrivka}
-  \caption{Graf PR přivky z příkladu z tabulky \ref{tabulka:prkrivka}}
-  \end{center}
-\end{figure}
-
-Výsledká průměrná přesnost je vypočítána jako plocha pod křivkou. Tuto plochu můžeme vypočítat pomocí zmíněné 11bodové interpolace. Tato metoda byla představena v roce 2007 v rámci detekční soutěže PASCAL VOC. Interpolace je prováděna na ose x (\emph{recall}) v bodech 0 až 1 s krokem 0,1 a jsou interpolovány hodnoty \emph{precision}, které v daném bodě odpovídají \textbf{nejvyšší hodnotě napravo}. Pro náš příklad by 11 interpolace vypadala tak, jak ukazuje graf na obrázku \ref{obrazek:interpolace}.
-
-\begin{figure}[H] 
-  \begin{center}
-      \scalebox{0.8}{\includegraphics{obrazky-figures/interpolace.png}}
-  \label{obrazek:interpolace}
-  \caption{Graf interpolované přesnosti z příkladu}
-  \end{center}
-\end{figure}
-
-\noindent Finální výpočet přesnosti pak vypadá následovně \cite{interpolace, detekceMetriky} (P = \emph{precision}, R = \emph{recall}):
-
-\begin{equation}
-  AP_{11} = \frac{1}{11} * \sum_{R \in \{0;0,1;...;0,9;1\}} P_{interpolovane} (R)
-\end{equation}
-
-Pro názorný příklad jsou interpolované hodnoty H rovny [1, 1, 0,75, 0,75, 0,75, 0,6666, 0,6666, 0, 0]. Výsledná přesnost tak je $AP = \frac{1}{11} * \sum H$ což se rovná cca 50,756 \%.
-
-\subsection*{Experimenty s datasetem}
-K měření úspěšnosti detekce v datasetu je využit validační dataset popsaný dále v sekci \ref{sekce:podklady}. Skripty měřící \emph{precision} a \emph{recall} umožňují nastavit model a zařízení na nichž se bude měřit. Evaluace je pak prováděna pomocí COCO evaluace\footnote{\url{https://cocodataset.org/\#detection-eval}}. 
-
-COCO evaluace detekčních modelů počítá přesnost detekce s různými prahy $t$ pro hodnotu IoU. V experimentech v kapitole \ref{kapitola:experimenty} jsou naměřené hodnoty \emph{precision} pro tyto prahy:
-
-\begin{enumerate}
-  \item průměr mezi 0,5 až 0,95 s krokem 0,05
-  \item 0,5
-  \item 0,75
-\end{enumerate}
-
-\noindent Hodnota \emph{recall} se pak počítá pro:
-
-\begin{enumerate}
-  \item 1 detekci na 1 obrázek,
-  \item 10 detekcí na 1 obrázek,
-  \item 100 detekcí na 1 obrázek.
-\end{enumerate}
- 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA Experimenty
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Experimenty}
 \label{kapitola:experimenty}
-Kapitola experimenty je zaměřena na otestování nově vzniklých detektorů obličejů ve zhoršených světelných podmínkách, a jejich praktickému porovnání s existujícími detektory. Provedené testy využívají skripty a aplikace navržené a implementované v předchozích kapitolách. Výsledky testů umožňují identifikovat problémy jednotlivých detektorů a mohou určit, který z detektorů je vhodnější k řešení daného konkrétního problému.
-
-Následující oddíly jsou zacíleny jak na testovací data tak na testovací přístupy. Každý oddíl věnující se konkrétnímu testu se skládá z popisu testovaných modelů, procesu testování a shrnutí dosažených výsledků.
 
 \section{Podklady}
-\label{sekce:podklady}
-Jak již bylo zmíněno, testování je prováděno na validačním datasetu a na dvou testovacích oanotovaných videích. Tato část je věnována popisu jejich tvorby.
-
-\subsection*{Příprava validačního datasetu}
-Mezi data, která jsou hodnocena za účelem srovnání detekčních sítí, patří nejen data získaná z GUI aplikace, ale také výsledky evaluace modelů na validačním datasetu. Jako validační dataset byla vybrána část WIDER FACE datasetu určená k validaci s některými úpravami:
-\begin{itemize}
-  \item odebrání snímků s více než 100 obličeji,
-  \item augmentace snímků, tak aby spadaly do kategorii zhoršených světelných podmínek.
-\end{itemize}
-
-Vyběr obrázků s  $\le 100$ obličeji byl zvolen z toho důvodu, že evaluční příkazy validátoru COCO ve výchozím nastavení detekují pouze maximálně 100 obličejů v jednom snímku. Vznikl tak validační dataset s 3167 fotografiemi. Typický snímek z datasetu viz obrázek \ref{obrazek:valdataset}.
-
-\begin{figure}[H] 
-  \begin{center}
-      \scalebox{0.35}{\includegraphics{obrazky-figures/valdataset.jpg}}
-  \label{obrazek:valdataset}
-  \caption{Snímek z validačního datasetu}
-  \end{center}
-\end{figure}
-
-COCO validátor bere na vstupu anotační data ve speciálním formátu (\textbf{Data Format}) v podobě JSON souboru. Byl vytvořen skript převádějící \emph{ground truth} souřadnice obličejů na tento formát. Dále pak validátor potřebuje ke svému fungování výstupní data detektoru (souřadnice obličejů a číslo obrázku ke kterému se informace vztahují) opět ve specifickém formátu \textbf{Result Format}. Skripty pro spuštění detekce na každém z vytvořených detektorů i na každém použitém existujícím řešení, vytvářejí přímo tento výsledkový soubor.
-
-Následující ukázky obsahují data v obou zmíněných formátech pro první snímek z validačního datasetu.
-
-% TODO ukazka data foramtu coco a result formatu pro 1 obrazek
-
-Naprogramovaný skript \texttt{eval.py} zpracuje výstupy (JSON result soubor) všech detektorů a zapíše do souboru statistiky vypočítané COCO evaluátorem. Tyto statistiky pak posloužily jako data do některých tabulek a grafů v následujících testech. Pokud není v textu řečeno jinak, byly detektory spouštěny vždy s prahem jistoty detekce (\emph{confidence}) $c = 0.25$.
-
-
-\subsection*{Příprava videí}
-K otestování schopností detektorů byly vybrány 2 testovací videa. Obě videa bylo třeba oanotovat, k čemuž byl použit webový nástroj CVAT\footnote{\url{https://www.cvat.ai}} (Computer Vision Anottation Tool). 
-Tento program umožňuje ve zpracovávaném videu projít každý jeden snímek (frame) a nastavit v něm ohraničující boxy jednotlivých tváří. Tento úkon bylo nutno udělat ručně a výstup slouží jak \emph{ground truth} údaje pro validaci a porovnávání modelů mezi sebou. Formát výstupu je možné zvolit v několika tvarech, pro zpracovaná videa byl zvolen výstup podobný anotaci WIDER FACE datasetu (číslo snímku, počet obličejů ve snímku, COCO souřadnice). Anotační soubory videí lze použít jak k hodnocení přesnosti detekce, tak při přehrávání pro zobrazování \emph{ground truth} boxů. 
-
-První video (na obrázku \ref{obrazek:videa} vlevo) je 9 sekund dlouhé, skládá se z 241 snímků o snímkové frekvenci 25 FPS. Zachycuje městskou ulici v podvečer a obsahuje cca 10 obličejů. Druhé video (na obrázku \ref{obrazek:videa} vpravo) trvá 23 sekund, je natočeno ve 29 FPS a obsahuje 700 framů. Jeho meritem je průchod většího počtu lidí po pobřežním molu večer.
-
-\begin{figure}[H] 
-  \begin{center}
-      \scalebox{0.22}{\includegraphics{obrazky-figures/videa.png}}
-  \label{obrazek:videa}
-  \caption{Snímky z obou testovacích videí}
-  \end{center}
-\end{figure}
-
-Původním záměrem bylo real--timové využití Mirnetu pro detektory, které nebyly trénovány na datasetu DARK FACE. Tento úmysl se ovšem ukázal jako nerealizovatelný kvůli vysoké výpočetní a paměťové náročnosti převodu framu videa sítí Mirnet. Nebylo by tak možné dosáhnout únosné snímkové frekvence. Proto byly obě videa převedeny Mirnetem (výstupy viz obrázek \ref{obrazek:videamirnet}) separátně od GUI aplikace. Lze je samozřejmě spustit v aplikaci stejným způsobem jako originály, čímž je simulována detekce s použitím Mirnetu.
-
-\begin{figure}[H] 
-  \begin{center}
-      \scalebox{0.22}{\includegraphics{obrazky-figures/videamirnet.png}}
-  \label{obrazek:videamirnet}
-  \caption{Snímky z obou videí po úpravě Mirnetem}
-  \end{center}
-\end{figure}
+videa
 
 \section{Porovnání akcelerovaného a normálního řešení}
-V prvním experimentu byly porovnány natrénované TensorFlow modely s jejich akcelerovanými verzemi. První část testování proběhla na validačním datasetu, druhá na obou testovacích videích ve verzi bez Mirnet vylepšení.
 
-\subsection*{Testování na datasetu}
-Tabulky \ref{tabulka:dfmdataset}, \ref{tabulka:dfrdataset}, \ref{tabulka:wfmdataset} a \ref{tabulka:wfrdataset} ukazují přesnost (AP) a poměr správných detekcí (recall) pro jednotlivé modely a jejich akcelerované varianty. Měření optimalizovaných modelů pomocí knihovny OpenVINO probíhalo na 3 různých zařízeních: \textbf{CPU} -- Intel Core i7--1165G7, \textbf{integrované GPU} -- Intel Iris Xe a \textbf{VPU} -- Intel Neural Compute Stick 2. Výkony výchozích TensorFlow detektorů byly v tomto testu měřeny na grafické kartě (\textbf{GPU}) nVidia MX 450. Hodnoty v tabulkách jsou udány v procentech.
-
-\begin{table}[H]
-  \begin{tabular}{|
-  >{\columncolor[HTML]{E0DBDB}}l |
-  >{\columncolor[HTML]{E0DBDB}}l |c|c|c|c|c|c|}
-  \hline
-  \textbf{Model} & \textbf{Zař.} & \cellcolor[HTML]{E0DBDB}\textbf{AP} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.5} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.75} & \cellcolor[HTML]{E0DBDB}\textbf{Recall1} & \cellcolor[HTML]{E0DBDB}\textbf{Recall10} & \cellcolor[HTML]{E0DBDB}\textbf{Recall100} \\ \hline
-  TensorFlow          & GPU               & 3,0                                 & 9,3                                     & 1,0                                      & 1,9                                       & 5,5                                        & 6,1                                         \\ \hline
-  OpenVINO            & iGPU              & 3,1                                 & 9,2                                     & 1,0                                      & 1,8                                       & 5,5                                        & 5,9                                         \\ \hline
-  OpenVINO            & CPU               & 3,0                                 & 9,2                                     & 1,0                                      & 1,8                                       & 5,5                                        & 5,9                                         \\ \hline
-  OpenVINO            & VPU               & 2,9                                 & 8,6                                     & 1,1                                      & 1,7                                       & 5,0                                        & 5,4                                         \\ \hline
-  Kvantovaný          & iGPU              & 2,9                                 & 8,7                                     & 0,9                                      & 1,8                                       & 5,4                                        & 5,8                                         \\ \hline
-  Kvantovaný          & CPU               & 2,9                                 & 8,7                                     & 1,0                                      & 1,8                                       & 5,3                                        & 5,8                                         \\ \hline
-  \end{tabular}
-  \label{tabulka:dfmdataset}
-  \caption{Model DARK FACE Mobilenet -- výsledky detekce na validačním datasetu}
-\end{table}
-
-Z tabulky \ref{tabulka:dfmdataset} je patrné, že model SSD MobileNet natrénovaný na datasetu DARK FACE naprosto nezvládá detekovat obličeje z jiného datasetu. Maximální naměřená přesnost při $IoU = 0.50$ nedosahuje ani 10 \%. Rozdíly neakcelerované a TensorFlow verze jsou minimální.
-
-
-\begin{table}[H]
-  \begin{tabular}{|
-  >{\columncolor[HTML]{E0DBDB}}l |
-  >{\columncolor[HTML]{E0DBDB}}l |c|c|c|c|c|c|}
-  \hline
-  \textbf{Model} & \textbf{Zař.} & \cellcolor[HTML]{E0DBDB}\textbf{AP} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.5} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.75} & \cellcolor[HTML]{E0DBDB}\textbf{Recall1} & \cellcolor[HTML]{E0DBDB}\textbf{Recall10} & \cellcolor[HTML]{E0DBDB}\textbf{Recall100} \\ \hline
-  TensorFlow     & GPU           & 1,6                                 & 4,7                                     & 0,5                                      & 1,0                                      & 2,6                                       & 2,8                                        \\ \hline
-  OpenVINO       & iGPU          & 1,8                                 & 5,0                                     & 0,5                                      & 1,0                                      & 2,6                                       & 2,8                                        \\ \hline
-  OpenVINO       & CPU           & 1,7                                 & 5,0                                     & 0,5                                      & 1,0                                      & 2,6                                       & 2,7                                        \\ \hline
-  OpenVINO       & VPU           & 1,7                                 & 5,0                                     & 0,5                                      & 1,0                                      & 2,6                                       & 2,7                                        \\ \hline
-  Kvantovaný     & iGPU          & 1,6                                 & 4,4                                     & 0,5                                      & 1,0                                      & 2,5                                       & 2,6                                        \\ \hline
-  Kvantovaný     & CPU           & 1,6                                 & 4,4                                     & 0,5                                      & 1,0                                      & 2,5                                       & 2,6                                        \\ \hline
-  \end{tabular}
-  \label{tabulka:dfrdataset}
-  \caption{Model DARK FACE ResNet50 -- výsledky detekce na validačním datasetu}
-\end{table}
-
-Při záměně MobileNetu za ResNet50 nedošlo k žádnému zlepšení, jak vyplývý z tabulky \ref{tabulka:dfrdataset}. Oba modely trénované na datech datasetu DARK FACE jsou nevyhovující pro detekci ve validačním datasetu. Jejich přínos je viditelný v extrémně tmavých a nočních fotografií nebo videích, což ukazuje test na testovacím videu 2 níže.
-
-
-\begin{table}[H]
-  \begin{tabular}{|
-  >{\columncolor[HTML]{E0DBDB}}l |
-  >{\columncolor[HTML]{E0DBDB}}l |c|c|c|c|c|c|}
-  \hline
-  \textbf{Model} & \textbf{Zař.} & \cellcolor[HTML]{E0DBDB}\textbf{AP} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.5} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.75} & \cellcolor[HTML]{E0DBDB}\textbf{Recall1} & \cellcolor[HTML]{E0DBDB}\textbf{Recall10} & \cellcolor[HTML]{E0DBDB}\textbf{Recall100} \\ \hline
-  TensorFlow     & GPU           & 16,2                                & 35,3                                    & 13,0                                     & 7,9                                      & 25,7                                      & 34,7                                       \\ \hline
-  OpenVINO       & iGPU          & 16,2                                & 34,8                                    & 13,3                                     & 7,9                                      & 25,4                                      & 32,3                                       \\ \hline
-  OpenVINO       & CPU           & 16,2                                & 34,8                                    & 13,3                                     & 7,9                                      & 25,4                                      & 32,3                                       \\ \hline
-  OpenVINO       & VPU           & 17,4                                & 36,3                                    & 15,1                                     & 7,8                                      & 25,2                                      & 31,6                                       \\ \hline
-  Kvantovaný     & iGPU          & 17,8                                & 37,5                                    & 15,1                                     & 7,8                                      & 25,3                                      & 31,5                                       \\ \hline
-  Kvantovaný     & CPU           & 17,7                                & 37,4                                    & 15,1                                     & 7,8                                      & 25,2                                      & 31,6                                       \\ \hline
-  \end{tabular}
-  \label{tabulka:wfmdataset}
-  \caption{Model WIDER FACE MobileNet -- výsledky detekce na validačním datasetu}
-\end{table}
-
-Změna trénovacích dat přinesla kýžený efekt v podobě výrazného zlepšení detekčních výsledků. Z tabulky \ref{tabulka:wfmdataset} je patrné 350 \% zlepšení přesnosti detekce v kategorii AP@0.5. Trochu překvapivě dosáhl nejvyšších výsledků přesnosti kvantovaný model, konkrétně 37,5 \%. Tyto hodnoty nemusejí vypadat dobře, ale v porovnání s existujícími modely (viz sekce \ref{sekce:yolov7}, \ref{sekce:vj} a \ref{sekce:mtcnn}) nejsou výsledky vůbec špatné. Model obsahující MobileNet je navíc rychlý, což ukazují měření v další části této části.
-
-\begin{table}[H]
-  \begin{tabular}{|
-  >{\columncolor[HTML]{E0DBDB}}l |
-  >{\columncolor[HTML]{E0DBDB}}l |c|c|c|c|c|c|}
-  \hline
-  \textbf{Model} & \textbf{Zař.} & \cellcolor[HTML]{E0DBDB}\textbf{AP} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.5} & \cellcolor[HTML]{E0DBDB}\textbf{AP@0.75} & \cellcolor[HTML]{E0DBDB}\textbf{Recall1} & \cellcolor[HTML]{E0DBDB}\textbf{Recall10} & \cellcolor[HTML]{E0DBDB}\textbf{Recall100} \\ \hline
-  TensorFlow     & GPU           & 23,2                                & 47,1                                    & 20,4                                     & 8,3                                      & 28,2                                      & 38,1                                       \\ \hline
-  OpenVINO       & iGPU          & 22,2                                & 44,8                                    & 19,8                                     & 8,3                                      & 27,7                                      & 35,2                                       \\ \hline
-  OpenVINO       & CPU           & 22,1                                & 44,8                                    & 19,7                                     & 8,3                                      & 27,7                                      & 35,3                                       \\ \hline
-  OpenVINO       & VPU           & 22,5                                & 45,3                                    & 20,1                                     & 8,3                                      & 27,8                                      & 35,4                                       \\ \hline
-  Kvantovaný     & iGPU          & 22,3                                & 44,7                                    & 20,1                                     & 8,3                                      & 27,6                                      & 35,0                                       \\ \hline
-  Kvantovaný     & CPU           & 22,4                                & 44,8                                    & 20,2                                     & 8,3                                      & 27,6                                      & 35,0                                       \\ \hline
-  \end{tabular}
-  \label{tabulka:wfrdataset}
-  \caption{Model WIDER FACE ResNet50 -- výsledky detekce na validačním datasetu}
-\end{table}
-
-Nahrazení MobileNetu Resnetem50 přineslo zvýšení přesnosti o 10 procentních bodů. Hodnota 47,1 \% AP@0.5 je vůbec nejvyšší naměřená přesnost ze všech měření na validačním datasetu. S akcelerací modelu a kvantováním, se rapidně snížila velikost modelu, ale došlo jen k nepatrnému snížení přesnosti a hodnoty \emph{recall} v řádech procent.
-
-Nejlepším natrénovaným modelem se tak ukázal být model SSD Resnet50 ve verzi WIDER FACE, který byl dále porovnán s existujícimi řešeními v rámci testů na validačním datasetu.
-
-\subsection*{Testování ve videích}
-K experimentům a měření metrik ve videích bylo využito vytvořené GUI rozhraní. Jak již bylo zmíněno v sekci \ref{sekce:nastroje_pro_experimenty}, posuzovány byly tyto ukazatele: \textbf{průměrné FPS}, \textbf{průměrná přesnost mezi snímky -- APF} a \textbf{průměrné IoU mezi snímky}. Následující tabulky obsahují naměřené informace. Jednotkou každého čísla je \% a měření probíhalo s prahem jistoty detekce (\emph{confidence}) $c = 0.3$.
-
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{cc|ccc|ccc|}
-  \cline{3-8}
-                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{17,083}                                 & \multicolumn{1}{c|}{14,64}                                  & 36,24          & \multicolumn{1}{c|}{17,171}                                 & \multicolumn{1}{c|}{5,52}                                   & 22,44          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{48,036}                                 & \multicolumn{1}{c|}{13,34}                                  & 33,89          & \multicolumn{1}{c|}{41,996}                                 & \multicolumn{1}{c|}{5,16}                                   & 22,46          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{22,775}                                 & \multicolumn{1}{c|}{13,31}                                  & 33,73          & \multicolumn{1}{c|}{17,754}                                 & \multicolumn{1}{c|}{5,09}                                   & 22,47          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{2,792}                                  & \multicolumn{1}{c|}{12,87}                                  & 34,42          & \multicolumn{1}{c|}{2,786}                                  & \multicolumn{1}{c|}{4,70}                                   & 23,51          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{56,927}                                 & \multicolumn{1}{c|}{12,89}                                  & 34,80          & \multicolumn{1}{c|}{43,308}                                 & \multicolumn{1}{c|}{5,15}                                   & 21,73          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{48,774}                                 & \multicolumn{1}{c|}{12,60}                                  & 33,70          & \multicolumn{1}{c|}{49,732}                                 & \multicolumn{1}{c|}{5,25}                                   & 21,45          \\ \hline
-  \end{tabular}
-  \label{tabulka:dfmvidea}
-  \caption{Model DARK FACE MobileNet -- výsledky detekce na testovacích videích}
-\end{table}
-
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{cc|ccc|ccc|}
-  \cline{3-8}
-                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{4,767}                                  & \multicolumn{1}{c|}{0}                                      & 4,3            & \multicolumn{1}{c|}{4,773}                                  & \multicolumn{1}{c|}{5,19}                                   & 42,04          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{7,644}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{7,888}                                  & \multicolumn{1}{c|}{3,24}                                   & 37,16          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{1,516}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{1,446}                                  & \multicolumn{1}{c|}{3,03}                                   & 36,76          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{0,992}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{0,992}                                  & \multicolumn{1}{c|}{3,68}                                   & 36,15          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{14,082}                                 & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{13,657}                                 & \multicolumn{1}{c|}{1,98}                                   & 34,26          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{5,381}                                  & \multicolumn{1}{c|}{0}                                      & 0              & \multicolumn{1}{c|}{5,413}                                  & \multicolumn{1}{c|}{2,37}                                   & 33,26          \\ \hline
-  \end{tabular}
-  \label{tabulka:dfrvidea}
-  \caption{Model DARK FACE Resnet50 -- výsledky detekce na testovacích videích}
-\end{table}
-
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{cc|ccc|ccc|}
-  \cline{3-8}
-                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{17,327}                                 & \multicolumn{1}{c|}{20,03}                                  & 36,34          & \multicolumn{1}{c|}{16,855}                                 & \multicolumn{1}{c|}{6,5}                                    & 22,14          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{35,649}                                 & \multicolumn{1}{c|}{20,26}                                  & 35,69          & \multicolumn{1}{c|}{40,890}                                 & \multicolumn{1}{c|}{6,96}                                   & 22,76          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{19,192}                                 & \multicolumn{1}{c|}{20,73}                                  & 35,95          & \multicolumn{1}{c|}{17,234}                                 & \multicolumn{1}{c|}{6,97}                                   & 22,67          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{2,782}                                  & \multicolumn{1}{c|}{22,47}                                  & 38,11          & \multicolumn{1}{c|}{2,797}                                  & \multicolumn{1}{c|}{8,22}                                   & 26,08          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{47,944}                                 & \multicolumn{1}{c|}{19,79}                                  & 43,08          & \multicolumn{1}{c|}{44,808}                                 & \multicolumn{1}{c|}{8,97}                                   & 30,82          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{45,272}                                 & \multicolumn{1}{c|}{19,73}                                  & 42,25          & \multicolumn{1}{c|}{42,600}                                 & \multicolumn{1}{c|}{8,78}                                   & 30,58          \\ \hline
-  \end{tabular}
-  \label{tabulka:wfmvidea}
-  \caption{Model WIDER FACE MobileNet -- výsledky detekce na testovacích videích}
-\end{table}
-
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{cc|ccc|ccc|}
-  \cline{3-8}
-                                                               &                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \textbf{Zař.}                & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}TensorFlow}     & \cellcolor[HTML]{E0DBDB}GPU  & \multicolumn{1}{c|}{4,773}                                  & \multicolumn{1}{c|}{28,53}                                  & 51,55          & \multicolumn{1}{c|}{4,772}                                  & \multicolumn{1}{c|}{5,10}                                   & 32,88          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{7,547}                                  & \multicolumn{1}{c|}{29,01}                                  & 51,65          & \multicolumn{1}{c|}{7,686}                                  & \multicolumn{1}{c|}{5,07}                                   & 32,73          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{1,462}                                  & \multicolumn{1}{c|}{29,03}                                  & 51,82          & \multicolumn{1}{c|}{1,438}                                  & \multicolumn{1}{c|}{5,01}                                   & 32,65          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}OpenVINO}       & \cellcolor[HTML]{E0DBDB}VPU  & \multicolumn{1}{c|}{0,991}                                  & \multicolumn{1}{c|}{28,69}                                  & 52,00          & \multicolumn{1}{c|}{0,991}                                  & \multicolumn{1}{c|}{4,95}                                   & 33,09          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}iGPU & \multicolumn{1}{c|}{13,924}                                 & \multicolumn{1}{c|}{28,18}                                  & 51,52          & \multicolumn{1}{c|}{13,727}                                 & \multicolumn{1}{c|}{4,68}                                   & 32,39          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Kvantovaný}     & \cellcolor[HTML]{E0DBDB}CPU  & \multicolumn{1}{c|}{5,465}                                  & \multicolumn{1}{c|}{27,32}                                  & 52,11          & \multicolumn{1}{c|}{5,279}                                  & \multicolumn{1}{c|}{4,70}                                   & 32,56          \\ \hline
-  \end{tabular}
-  \label{tabulka:wfrvidea}
-  \caption{Model WIDER FACE Resnet50 -- výsledky detekce na testovacích videích}
-\end{table}
-
-
-\section{Porovnání s YOLOv7--face}
-\label{sekce:yolov7}
-Prvním existujícím řešením, s nímž byly nově vytvořené modely srovnány je YOLOv7--face\footnote{\url{https://github.com/derronqi/yolov7-face}}. YOLOv7--face vychází z detektoru YOLOv7 \cite{yolov7}. YOLOv7 je nový detektor objektů dosahující přesnoti 51,4 \% na COCO datasetu. Jeho přetrénovaním na detekci obličejů vznikl detektor YOLOv7--face. Detektor je dostupný v podobě GitHub repozitáře a je postaven na frameworku PyTorch.
-
-\subsection*{Testování na datasetu}
-Repozitář obsahuje skript \texttt{detect.py} s jehož pomocí je možné spustit detekci v obrázcích nebo ve videu. Skript tak byl spuštěn nad validačním datasetem a výstupní souřadnice obličejů byly převedeny do výsledného COCO formátu. Následně bylo provedeno vyhodnocení jako u všech ostatních modelů a byly naměřeny výsledky, které ukazuje tabulka \ref{tabulka:yolov7face} (všechny čísla mají jako jednotku \%, práh jistoty $c=0.25$). K měření posloužila stejná grafická karta nVidia MX 450.
-
-\begin{table}[H]
-  \begin{center}
-    \begin{tabular}{|l|c|c|c|c|c|c|}
-    \hline
-    \rowcolor[HTML]{E0DBDB} 
-    \textbf{Model}                      & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
-    \cellcolor[HTML]{E0DBDB}YOLOv7-face & 21,4        & 42,8            & 19,6             & 5,6              & 20,8              & 30,7               \\ \hline
-    \end{tabular}
-    \label{tabulka:yolov7face}
-    \caption{Model YOLOv7--face -- výsledky detekce na validačním datasetu}
-  \end{center}
-\end{table}
-
-Z výsledků lze vypozorovat, že průměrná přesnost je nižší než u nejlepšího natrénovaného modelu (SSD ResNet50 s přesností AP@0.50 47,1 \% -- viz tabulka \ref{tabulka:wfrdataset}). O něco hůře vychází ze srovnání YOLOv7--face také v případě hodnoty \emph{recall}, která je nižší o 2,7 \% (5,6 \% $\times$ 8,7 \%) až 7,4 \% (30,7 \% $\times$ 38,1 \%). 
-
-V porovnání s architekturou MobileNet + SSD (tabulka \ref{tabulka:wfmdataset} -- verze akcelerovaná na NCS2) je YOLOv7--face detektor o 6,5 procentního bodu přesnější (v kategorii AP@0.50).
-
-
-\subsection*{Testování ve videích}
-
-video1 čas 42,789 s
-
-video2 čas 115,998 s
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{c|ccc|ccc|}
-  \cline{2-7}
-                                                               & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}YOLOv7-face}    & \multicolumn{1}{c|}{5,632}                                  & \multicolumn{1}{c|}{28,46}                                  & 43,68          & \multicolumn{1}{c|}{6,034}                                  & \multicolumn{1}{c|}{11,76}                                  & 39,29          \\ \hline
-  \end{tabular}
-  \label{tabulka:yolov7facevidea}
-  \caption{Model YOLOv7--face -- výsledky detekce na testovacích videích}
-\end{table}
-
-\section{Porovnání s Viola--Jones}
-\label{sekce:vj}
-Další zvoleným existujícím řešením je klasický algoritmus \textbf{Viola--Jones/Haar Cascades}. Tato část se zaměřuje na porovnání vytvořených detektorů s tímto detektorem. Detektor Viola--Jones, který byl použit k testování je obsažen v knihovně OpenCV\footnote{\url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}}. Pomocí příkazu \texttt{cv2.CascadeClassifier()} je možné vytvořit objekt detektoru. Detektor ke správnému fungování potřebuje speciální XML soubor\footnote{\url{https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_alt.xml}}. Po načtení souboru je možné funkcí \texttt{detectMultiScale()} detekovat obličeje v černobílé verzi vstupního obrázku.
-
-Detekce byla opět provedena jak na validačním datasetu, tak ve videích, kdy byl detektor Viola--Jones přímo zabudován do GUI aplikace. Lze tak v libovolném mp4 videu spustit detekci tímto detektorem. Následující oddíly se věnují pokusům s detektorem.
-
-\subsection*{Testování na datasetu}
-Výsledky měření (viz tabulka \ref{tabulka:violajones}) ukazují velmi nízkou úspěšnost detekce. Ta je dána jak zastaralostí a nedokonalostí této technologie, tak také omezením detekce podle specifického XML souboru. Použitý soubor (\emph{haarcascade\_frontalface\_alt.xml}) se zaměřuje na detekci tváří, které jsou v přímém pohledu do kamery/fotoaparátu, což je značně limitní. 
-
-Přesnost detekce i poměr správných detekcí zhruba odpovídají vytvořenému detektoru SSD MobileNet, který byl natrénován na datasetu DARK FACE (tabulka \ref{tabulka:dfmdataset}). Nejlepší natrénovaný model SSD Resnet50 má cca 5 $\times$ vyšší přesnost detekce AP@0.50.
-
-\begin{table}[H]
-  \begin{center}
-    \begin{tabular}{|l|c|c|c|c|c|c|}
-    \hline
-    \rowcolor[HTML]{E0DBDB} 
-    \textbf{Model}                      & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
-    \cellcolor[HTML]{E0DBDB}Viola-Jones & 3,8         & 9,8             & 0,9              & 1,6              & 4,3               & 5,2                \\ \hline
-    \end{tabular}
-    \label{tabulka:violajones}
-    \caption{Model Viola--Jones -- výsledky detekce na validačním datasetu}
-  \end{center}
-\end{table}
-
-\subsection*{Testování ve videích}
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{c|ccc|ccc|}
-  \cline{2-7}
-                                                               & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Viola-Jones}    & \multicolumn{1}{c|}{3,141}                                  & \multicolumn{1}{c|}{22,54}                                  & 42,95          & \multicolumn{1}{c|}{5,182}                                  & \multicolumn{1}{c|}{0,23}                                   & 1,44           \\ \hline
-  \end{tabular}
-  \label{tabulka:violajonesvidea}
-  \caption{Model Viola--Jones -- výsledky detekce na testovacích videích}
-\end{table}
-
-\section{Porovnání s MTCNN}
-\label{sekce:mtcnn}
-Detektor MTCNN (Multi-task Cascaded Convolutional Network) \cite{mtcnn, mtcnnpaper} byl vybrán jako poslední existující řešení ke srovnání úspěšnosti detekce. Jedná se o kaskádu neuronových síť, která se používá k detekci a zarovnání obličejů. Není příliš rychlá, ovšem dle \cite{mtcnnpaper} dosahuje dobrých výsledků detekce v základním neupraveném datasetu WIDER FACE.
-
-V práci byla síť testována opět jak na validačním datasetu, tak v testovacích videích. Díky tomu, že lze síť stáhnout jako Python balíček v prostředí pip, bylo možné ji implementovat do GUI aplikace. Měření ve videích tak probíhá ve stejném prostředí jako v případě natrénovaných modelů a v případě detektoru Viola--Jones. Pro provedení detekce v datasetu byl vytvořen speciální Python skript.
-
-\subsection*{Testování na datasetu}
-Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti jako téměr poloviční oproti detektoru WIDER FACE ResNet50. Hodnota \emph{recall} ovšem dopadla pro MTCNN výrazně hůře (14,8 \% $\times$ 38,1 \%). Výsledky jsou horší i v případě srovnání s YOLOv7--face, ze srovnání se starým algoritmem Viola--Jones pak vychází MTCNN o poznání lépe. Největším problémem MTCNN je však rychlost zpracování obrázku, což demonstruje následující text.
-
-\begin{table}[H]
-  \begin{center}
-    \begin{tabular}{|l|c|c|c|c|c|c|}
-    \hline
-    \rowcolor[HTML]{E0DBDB} 
-    \textbf{Model}                & \textbf{AP} & \textbf{AP@0.5} & \textbf{AP@0.75} & \textbf{Recall1} & \textbf{Recall10} & \textbf{Recall100} \\ \hline
-    \cellcolor[HTML]{E0DBDB}MTCNN & 11,7        & 23,1            & 9,9              & 4,4              & 12,2              & 14,8               \\ \hline
-    \end{tabular}
-    \label{tabulka:mtcnn}
-    \caption{Model MTCNN -- výsledky detekce na validačním datasetu}
-  \end{center}
-\end{table}
-
-\subsection*{Testování ve videích}
-
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{c|ccc|ccc|}
-  \cline{2-7}
-                                                               & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 1}}                                                                              & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Video 2}}                                                                              \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}MTCNN}          & \multicolumn{1}{c|}{1,490}                                  & \multicolumn{1}{c|}{15,40}                                  & 53,79          & \multicolumn{1}{c|}{1,497}                                  & \multicolumn{1}{c|}{0}                                      & 11,08          \\ \hline
-  \end{tabular}
-  \label{tabulka:mtcnnvidea}
-  \caption{Model MTCNN -- výsledky detekce na testovacích videích}
-\end{table}
 
 \section{Detekce s a bez Mirnetu}
-V tomto testu byly modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření pak byly porovnány s detekcemi v originálech. 
 
-yolo čas 1 - 46.008 S
-yolo čas 2 - 128.909 s
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{c|ccc|ccc|}
-  \cline{2-7}
-                                                                             & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Mirnet Video 1}}                                                                       & \multicolumn{3}{c|}{\cellcolor[HTML]{CBCEFB}\textbf{Mirnet Video 2}}                                                                       \\ \hline
-  \rowcolor[HTML]{E0DBDB} 
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}\textbf{Model}}               & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø FPS}} & \multicolumn{1}{c|}{\cellcolor[HTML]{E0DBDB}\textbf{ø APF}} & \textbf{ø IoU} \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF MobileNet (TF+GPU)}      & \multicolumn{1}{c|}{16,844}                                 & \multicolumn{1}{c|}{14,32}                                  & 28,24          & \multicolumn{1}{c|}{16,922}                                 & \multicolumn{1}{c|}{9,38}                                   & 24,07          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF ResNet50 (TF+GPU)}       & \multicolumn{1}{c|}{4,760}                                  & \multicolumn{1}{c|}{27,19}                                  & 49,00          & \multicolumn{1}{c|}{4,649}                                  & \multicolumn{1}{c|}{11,80}                                  & 40,04          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF MobileNet (kv.+iGPU)} & \multicolumn{1}{c|}{46,193}                                 & \multicolumn{1}{c|}{14,51}                                  & 33,40          & \multicolumn{1}{c|}{46,570}                                 & \multicolumn{1}{c|}{9,54}                                   & 31,70          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}WF ResNet50 (kv.+iGPU)}  & \multicolumn{1}{c|}{13,157}                                 & \multicolumn{1}{c|}{27,06}                                  & 48,18          & \multicolumn{1}{c|}{13,74}                                  & \multicolumn{1}{c|}{11,77}                                  & 40,95          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Viola-Jones}                  & \multicolumn{1}{c|}{3,156}                                  & \multicolumn{1}{c|}{27,15}                                  & 59,38          & \multicolumn{1}{c|}{3,973}                                  & \multicolumn{1}{c|}{9,57}                                   & 54,07          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}MTCNN}                        & \multicolumn{1}{c|}{1,332}                                  & \multicolumn{1}{c|}{11,75}                                  & 4788           & \multicolumn{1}{c|}{1,317}                                  & \multicolumn{1}{c|}{9,85}                                   & 45,61          \\ \hline
-  \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}YOLOv7-face}                  & \multicolumn{1}{c|}{5,238}                                  & \multicolumn{1}{c|}{23,86}                                  & 35,90          & \multicolumn{1}{c|}{5,430}                                  & \multicolumn{1}{c|}{13,66}                                  & 37,22          \\ \hline
-  \end{tabular}
-  \label{tabulka:mirnet}
-  \caption{Mirnet -- výsledky detekce na testovacích videích}
-\end{table}
+\section{Porovnání s YOLOFacev7}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA ZÁVĚR
