@@ -3,22 +3,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Úvod}
 \label{kapitola:uvod}
-Neuronové sítě (anglicky neural networks) mají v~dnešním světě mnoho využití. Jelikož se jedná o~jednu z~aplikací umělé inteligence (anglicky artificial intelligence), lze neuronové sítě použít například k~rozpoznávání řeči, zpracování přirozeného jazyka či k~detekci obličejů.
+Neuronové sítě (anglicky \emph{neural networks}) mají v~dnešním světě mnoho využití. Jelikož se jedná o~jednu z~aplikací umělé inteligence (anglicky \emph{artificial intelligence}), lze neuronové sítě použít například k~rozpoznávání řeči, zpracování přirozeného jazyka či k~detekci obličejů.
 Tyto činnosti jsou pro běžného člověka poměrně snadné, avšak pro počítače znamenají relativně náročnou činnost.
 
 Lidé jsou schopni velmi dobře rozeznat obličeje jiných lidí, bez ohledu na světelné podmínky, úhel natočení či částečné zakrytí tváře. Počítačové algoritmy a neuronové sítě zaměřující se na detekci obličejů v~těchto neideálních podmínkách musí být těmto jevů přizpůsobeny.
 
 Aby byly počítače schopné tyto akce vykonávat v~rozumném čase (případně v~reálném čase), je potřeba, aby neuronové sítě byly dostatečně rychlé. Zrychlení neuronové sítě lze dosáhnout buď optimalizací kódu, vylepšením procesu trénování neuronové sítě nebo také využitím speciálních hardwarových zařízení. 
 
-Tato práce se zabývá problematikou výše zmíněných fenoménů, konkrétně optimalizací a zrychlením neuronových sítí pro detekci obličejů v~neoptimálních světelných podmínkách. Z~oblasti neuronových sítí byly použity konvoluční neuronové sítě, k~jejichž trénování je využito jak dat z~běžných datasetů tváří, tak dat ze specializovaných datasetů obličejů a~osob ve špatném osvětlení. 
+Tato práce se zabývá problematikou výše zmíněných fenoménů, konkrétně optimalizací a zrychlením neuronových sítí pro detekci obličejů v~neoptimálních světelných podmínkách. Z~oblasti neuronových sítí byly použity konvoluční neuronové sítě, k~jejichž trénování je využito jak dat z datasetu WIDER FACE, tak dat ze specializovaného datasetu DARK FACE. 
 
-O~akceleraci neuronové sítě se stará zařízení Intel Neural Compute Stick 2 (NCS2) s~knihovnou OpenVINO. V~práci jsou také zmíněny dostupné komerční a~nekomerční systémy a~řešení pro detekci obličejů.
-
-V~rámci kapitoly \ref{kapitola:detekce_obliceje} je popsána problematika detekce obličeje v~reálných podmínkách, včetně problémů, které detekci ztěžují či přímo znemožňují. Tato část také popisuje klasické přístupy k~detekci obličejů jako jsou algoritmy Viola--Jones nebo Local Binary Patterns.
+V kapitole \ref{kapitola:detekce_obliceje} je popsána problematika detekce obličeje v~reálných podmínkách, včetně problémů, které detekci ztěžují či přímo znemožňují. Tato část také popisuje klasické přístupy k~detekci obličejů jako jsou algoritmy Viola-Jones nebo Local Binary Patterns.
 
 Kapitola \ref{kapitola:neuronove_site} se věnuje neuronovým sítím jak obecně (perceptron, aktivační funkce, učení), tak konkrétně konvolučním neuronovým sítím. Dále jsou v~kapitole popsány datasety pro učení neuronových sítí a existující řešení detekce obličeje založené na neuronových sítích (YOLO, MTCNN, SSD), včetně jejich porovnání a porovnání algoritmů zaměřených na detekci ve špatných světelných podmínkách.
 
-Popis používaných řešení a systémů k~detekci a popis akcelerace detekčních algoritmů tvoří obsah kapitoly \ref{kapitola:kamery_a_systemy}. Konkrétně je zde popsáno zařízení NCS2.
+Popis používaných řešení a systémů k~detekci s popisem nástrojů a přístupů k akceleraci detekčních algoritmů tvoří obsah kapitoly \ref{kapitola:kamery_a_systemy}. Konkrétně je zde popsáno zařízení Intel Neural Compute Stick 2 a optimalizační knihovna OpenVINO.
+
+S přechodem do praktické části práce začíná kapitola \ref{kapitola:navrh}. Ta charakterizuje využité nástroje k tvorbě, trénování a akceleraci modelů. Následuje návrh aplikace s grafickým uživatelským rozhraním pro testování detektorů. 
+
+Implementací se zabývající kapitola \ref{kapitola:implementace} je věnována přípravě dat (augmentace), výběru a trénování detekčních modelů. Modely vznikly během práce celkem 4, z nichž byly později vytvořeny akcelerované a kvantované verze. Část kapitoly je věnována praktickému využití akcelerace (knihovna OpenVINO a kvantování modelů). Popisu aplikace pro detekci a konstrukci nástrojů pro provádění experimentů je věnován závěr této kapitoly. Je zde i část věnovaná vyhodnocovacím metrikám a výpočtům spojených s testováním.
+
+Na vyhodnocení úspěšnosti detekce ve 2 kategoriích (fotky a videa) je zaměřena kapitola \ref{kapitola:experimenty}. Z výsledků vyplývá, že nejlepší nově natrénovaný model dosahuje přesnosti detekce vyšší než existující řešení jako jsou YOLOv7-face nebo MTCNN. V rámci testů se také projevil vliv akcelerace, zejména pak kvantování. Některé modely byly zrychleny 3$\times$ až 4$\times$ při minimálních ztrátách přesnosti.
 
 
 
@@ -27,32 +31,32 @@ Popis používaných řešení a systémů k~detekci a popis akcelerace detekčn
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Detekce obličeje v~reálných podmínkách}
 \label{kapitola:detekce_obliceje}
-Detekce obličeje (anglicky face detection) \cite{fdReview, frReview} je technologie, která umožňuje v~digitálním obrázku lokalizovat lidský obličej. Detekce obličeje patří do skupiny technologií HCI (Human--Computer interaction).
-Detekovat obličej je poměrně jednoduchý úkol pro lidi, ale zároveň se jedná o~relativně náročný úkol pro počítače.
-Detekce obličeje je výchozím bodem pro další algoritmy analyzující lidský obličej, jako je například (v~závorce za pojmem následuje anglický výraz):
+Detekce obličeje (anglicky \emph{face detection}) \cite{fdReview, frReview} je technologie, která umožňuje v~digitálním obrázku lokalizovat lidský obličej. Detekce obličeje patří do skupiny technologií HCI (Human\,--\,Computer interaction).
+Detekovat obličej je sandná pro člověka, ale zároveň se jedná o~relativně náročný úkol pro počítač.
+Detekce obličeje je výchozím bodem pro další algoritmy analyzující lidský obličej, jako jsou například (v~závorce za pojmem následuje anglický výraz):
 \begin{itemize}
-  \item rozpoznávání obličeje (face recognition),
-  \item zarovnání obličeje (face alignment),
-  \item autentizace pomocí obličeje (face verification/authentication),
-  \item sledování pohybu hlavy (head pose tracking),
-  \item určování věku nebo pohlaví (age/gender recognition),
+  \item rozpoznávání obličeje (\emph{face recognition}),
+  \item zarovnání obličeje (\emph{face alignment}),
+  \item autentizace pomocí obličeje (\emph{face verification/authentication}),
+  \item sledování pohybu hlavy (\emph{head pose tracking}),
+  \item určování věku nebo pohlaví (\emph{age/gender recognition}),
   \item[] a mnoho dalších. 
 \end{itemize}
 
 Samotná detekce obličeje se v~realném prostředí využívá například v~oblasti fotografování (automatické ostření na tvář), marketingu (zjišťování zájmu zákazníku o~produkty podle počtu výskytu obličejů) nebo bezpečnosti (bezpečnostní kamery a systémy).
 
-Následující podkapitoly se zabývají principem fungování detekce obličeje v~reálných podmínkách a problémy a omezeními, které se v~běžném světě vyskytují a detekce by si s~nimi měla umět poradit (špatné světelné podmínky, příliš členité pozadí, přílišný počet obličejů v~obrázku, barva kůže, nízké rozlišení atd.). Na konci této kapitoly se nachází popis algoritmů a detektorů, které k~detekci přímým způsobem nepoužívají neuronové sítě.
+Následující podkapitoly se zabývají principem fungování detekce obličeje v~reálných podmínkách a problémy a omezeními, které se v~běžném světě vyskytují a detekce by si s~nimi měla umět poradit (špatné světelné podmínky, příliš členité pozadí, přílišný počet obličejů v~obrázku, barva kůže, nízké rozlišení atd.). Na konci této kapitoly se nachází souhrn klasických algoritmů a detektorů obličejů.
 
 \begin{figure}[H]
   \begin{center}
-      \scalebox{0.31}{\includegraphics{obrazky-figures/fdexample.png}}
-  \label{fdexample}
-  \caption{Příklad detekce obličeje}
+      \scalebox{0.31}{\includegraphics{obrazky-figures/fdexample.jpg}}
+  \label{obrazek:fdexample}
+  \caption{Příklad zvýraznění detekce obličeje. Obrázek převzat z datasetu WIDER FACE.}
   \end{center}
 \end{figure}
 
 \section{Detekce obličeje}
-Způsoby detekce obličeje lze rozdělit do několika skupin, vědecké práce na toto téma se liší a nelze jasně říci zda to či ono dělení je jediné korektní.
+Způsoby detekce obličeje lze rozdělit do několika skupin, vědecké práce na toto téma se liší a nelze jasně říci zda to či ono dělení je jediné korektní. Často bývají detekované obličeje ohraničeny obdélníkem jako na obrázku \ref{obrazek:fdexample}.
 
 Dle \cite{fdReview} existují 2 různé přístupy k~hledání tváří v~obrázcích, a to \textbf{přístup založený na vlastnostech} (anglicky feature based approach) a \textbf{přístup založený na obrázku} (anglicky image based approach). 
 \textbf{Přístup založený na vlastnostech} nepoužívá přímo k~detekci obličeje neuronové sítě. Využívá vlastností obličeje jako takového (rysy, pozice očí, uší, obočí, barva kůže\dots). Efektivita tohoto přístupu se snižuje s~výskyty problémů popsaných v~sekci \ref{sekce:problemy}, protože může docházet například k~zakrytí nebo špatné viditelnosti některých vlastností obličeje.
@@ -64,7 +68,7 @@ Podle \cite{feature-based-fd-review} lze rozdělit metody detekce obličeje do 4
   \begin{center}
       \scalebox{0.9}{\includegraphics{obrazky-figures/fddeleni.png}}
   \label{fddeleni}
-  \caption{Dělení metod detekce obličeje dle \cite{feature-based-fd-review}}
+  \caption{Dělení metod detekce obličeje dle \cite{feature-based-fd-review}.}
   \end{center}
 \end{figure}
 
@@ -89,7 +93,7 @@ V~této sekci jsou popsány některé problémy \cite{feature-based-fd-review, f
   \begin{center}
       \scalebox{0.5}{\includegraphics{obrazky-figures/fdproblems.png}}
   \label{fdproblems}
-  \caption{Vybráné problémy při detekci obličejů \cite{frReview}. (a) Pozice hlavy; (b)~Zakrytí části obličeje; (c) Špatné světelné podmínky; (d) Výraz tváře}
+  \caption{Některé problémy vyskytující se při detekci obličejů. Převzato z \cite{frReview}. (a) Pozice hlavy; (b)~Zakrytí části obličeje; (c) Špatné světelné podmínky; (d) Výraz tváře.}
   \end{center}
 \end{figure}
 
@@ -110,10 +114,10 @@ Problémem pro detekci může být různá orientace obrázku (vzhůru nohama, z
 Velmi důležitým faktorem při detekci obličejů, zvláště v~real-timových aplikacích, je rychlost detekce. Pokud má algoritmu vysokou přesnost, ale je příliš pomalý pro vybranou aplikaci, stává se nepoužitelným. Akcelerací detekčních algoritmů se mj. zabývá i tato práce.
 
 \subsection*{Příliš členité pozadí} 
-Pokud se v~o~brázku nachází příliš mnoho objektů, může dojít ke snížení přesnosti a rychlosti detekce.
+Pokud se v~obrázku nachází příliš mnoho objektů, může dojít ke snížení přesnosti a~rychlosti detekce.
 
 \subsection*{Přílišný počet obličejů v~obrázku}
-Výskyt velkého počtu obličejů v~jednom obrázku, často překrývajících se, může představovat výzvu pro detekční algoritmus. 
+Výskyt velkého počtu obličejů v~jednom obrázku, často překrývajících se, může představovat problém pro detekční algoritmus. 
 
 \subsection*{Nízké rozlišení}
 Obrázky a fotografie s~nízkým rozlišením nemusejí obsahovat dostatek informace nutné ke správnemu detekování tváře.
@@ -126,7 +130,7 @@ Na detekci mohou mít vliv světelné podmínky panující při pořizování zk
   \begin{center}
       \scalebox{0.8}{\includegraphics{obrazky-figures/illuminationexample.png}}
   \label{illuminationexample}
-  \caption{Příklad stejného obličeje vyfoceného při různých světelných podmínkách \cite{feature-based-fd-review}}
+  \caption{Příklad stejného obličeje vyfoceného při různých světelných podmínkách. Převzato z \cite{feature-based-fd-review}.}
   \end{center}
 \end{figure}
 
@@ -135,14 +139,14 @@ Na detekci mohou mít vliv světelné podmínky panující při pořizování zk
 Existuje několik různých přístupů k~detekci obličeje. Tato sekce se zaměřuje na detekci s~využitím detektorů založených primárně ne na neuronových sítích (neuronová síť není použita vůbec, nebo není použita k~přímé detekci). Detektory obličeje využívající principy neuronových sítí k~přímé detekci jsou popsány v~sekci \ref{sekce:NSdetektory}.
 
 \subsection*{Local Binary Patterns}
-Algoritmus využívající \textbf{lokální binární vzory} (anglicky Local Binary Patterns -- dále jen LBP) pro popis struktury/textury obrázku má mnoho aplikací \cite{localBinaryPatterns}. Jedná se o~jeden z~nejvýkonnějších algoritmů pro popis textur v~obrázcích. LBP algoritmus má vysokou účinnost detekce (89 \%) \cite{localBinaryPatternsTests} a nízkou výpočetní náročnost.
-LBP pracuje s~černobílými (anglicky gray--scale) obrázky a v~původní verzi funguje tak, že každému pixelu přiřadí binární číselnou hodnotu, vypočítanou dle hodnot pixelů v~3 $\times$ 3 okolí daného pixelu. Každý takovýto pixel v~okolí je ohodnocen hodnotou buď 1 nebo 0 v~závislosti na tom, zda jeho hodnota překročila stanovený práh (anglicky threshold), kterým je hodnota prostředního pixelu (viz obrázek \ref{lbp}).
+Algoritmus využívající \textbf{lokální binární vzory} (anglicky \emph{Local Binary Patterns} -- dále jen LBP) pro popis struktury/textury obrázku má mnoho aplikací \cite{localBinaryPatterns}. Jedná se o~jeden z~nejvýkonnějších algoritmů pro popis textur v~obrázcích. LBP algoritmus má vysokou účinnost detekce (89 \%) \cite{localBinaryPatternsTests} a nízkou výpočetní náročnost.
+LBP pracuje s~černobílými (anglicky \emph{gray-scale}) obrázky a v~původní verzi funguje tak, že každému pixelu přiřadí binární číselnou hodnotu, vypočítanou dle hodnot pixelů v~3 $\times$ 3 okolí daného pixelu. Každý takovýto pixel v~okolí je ohodnocen hodnotou buď 1 nebo 0 v~závislosti na tom, zda jeho hodnota překročila stanovený práh (anglicky \emph{threshold}), který odpovídá hodnotě prostředního pixelu (viz obrázek \ref{lbp}).
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.8}{\includegraphics{obrazky-figures/lbp.png}}
   \label{lbp}
-  \caption{Ukázka ohodnocení pixelu algoritmem LBP \cite{localBinaryPatterns}}
+  \caption{Ukázka ohodnocení pixelu algoritmem LBP. Jako práh je využita hodnota středního pixelu. Převzato z \cite{localBinaryPatterns}.}
   \end{center}
 \end{figure}
 
@@ -154,13 +158,13 @@ Lokální primitiva (obrázek \ref{lbpprimitives}) a histogramy vytvořené z~ta
   \begin{center}
       \scalebox{0.8}{\includegraphics{obrazky-figures/lbpPrimitives.png}}
   \label{lbpprimitives}
-  \caption{Lokální primitiva detekované algoritmem LBP \cite{localBinaryPatternsTests}}
+  \caption{Lokální primitiva detekovaná algoritmem LBP s využitím okolí ve tvaru kružnice $(P, R)$. Převzato z \cite{localBinaryPatternsTests}.}
   \end{center}
 \end{figure}
 
-\subsection*{Viola--Jones algoritmus}
+\subsection*{Viola-Jones algoritmus}
 \label{sekce:viola_jones}
-Algoritmus \textbf{Viola--Jones} \cite{violaJonesArticle, violaJones}, někdy také nazývaný \textbf{Haar Cascades}, je obecně technika pro detekci objektů, vytvořená před používáním metod hlubokého učení. Používá se k~detekci obličejů, částí těla, očí, úst atd. Dosahuje přesnosti detekce kolem 90 \% \cite{violaJones}. 
+Algoritmus \textbf{Viola-Jones} \cite{violaJonesArticle, violaJones}, někdy také nazývaný \textbf{Haar Cascades}, je obecně technika pro detekci objektů, vytvořená před používáním metod hlubokého učení. Používá se k~detekci obličejů, částí těla, očí, úst atd. V určitých aplikacích dosahuje přesnosti detekce kolem 90 \% \cite{violaJones}. 
 
 Princip fungování algoritmu spočívá v~detekci hran a čár (obecně vlastností) v~černobílém obrázku (hodnoty pixelů jsou na intervalu $<0; 1>$). Vybere se jedna z~vlastností (některé z~nich zobrazuje obrázek \ref{haarfeatures}) a vypočítá se průměrná hodnota pixelů ve všech obdélnících (obdélníky jsou dva, tři nebo čtyři). Rozdíl těchto hodnot pak určuje zda se jedná o~hranu, čáru tzn. zda je daná vlastnost detekována. Pokud například budeme hledat vlastnost \emph{b)} z~obrázku \ref{haarfeatures} a vypočtený rozdíl hodnot je blízký 1, detekce byla úspěšná (viz ukázka v~obrázku \ref{haarexample}).
 
@@ -168,8 +172,8 @@ Princip fungování algoritmu spočívá v~detekci hran a čár (obecně vlastno
   \begin{center}
       \scalebox{0.6}{\includegraphics{obrazky-figures/haarfeatures.png}}
   \label{haarfeatures}
-  \caption{Haarovy vlastnosti \cite{violaJonesArticle}
-  a) horizontální hrana; b) horizontální hrana; c) horizontální čára d) diagonála e) vertikální čára}
+  \caption{Některé z Haarových vlastností \cite{violaJonesArticle}
+  a) horizontální hrana; b) horizontální hrana; c) horizontální čára d) diagonála e) vertikální čára.}
   \end{center}
 \end{figure}
 
@@ -177,7 +181,7 @@ Princip fungování algoritmu spočívá v~detekci hran a čár (obecně vlastno
   \begin{center}
       \scalebox{0.4}{\includegraphics{obrazky-figures/haarexample.png}}
   \label{haarexample}
-  \caption{Příklad výpočtu detekce hrany dle vlastnosti b) z~obrázku \ref{haarfeatures}. Bílý obdélník je nahrazen červeným pro lepší viditelnost.}
+  \caption{Příklad výpočtu detekce hrany dle vlastnosti b) z~obrázku \ref{haarfeatures}. Bílý obdélník je nahrazen červeným pro lepší ilustraci.}
   \end{center}
 \end{figure}
 
@@ -188,7 +192,7 @@ vylepšení nazvané anglicky \textbf{Integral Image}. To spočívá v~tom, že 
   \begin{center}
       \scalebox{0.7}{\includegraphics{obrazky-figures/integralimage.png}}
   \label{integralimage}
-  \caption{Ukázka výpočtu hodnoty obdélníku v~Haarově vlastnosti za pomoci vylepšení \textbf{Integral Image} \cite{violaJonesArticle}.}
+  \caption{Ukázka výpočtu hodnoty obdélníku v~Haarově vlastnosti za pomoci vylepšení \textbf{Integral Image}. Převzato z \cite{violaJonesArticle}.}
   \end{center}
 \end{figure}
 
@@ -198,17 +202,17 @@ Jelikož Haarových vlastností je velké množství, bylo vybráno 6000 nejvíc
 \subsection*{Histogram orientací gradientů}
 Metoda HOG (anglicky Histograms of Oriented Gradients) \cite{hog, hog2} používá k~detekci obličejů či postav histogramy orientovaných přechodů v~obrázku, rozděleném dle mřížky na několik bloků (často například 8$\times$8 nebo 4$\times$4 pixelů). Pro každý pixel v~takovémto bloku jsou vypočítány hodnoty gradientů -- velikost (magnitude) a směr (direction). Tyto hodnoty jsou pak přiřazeny do jednoho či více sloupců v~histogramu popisujícím celý blok.
 
-Tento histogram bývá rozdělen na 9 sloupců (rozmezí -- anglicky bin) vyjadřujících směr gradientu v~úhlu na škále od 0$^\circ$ do 180$^\circ$, kdy každý sloupec odpovídá intervalu 20$^\circ$. Výslednému vektoru, který udává velikosti gradientů v~jednotlivých úhlech se říká HOG deskriptor.
+Tento histogram bývá rozdělen na 9 sloupců (rozmezí -- anglicky \emph{bin}) vyjadřujících směr gradientu v~úhlu na škále od 0$^\circ$ do 180$^\circ$, kdy každý sloupec odpovídá intervalu 20$^\circ$. Výslednému vektoru, který udává velikosti gradientů v~jednotlivých úhlech se říká HOG deskriptor.
 
 HOG využívá pro zlepšení detekce při zhoršených světelných podmínkách normalizaci HOG deskriptorů. Tato normalizace je prováděna na vektorech 4 sousedících bloků. Pokud je tedy vektor složen z~9 hodnot, vypočítá se normalizační vektor z~$9 \times 4 = 36$ hodnot.
 
-Výsledkem metody je obrázek (viz obrázek \ref{hogexample} reprezentovaný orientovanými gradienty, který se využívá k~detekci osoby nebo obličeje.
+Výsledkem metody je obrázek (viz obrázek \ref{hogexample}) reprezentovaný orientovanými gradienty, který se využívá k~detekci osoby nebo obličeje.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.5}{\includegraphics{obrazky-figures/hogexample.png}}
   \label{hogexample}
-  \caption{Zleva výřez originálního obrázku převedený do šedotónové reprezentace, rozdělený obrázek na bloky, výstup metody HOG \cite{hog2}.}
+  \caption{Zleva: výřez originálního obrázku převedený do šedotónové reprezentace, obrázek rozdělený na bloky, výstup metody HOG. Převzato z \cite{hog2}.}
   \end{center}
 \end{figure}
 
@@ -218,12 +222,12 @@ Výsledkem metody je obrázek (viz obrázek \ref{hogexample} reprezentovaný ori
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Neuronové sítě pro detekci obličeje}
 \label{kapitola:neuronove_site}
-Tato kapitola popisuje neuronové sítě a jejich využití pro detekci obličejů. Sekce \ref{sekce:NS} se věnuje popisu neuronových sítí obecně, v~sekci \ref{sekce:datasety} jsou popsány datasety a jejich využití k~trénování neuronových sítí. Sekce \ref{sekce:NSdetektory} se zabývá konkrétními detektory obličejů s~využitím neuronových sítí. Konkrétní programovací frameworky pro práci s~neuronovými sítěmi vyobrazuje sekce \ref{sekce:frameworky_pro_ns}.
+Tato kapitola popisuje neuronové sítě a jejich využití pro detekci obličejů. Sekce \ref{sekce:NS} se věnuje popisu neuronových sítí obecně, v~sekci \ref{sekce:datasety} jsou popsány datasety a jejich využití k~trénování a validaci neuronových sítí. Sekce \ref{sekce:NSdetektory} se zabývá konkrétními detektory obličejů s~využitím neuronových sítí. Konkrétní programovací frameworky pro práci s~neuronovými sítěmi vyobrazuje sekce \ref{sekce:frameworky_pro_ns}.
 
 \section{Neuronové sítě}
 \label{sekce:NS}
 
-Neuronové sítě \cite{deeplearningbook, ns1994} umožňují nalezení neznámého řešení problému pomocí naučení se z~podobných problémů u~nichž známe řešení. Tyto umělé sítě jsou inspirovány biologickou nervovou soustavou lidí (lidským mozkem). Síla neuronových sítí se projevuje v~úlohách zaměřených na detekci, rozpoznávání (objektů, lidí, obličejů, obecně vzorů -- anglicky patterns) a~zpracování dat. Existuje řada druhů neuronových sítí (konvoluční, hluboké, dopředné, rekurentní), pro detekci obličejů v~obrázcích se nejčastěji používají konvoluční neuronové sítě (anglicky Convolutional Neural Networks -- CNN). 
+Neuronové sítě \cite{deeplearningbook, ns1994} umožňují nalezení neznámého řešení problému pomocí naučení se z~podobných problémů u~nichž známe řešení. Tyto umělé sítě jsou inspirovány biologickou nervovou soustavou lidí (lidským mozkem). Síla neuronových sítí se projevuje v~úlohách zaměřených na detekci, rozpoznávání (objektů, lidí, obličejů, obecně vzorů -- anglicky \emph{patterns}) a~zpracování dat. Existuje řada druhů neuronových sítí (konvoluční, hluboké, dopředné, rekurentní), pro detekci obličejů v~obrázcích se nejčastěji používají konvoluční neuronové sítě (anglicky \emph{Convolutional Neural Networks} -- CNN). 
 
 Na princip fungování neuronových sítí může být nahlíženo jako na nelineární matematickou funkci, která převádí $X$ vstupů na $Y$ výstupů. Proces transformace vstupních informací na výstup je ovlivňován váhováním hodnot vně sítě. Tyto hodnoty vah jsou určovány při tzv. učení/trénování neuronových sítí. Pro správné natrénování neuronové sítě je potřeba dostatečného počtu vstupních trénovacích dat (obrázků, textů, hodnot) a~dostatečně výkonný hardware. 
 
@@ -246,7 +250,7 @@ Hodnota $x_0$ se nazývá bias a jedná se o~neměnnou vstupní hodnotu (často 
   \begin{center}
       \scalebox{0.4}{\includegraphics{obrazky-figures/perceptron.png}}
   \label{obrazek:perceptron}
-  \caption{Perceptron s~N vstupy, biasem $x_0$ a aktivační funkcí $f$}
+  \caption{Perceptron s~N vstupy, biasem $x_0$ a aktivační funkcí $f$.}
   \end{center}
 \end{figure}
 
@@ -268,13 +272,13 @@ Aktivační funkce $f$ je matematická funkce, která určuje výstup neuronu (v
 \end{equation}
 
 \subsection*{Spojování neuronů}
-Spojením několika neuronů lze vytvořit tzv. vrstvu (anglicky layer) perceptronů. Tytvo vrstvy se dělí na vstupní (anglicky input), výstupní (anglicky output) a skryté (anglicky hidden). Konkatenací vstupní, několika skrytých a výstupní vrstvy je možno vytvořit neuronovou síť připravenou k~trénování.
+Spojením několika neuronů lze vytvořit tzv. vrstvu (anglicky \emph{layer}) perceptronů. Tytvo vrstvy se dělí na vstupní (anglicky \emph{input}), výstupní (anglicky \emph{output}) a skryté (anglicky \emph{hidden}). Konkatenací vstupní, několika skrytých a výstupní vrstvy je možno vytvořit neuronovou síť připravenou k~trénování.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.22}{\includegraphics{obrazky-figures/nsexample.png}}
   \label{obrazek:nsexample}
-  \caption{Propojení vrstev neuronů do neuronové sítě}
+  \caption{Příklad propojení vrstev neuronů do neuronové sítě.}
   \end{center}
 \end{figure}
 
@@ -282,12 +286,12 @@ Spojením několika neuronů lze vytvořit tzv. vrstvu (anglicky layer) perceptr
 Aby neuronová síť mohla fungovat, musí se natrénovat (tzn. nastavit co nejpřesněji váhy na vstupech neuronů). K~trénování se používají data z~datasetů (viz sekce \ref{sekce:datasety}). Trénování neuronových sítí lze rozdělit do 3 kategorií \cite{deeplearningbook}:
 
 \begin{itemize}
-  \item \textbf{Učení bez učitele} (anglicky unsupervised learning) -- tyto algoritmy procházejí data z~datasetu a provádějí nad nimi shlukování do tzv. clusterů.
-  \item \textbf{Učení s~učitelem} (anglicky supervised learning) -- každým datům z~datasetu je přiřazena informace o~požadpvaném výstupu. Vstupy jsou zpracovány neuronovou sítí a podle chyby (rozdílu vstup/výstup) jsou upraveny parametry v~neuronové síti.
-  \item \textbf{Posilované učení} (anglicky reinforcement learning) -- tento druh učení není vázán pouze na data z~datasetu, ale navíc interaguje s~prostředím.
+  \item \textbf{Učení bez učitele} (anglicky \emph{unsupervised learning}) -- tyto algoritmy procházejí data z~datasetu a provádějí nad nimi shlukování do tzv. clusterů.
+  \item \textbf{Učení s~učitelem} (anglicky \emph{supervised learning}) -- každým datům z~datasetu je přiřazena informace o~požadovaném výstupu. Vstupy jsou zpracovány neuronovou sítí a podle chyby (rozdílu vstup/výstup) jsou upraveny parametry v~neuronové síti.
+  \item \textbf{Posilované učení} (anglicky \emph{reinforcement learning}) -- tento druh učení není vázán pouze na data z~datasetu, ale navíc interaguje s~prostředím.
 \end{itemize}
 
-Trénování neuronových sítí je rozděleno do tzv. \textbf{epoch}, kdy jedna epocha znamená, že všechna trénovací data byla zpracována neuronovou sítí právě jedenkrát. S pojemem epocha souvisí pojem \textbf{batch}, který udává počet trénovacích dat, které síť zpracuje, než dojde k aktualizaci jejích vnitřních stavů. Běžně používané hodnoty batch jsou mocniny 2 (2, 4, 8, 16, 32, 64). 
+Trénování neuronových sítí je rozděleno do tzv. \textbf{epoch}, kdy jedna epocha znamená, že všechna trénovací data byla zpracována neuronovou sítí právě jedenkrát. S pojemem epocha souvisí pojem \textbf{batch}, který udává počet trénovacích dat, které síť zpracuje, než dojde k aktualizaci jejích vnitřních stavů. Běžně používané hodnoty batch jsou mocniny 2 (2, 4, 8, 16, 32, 64, \dots). 
 
 \subsection*{Chyby}
 Abychom byli schopní aktualizovat váhy vstupů jednotlivých neuronů, je potřeba měřit chybovost výstupu neuronové sítě. Jednou z~možností měření chyby (využitelné například při lineární regresi) je \emph{mean squared error}. Dle vztahu \ref{vzorec:mse} je vypočítána chybovost a jsou upraveny váhy. Snahou je chybu co nejvíce zmenšit.
@@ -297,49 +301,50 @@ Abychom byli schopní aktualizovat váhy vstupů jednotlivých neuronů, je pot�
   MSE = \frac{1}{N} \sum_{i}^{N} (vystupNS - spravnyVystup)^2
 \end{equation}
 
-Při trénování může dojít k~situaci, kdy neuronová síť zvládá zpracovávat trénovací data s~velmi vysokou přesností, ale při použití testovacích (validačních) dat se chybovost zvyšuje. V~takovémto případě mluvíme o~\textbf{přetrénování} (anglicky overfitting). Druhým nežádoucím jevem, který může nastat je \textbf{nedotrénovanost} (anglicky underfitting) -- síť není dostatečně natrénovaná a dochází tak k~vysoké chybovosti (příčinou je například málo trénovacích dat).
+Při trénování může dojít k~situaci, kdy neuronová síť zvládá zpracovávat trénovací data s~velmi vysokou přesností, ale při použití testovacích (validačních) dat se chybovost zvyšuje. V~takovémto případě mluvíme o~\textbf{přetrénování} (anglicky \emph{overfitting}). Druhým nežádoucím jevem, který může nastat je \textbf{nedotrénovanost} (anglicky \emph{underfitting}) -- síť není dostatečně natrénovaná a dochází tak k~vysoké chybovosti (příčinou je například málo trénovacích dat).
 
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.18}{\includegraphics{obrazky-figures/fitting.png}}
   \label{obrazek:fitting}
-  \caption{Ukázka výstupu neuronové sítě při nedoučení, přeučení a dostatečně dobrém množství dat pro učení}
+  \caption{Ukázka výstupu neuronové sítě při nedoučení (\emph{underfit
+  }), přeučení (\emph{overfitting}) a dostatečně dobrém množství dat pro učení. Obrázek vychází z \cite{deeplearningbook}.}
   \end{center}
 \end{figure}
 
 
 \section{Datasety}
 \label{sekce:datasety}
-Datasetem rozumíme soubor podobných dat (například obrázků obličejů, číslic, předmětů nebo textů). Pro detekci obličejů se využívají datasety obsahující fotografie a videa lidí z~veřejně dostupných zdrojů (internet, televize) nebo jsou datasety přímo účelně vytvářeny (fotografování lidí) a následně je možné si je koupit nebo stáhnout. Data v~datasetech je nutné tzv. anotovat (označit co na daném obrázku je). V~případě tváří se může jednat například o~věk osoby, pohlaví, rasu, aby bylo možné určit zda po klasifikaci neuronovou sítí výstup odpovídá požadovanému výsledku. Následující podsekce popisují datasety používané k~učení neuronových sítí pro detekci obličejů.
+Datasetem rozumíme soubor podobných dat (například obrázků obličejů, číslic, předmětů nebo textů). Pro detekci obličejů se využívají datasety obsahující fotografie a videa lidí z~veřejně dostupných zdrojů (internet, televize) nebo jsou datasety přímo účelně vytvářeny (fotografování lidí) a následně je možné si je koupit nebo stáhnout. Data v~datasetech je nutné tzv. anotovat (označit co a kde na daném obrázku je). V~případě tváří se může jednat například o~věk osoby, pohlaví, rasu, aby bylo možné určit zda po klasifikaci neuronovou sítí výstup odpovídá požadovanému výsledku. Následující podsekce popisují některé datasety používané k~učení neuronových sítí pro detekci nebo rozpoznávání obličejů.
 
 \subsection*{Datasety lidských obličejů}
-Dataset \textbf{WIDER FACE}\footnote{\url{http://shuoyang1213.me/WIDERFACE/}} je dataset snímků obličejů obsahující 32203 obrázků ve skupinách trénovací, validační, testovací s poměrovým rozdělením 40\%/10\%/50\%. Dataset je volně přístupný a autoři poskytují k trénovacím a validačním obrázkům anotační soubory s pozicemi obličejů. Fotografie spadají do různých skupin jako jsou různé pozice hlavy, různé zakrytí obličeje nebo špatné světelné podmínky. Fotografie jsou navíc rozděleny do 61 kategorií podle událostí, za kterých byly pořízeny (například demonstrace nebo volby).
+Dataset \textbf{WIDER FACE}\footnote{\url{http://shuoyang1213.me/WIDERFACE/}} je dataset snímků obličejů obsahující 32203 obrázků ve skupinách trénovací, validační a testovací s poměrovým rozdělením 40\%/10\%/50\%. Dataset je volně přístupný a autoři poskytují k trénovacím a validačním obrázkům anotační soubory s pozicemi obličejů. Fotografie spadají do různých skupin jako jsou různé pozice hlavy, různé zakrytí obličeje nebo špatné světelné podmínky. Fotografie jsou navíc rozděleny do 61 kategorií podle událostí, za kterých byly pořízeny (například demonstrace nebo volby).
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.6}{\includegraphics{obrazky-figures/celeba.png}}
   \label{obrazek:celeba}
-  \caption{Příklady obličejů z~datasetu WIDER FACE}
+  \caption{Příklady obličejů z~datasetu WIDER FACE.}
   \end{center}
 \end{figure}
 
-Dataset \textbf{DigiFace1M} \cite{digiface1m} se skládá z~1 milionu snímků digitálně vytvořených obličejů (viz obrázek \ref{obrazek:digiface}), čímž se vyhýbá případným právním a etnickým problémům, které mohou být spojeny s~využití tváří reálných osob. Při použití tohoto datasetu umělých tváří společně s~200 až 2000 fotografiemi tváří reálných lidí pro učení, lze dosáhnout podobných výsledků detekce jako s~datasety tvořenými čistě reálnými obličeji.
+Dataset \textbf{DigiFace1M} \cite{digiface1m} se skládá z~1 milionu snímků digitálně vytvořených obličejů (viz obrázek \ref{obrazek:digiface}), čímž se vyhýbá případným právním a etnickým problémům, které mohou být spojeny s~využití tváří reálných osob. Při použití tohoto datasetu umělých tváří společně s~200 až 2000 fotografiemi tváří reálných lidí pro učení, lze dosáhnout podobných výsledků detekce jako s~modely trénovanými na datasetech s čistě reálnými obličeji.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.6}{\includegraphics{obrazky-figures/digiface.png}}
   \label{obrazek:digiface}
-  \caption{Příklady vygenerovaných obličejů pod různými úhly a různým osvětlením z~datasetu DigiFace1M \cite{digiface1m}}
+  \caption{Příklady vygenerovaných obličejů pod různými úhly a různým osvětlením z~datasetu DigiFace1M \cite{digiface1m}.}
   \end{center}
 \end{figure}
 
-\textbf{Multi-PIE} \cite{multipie} je dataset zaměřený na fotografie obličejů pořízených za různých světelných podmínek a pod různými úhly. Obshauje přes 750000 snímků, které byly vytvořeny vyfotografováním 337 lidí po dobu několika měsíců. Tento dataset je placený.
+\textbf{Multi-PIE} \cite{multipie} je dataset zaměřený na fotografie obličejů pořízených za různých světelných podmínek a pod různými úhly. Obsahuje přes 750 000 snímků, které byly vytvořeny fotografováním 337 lidí po dobu několika měsíců. Tento dataset je placený.
 
-Dataset \textbf{UTKFace} \cite{utkface} obsahuje přes 20000 fotek obličejů lidí různých věků, pohlaví a~ras z~různých úhlů a~za rozličných světelných podmínek. Dataset je volně dostupný pro nekomerční použití. Data jsou podrobně anotovány dle vzorce \texttt{[věk]\_[pohlaví]\_[rasa]\_
+Dataset \textbf{UTKFace} \cite{utkface} obsahuje přes 20 000 fotek obličejů lidí různých věků, pohlaví a~ras z~různých úhlů a~za rozličných světelných podmínek. Dataset je volně dostupný pro nekomerční použití. Data jsou podrobně anotovány dle vzorce \texttt{[věk]\_[pohlaví]\_[rasa]\_
 [datum a čas].jpg}, kde věk je v~rozmezí 0--116 let, pohlaví muž/žena, rasa je jedna z~výčtu běloch, černoch, asiat, ind, ostatní a datum a čas uchovává informaci o~okamžiku zařazení fotografie do datasetu.
 
-Dataset \textbf{DARK FACE} \cite{darkFace} obsahuje 6000 fotografií různých prostředí s~lidmi, pořízených za špatných světelných podmínek. Používá se mj.při hodnocení účinnosti detektorů obličejů. Dataset obsahuje jak anotované tak neanotované obrázky.
+Dataset \textbf{DARK FACE} \cite{darkFace} obsahuje 6000 fotografií různých prostředí s~lidmi, pořízených za špatných světelných podmínek. Používá se mj. při hodnocení účinnosti detektorů obličejů. Dataset obsahuje jak anotované tak neanotované obrázky.
 
 \section{Detektory obličeje}
 \label{sekce:NSdetektory}
@@ -350,13 +355,13 @@ Existuje řada různých druhů a architektur neuronových sítí využívaných
 \begin{itemize}
   \item \textbf{Rotation invariant neural network} (RINN, rotačně invariantní neuronová síť) -- dokáže detekovat obličeje bez ohledu na úhel natočení tváře (není nutná normalizace v~preprocessingu). Systém tohoto typu neuronové sítě obsahuje několik sítí, s~tím že první se nazývá \emph{router network}. Tato síť určuje orientaci (natočení) výřezu obrázku a~připravuje (normalizuje) tak výřez pro 1 či více detekčních sítí.
   \item \textbf{Fast neural network} (FNN, rychlá neuronová síť) -- obrázek je rozdělen na malé podobrázky a každý podobrázek je zvlášť otestován na výskyt tváře rychlou neuronovou sítí. Cílem je snížení výpočetního času nutného pro nalezení obličeje.
-  \item \textbf{Polynomial neural network} (PNN, polynomiální neuronová síť) -- oblasti v~obrázku jsou klasifikovány jako tvář/ne--tvář pomocí binomické projekce této oblasti do podprostoru vlastností obličeje naučeného tzv. základní analýzou komponent (anglicky principal component analysis, PCA). Zkoumáním vlivu PCA na vzorky lze detekovat zda se jedná o~obličej.
+  \item \textbf{Polynomial neural network} (PNN, polynomiální neuronová síť) -- oblasti v~obrázku jsou klasifikovány jako tvář/ne-tvář pomocí binomické projekce této oblasti do podprostoru vlastností obličeje naučeného tzv. základní analýzou komponent (anglicky principal component analysis, PCA). Zkoumáním vlivu PCA na vzorky lze detekovat zda se jedná o~obličej.
   \item \textbf{Convolutional neural network} (CNN, konvoluční neuronové sítě) -- samostatně popsány v~další podsekci. 
 \end{itemize}
 
 
 \subsection*{Konvoluční neuronové sítě}
-Konvoluční neuronové sítě (CNN) \cite{cnnNlp, cnnCv, cnnIntro} jsou použity ve většině systémů v~oblasti počítačového vidění. Jelikož můžeme hodnoty pixelů vyjádřit čísly (používá se šedotónová varianta obrázku $\rightarrow$ při 8 bitové barevné hloubce může pixel nabývat hodnot 0 -- 255), lze tyto čísla použít jako vstupy neuronové sítě. Při vysokém rozlišení obrázku však nastává problém. Pokud bychom chtěli každou hodnotu pixelu použít na vstupu neuronové sítě pro celý obrázek naráz, měla by neuronová síť již u~obrázku s~rozměry 500 $\times$ 500 pixelů celkem 25000 vstupní neuronů, což je příliš výpočetně náročné. Proto se využívá konvoluce.
+Konvoluční neuronové sítě (CNN) \cite{cnnNlp, cnnCv, cnnIntro} jsou použity ve většině systémů v~oblasti počítačového vidění. Jelikož můžeme hodnoty pixelů vyjádřit čísly (používá se jak šedotónová varianta obrázku $\rightarrow$ při 8 bitové barevné hloubce může pixel nabývat hodnot 0--255, tak i běžná RGB varianta), lze tyto čísla použít jako vstupy neuronové sítě. Při vysokém rozlišení obrázku však nastává problém. Pokud bychom chtěli každou hodnotu pixelu použít na vstupu neuronové sítě pro celý obrázek naráz, měla by neuronová síť již u~obrázku s~rozměry 500 $\times$ 500 pixelů celkem 25 000 vstupních neuronů, což by vedlo k extrémnímu množství neuronů v dalších vrstvách. Proto se využívá konvoluce.
 
 \textbf{Konvoluce} je okenní matematická funkce, při níž je na každou část obrázku (okno, \emph{window}) násobením aplikována matice (filtr, kernel, konvoluční jádro). Princip konvoluce zachycuje následující obrázek.
 
@@ -364,7 +369,7 @@ Konvoluční neuronové sítě (CNN) \cite{cnnNlp, cnnCv, cnnIntro} jsou použit
   \begin{center}
       \scalebox{0.25}{\includegraphics{obrazky-figures/principkonvoluce.png}}
   \label{obrazek:principkonvoluce}
-  \caption{Princip konvoluce 2D obrázku s~rozměry 3$\times$3 a filtru $2\times2$}
+  \caption{Princip konvoluce 2D obrázku s~rozměry 3$\times$3 a filtru $2\times2$.}
   \end{center}
 \end{figure}
 
@@ -376,7 +381,7 @@ Jak lze vidět na obrázku \ref{obrazek:cnnpipeline} konvoluční neuronová sí
   \begin{center}
       \scalebox{0.55}{\includegraphics{obrazky-figures/cnnpipeline.png}}
   \label{obrazek:cnnpipeline}
-  \caption{Řetězec vrstev konvoluční neuronové sítě \cite{cnnNlp}}
+  \caption{Řetězec vrstev konvoluční neuronové sítě. Převzato z \cite{cnnNlp}.}
   \end{center}
 \end{figure}
 
@@ -395,18 +400,18 @@ Dalším parametrem konvolučních neuronových sítí je tzv. \textbf{stride} v
   \begin{center}
       \scalebox{0.25}{\includegraphics{obrazky-figures/cnnpooling.png}}
   \label{obrazek:cnnpooling}
-  \caption{Řetězec vrstev konvoluční neuronové sítě \cite{cnnCv}}
+  \caption{Příklad pooling vrstvy s max poolingem a průměrovacím poolingem. Převzato z \cite{cnnCv}.}
   \end{center}
 \end{figure}
 
-V~reálné aplikaci jsou konvoluční a poolingové vrstvy poskládány za sebe. Na konci řetězce (obrázek \ref{obrazek:cnnpipeline}) se pak nachází část plně propojených vrstev neuronů (fully--conected layer).
+V~reálné aplikaci jsou konvoluční a poolingové vrstvy poskládány za sebe. Na konci řetězce (obrázek \ref{obrazek:cnnpipeline}) se pak nachází část plně propojených vrstev neuronů (\emph{fully-conected layers}).
 
 \subsection*{Detektory}
 Tato část popisuje vybrané existující detektory obličejů založené na neuronových sítí a~porovnání úspěšnosti detekce těchto detektorů s~detektory popsanými v~sekci \ref{sekce:detektory_bez_neuronovych_siti}.
 
-\textbf{MTCNN} (Multi-Task Cascaded Convolutional Network) \cite{fdCNNComparison, MTCNN} provádí detekci obličejů pomocí kaskády konvoluční neuronových sítí. Algoritmus má dvě části. První část vytváří několik verzí vstupních obrázků, každa taková verze má jiné rozlišení. Druhá část složená z~kaskády neuronových sítí se stará o~detekci obličeje v~různých verzích obrázku. Použití více verzí obrázku umožňuje zvýšit efektivitu detekce.
+\textbf{MTCNN} (Multi-Task Cascaded Convolutional Network) \cite{fdCNNComparison, mtcnn} provádí detekci obličejů pomocí kaskády konvoluční neuronových sítí. Algoritmus má dvě části. První část vytváří několik verzí vstupních obrázků, každa taková verze má jiné rozlišení. Druhá část složená z~kaskády neuronových sítí se stará o~detekci obličeje v~různých verzích obrázku. Použití více verzí obrázku umožňuje zvýšit efektivitu detekce.
 
-Single shot detector \textbf{SSD} \cite{ssd} je konvoluční neuronová síť opět složená ze 2 částí, sloužící obecně k~detekci objektů. Tyto části jsou: a) natrénovaný detekční model (VGG--16 nebo jiný) a b) část SSD -- další konvoluční vrstva, která rozděluje obrázek pomocí mřížky (\emph{grid}) s~rozměry 4 $\times$ 4 nebo 8 $\times$ 8. V~každém takto vytvořeném bloku je pak hledán objekt (obličej).
+Single shot detector \textbf{SSD} \cite{ssd} je konvoluční neuronová síť opět složená ze 2 částí, sloužící obecně k~detekci objektů. Tyto části jsou: a) natrénovaný klasifikační model (VGG--16 nebo jiný) a b) část SSD -- další část, která rozděluje obrázek pomocí mřížky (\emph{grid}) s~rozměry 4 $\times$ 4 nebo 8 $\times$ 8. V~každém takto vytvořeném bloku je pak hledán objekt (obličej).
 
 Detekční model \textbf{RetinaFace} \cite{lowLightFdReview} používá multitasking pro učení. Detekce probíhá určením pozice obličeje podle vyhledání pixelů, které tvář obsahuje. Model má 2 struktury: \emph{Multi--task loss} -- minimalizace chyb modelu a \emph{Dense Regression Branch} -- renderer, který filtruje obličeje a získává pixely z~vyrenderovaných obličejů.
 
@@ -414,7 +419,7 @@ Detekční model \textbf{RetinaFace} \cite{lowLightFdReview} používá multitas
 YOLO má několik verzí, které se liší složením neuronové sítě a úspěšností detekce.
 
 \subsection*{Porovnání výkonnosti detektorů}
-Práce \cite{fdCNNComparison} se zabývá porovnáním detektorů Viola--Jones, Histogram of Oriented Gradients ze sekce \ref{sekce:detektory_bez_neuronovych_siti} a algoritmů založených na konvolučních neuronových sítích MTCNN a SSD (detektor VGG--16 je nahrazen detektorem MobileNet) ze sekce \ref{sekce:NSdetektory}. Testování bylo prováděno na datasetech AFW a WIDER FACE. Co se týká úspěšnosti detekce, nejlépe vyšel z~testu detektor MTCNN, nejrychlejší pak byl detektor SSD (viz obrázek \ref{obrazek:cnncomparison}). Z~detektorů založených na klasických metodách měl vyšší úspěšnost HOG, rychlejší však byl detektor Viola--Jones. Hodnota AP (average precision) udává průměrnou přesnost detekce a hodnota FPS (frames per second) počet snímků zpracovaných za sekundu.
+Práce \cite{fdCNNComparison} se zabývá porovnáním detektorů Viola-Jones, Histogram of Oriented Gradients ze sekce \ref{sekce:detektory_bez_neuronovych_siti} a algoritmů založených na konvolučních neuronových sítích MTCNN a SSD (klasifikátor VGG-16 je nahrazen klasifikátorem MobileNet) ze sekce \ref{sekce:NSdetektory}. Testování bylo prováděno na datasetech AFW a WIDER FACE. Co se týká úspěšnosti detekce, nejlépe vyšel z~testu detektor MTCNN, nejrychlejší pak byl detektor SSD (viz obrázek \ref{obrazek:cnncomparison}). Z~detektorů založených na klasických metodách měl vyšší úspěšnost HOG, rychlejší však byl detektor Viola-Jones. Hodnota AP (\emph{average precision}) udává průměrnou přesnost detekce a hodnota FPS (\emph{frames per second}) počet snímků zpracovaných za sekundu.
 
 \begin{figure}[H]
   \begin{center}
@@ -425,18 +430,18 @@ Práce \cite{fdCNNComparison} se zabývá porovnáním detektorů Viola--Jones, 
 \end{figure}
 
 \subsection*{Detektory zaměřující se na špatné světelené podmínky}
-Detektory zaměřující se na detekci ve špatných světelných podmínkách jsou buď specializované detektory, kdy je neuronová síť detektoru učena na datasetu vhodných obrázků (obrázky pořízené za špatných světelných podmínek) nebo je použit detektor obličeje natrénovaný na obyčejných snímcích. V~obou případech je nutno nejprve provést \emph{low--light image enhacement} (vylepšení obrázku) a~až poté přejít k~detekci.
+Detektory zaměřující se na detekci ve špatných světelných podmínkách jsou buď specializované detektory, kdy je neuronová síť detektoru učena na datasetu vhodných obrázků (obrázky pořízené za špatných světelných podmínek) nebo je použit detektor obličeje natrénovaný na obyčejných snímcích. V~obou případech je nutno nejprve provést \emph{low-light image enhacement} (vylepšení obrázku) a~až poté přejít k~detekci.
 
-Pro vylepšení obrázku existují různé metody \cite{lowLightFdReview}:
+\noindent Pro vylepšení obrázku existují různé metody \cite{lowLightFdReview}:
 \begin{itemize}
   \item Mirnet,
   \item Adaptive Gamma Correction (AGC),
   \item Retinex,
   \item RetinexNet,
-  \item a další.
+  \item[] a další.
 \end{itemize}
 
-\textbf{Mirnet} je metoda postavená na konvolučních neuronových sítí a jejím cílem je zvýšení kvality obrazu pomocí několika úprav v~konvolučních vrstvách.
+\textbf{Mirnet} je metoda postavená na konvolučních neuronových sítí a jejím cílem je zvýšení kvality obrazu pomocí několika úprav v~konvolučních vrstvách. Je použita i v praktické části této práce, viz kapitola \ref{kapitola:navrh}.
 
 \textbf{AGC} je metodou využívající gamma korekci k~vylepšení nasvícení scény (obrázku). Metoda navíc rozděluje obrázky podle intenzity gamma na tmavé (hodnota pod $0,5$) a~světlé (hodnota nad $0,5$).
 
@@ -444,7 +449,7 @@ Koncept \textbf{Retinex} se snaží upravit kvalitu obrazu tak, aby odpovídala 
 
 \textbf{RetinexNet} vychází z~Retinexu a provádí dekompozici obrázku tak, aby došlo k~oddělení odrazů nezávislých na osvětlení a osvětlení se známou strukturou. Metoda také celkově upravuje nasvícení pro dosažení co největší konzistence světla v~obrázku.
 
-Pro porovnání účinnosti \emph{image enhacement} metod lze použít 2 veličiny. \emph{Peak signal--noise ratio} (PSNR)-- poměr užitečného signálu k~šumu a~\emph{Structural similarity} (SSIM) -- index podobnosti 2 obrazů.
+Pro porovnání účinnosti \emph{image enhacement} metod lze použít 2 veličiny. \emph{Peak signal-noise ratio} (PSNR) -- poměr užitečného signálu k~šumu a~\emph{Structural similarity} (SSIM) -- index podobnosti 2 obrazů.
 
 \begin{figure}[H]
   \begin{center}
@@ -454,7 +459,7 @@ Pro porovnání účinnosti \emph{image enhacement} metod lze použít 2 veliči
   \end{center}
 \end{figure}
 
-Obrázek \ref{obrazek:iepostup}, který vychází ze článku \cite{lowLightFdReview} popisuje potřebný postup pro úpravu obrázku (preprocessing) a následné kroky vedoucí k~detekci obličeje. V~rámci tohoto článku jsou zpracovány výsledky detekce pomocí výše zmíněných metod vylepšení obrazu a detektoru RetinaFace (viz sekce Detektory). Jako testovací dataset byl použit dataset DARK FACE, popsaný v~sekci \ref{sekce:datasety}. V~rámci testování preprocessingových metod vylepšení obrazu bylo zjištěno, že nejlepší hodnoty PSNR ($19,48\:dB$) a SSIM ($0,74$) dosahuje metoda Mirnet (hodnoty dalších metod viz obrázek \ref{obrazek:psnrssim}).
+Obrázek \ref{obrazek:iepostup}, který vychází ze článku \cite{lowLightFdReview} popisuje potřebný postup pro úpravu obrázku (\emph{preprocessing}) a následné kroky vedoucí k~detekci obličeje. V~rámci tohoto článku jsou zpracovány výsledky detekce pomocí výše zmíněných metod vylepšení obrazu a detektoru RetinaFace. Jako testovací dataset byl použit dataset DARK FACE, popsaný v~sekci \ref{sekce:datasety}. V~rámci testování preprocessingových metod vylepšení obrazu bylo zjištěno, že nejlepší hodnoty PSNR ($19,48\:dB$) a SSIM ($0,74$) dosahuje metoda Mirnet (hodnoty dalších metod viz obrázek \ref{obrazek:psnrssim}).
 
 \begin{figure}[H]
   \begin{center}
@@ -464,17 +469,17 @@ Obrázek \ref{obrazek:iepostup}, který vychází ze článku \cite{lowLightFdRe
   \end{center}
 \end{figure}
 
-Výsledky detekce však ukázaly, že v~detekci obličejů si nejlépe vedl Retinex s~$0,43\:\%\:mAP$ (mean average precision -- průměrná přesnost detekce). Z~toho vyplývá, že lepší preprocessingová metoda nutně neznamená úspěšnější detektor.
+Výsledky detekce však ukázaly, že v~detekci obličejů si nejlépe vedl Retinex s~0,43 \% mAP (\emph{mean average precision} -- průměrná přesnost detekce). Z~toho vyplývá, že lepší preprocessingová metoda nutně neznamená úspěšnější detektor.
 
-Detekcí ve špatných světelných podmínkách se zabývá také článek \cite{HLAFace}. V~rámci tohoto článku byl vytvořen samoučící se (self--supervised) detektor dosahující $44,4\:\%\:mAP$ také na datech z~datasetu DARK FACE.
+Detekcí ve špatných světelných podmínkách se zabývá také článek \cite{HLAFace}. V~rámci tohoto článku byl vytvořen samoučící se (self-supervised) detektor dosahující 44,4 \% mAP také na datech z~datasetu DARK FACE.
 
-Práce \cite{fdExtremelyLowConditions} se rovněž zabývá detekcí nad datasetem DARK FACE při špatném osvětlení. Navržený algoritmus dosahuje $82,3\:\%\:mAP$. Algoritmus využívá 3 hlavní části umožňující dosáhnutí takto vysoké přesnosti detekce. Jsou to: \emph{Multi--scale retinex with color restoration} -- metoda podobná Retinexu, ale zachovává konzistenci barev, architektura konvolučních vrstev \emph{PyramidBox} a~\emph{Multi--scale test module} -- úpravy velikosti vstupního obrázku pro lepší detekci.
+Práce \cite{fdExtremelyLowConditions} se rovněž zabývá detekcí nad datasetem DARK FACE při špatném osvětlení. Navržený algoritmus dosahuje $82,3\:\%\:mAP$. Algoritmus využívá 3 hlavní části umožňující dosáhnutí takto vysoké přesnosti detekce. Jsou to: \emph{Multi-scale retinex with color restoration} -- metoda podobná Retinexu, ale zachovává konzistenci barev, architektura konvolučních vrstev \emph{PyramidBox} a~\emph{Multi-scale test module} -- úpravy velikosti vstupního obrázku pro lepší detekci.
 
-Velké rozdíly v~hodnotách $mAP$ jsou způsobeny tím, že neuronové sítě z~prací \cite{HLAFace, fdExtremelyLowConditions} jsou trénovány přímo na datasetu obličejů ve zhoršených pozorovacích podmínkách (specializoavné detektory), zatímco \cite{lowLightFdReview} používá model učený na běžných snímcích tváří.
+Velké rozdíly v~hodnotách mAP jsou způsobeny tím, že neuronové sítě z~prací \cite{HLAFace, fdExtremelyLowConditions} jsou trénovány přímo na datasetu obličejů ve zhoršených pozorovacích podmínkách (specializované detektory), zatímco \cite{lowLightFdReview} používá model učený na běžných snímcích tváří.
 
 \section{Frameworky pro neuronové sítě}
 \label{sekce:frameworky_pro_ns}
-Při programování neuronových sítí nebo obecně aplikací strojového učení se využívají k~tomu určené frameworky. Každý framework je trochu jiný a používá se k~jiným účelům. Všechny zde zmíněné frameworky podporují programovací jazyk Python. Mezi nejpoužívanější frameworky patří: TensorFlow, PyTorch, Keras, ONNX, Caffe \cite{nsFrameworks}.
+Pro programování neuronových sítí nebo obecně aplikací strojového učení se využívají k~tomu určené frameworky. Každý framework je trochu jiný a používá se k~jiným účelům. Všechny zde zmíněné frameworky podporují programovací jazyk Python. Mezi nejpoužívanější frameworky patří: TensorFlow, PyTorch, Keras, ONNX, Caffe \cite{nsFrameworks}.
 
 \vspace{1em}
 \textbf{TensorFlow} je framework pro jazyky R, C++, Python a další. Má několik modulů s~rozličnými funkcionalitami. Je velmi rozšířený a implementuje jej například Google překladač. Dokumentace je velmi podrobná a framework podporuje paralelismus napříč GPU.
@@ -483,7 +488,7 @@ Při programování neuronových sítí nebo obecně aplikací strojového učen
 
 Dalším frameworkem je \textbf{Keras}, v~němž se programují konvoluční a rekurentní neuronové sítě. Je minimalistický a snadno se integruje spolu s~TensorFlow.
 
-Framework \textbf{ONNX} je open source framework pro hluboké učení. Modely vytvořené v~ONNX lze konvertovat do jiných frameworků (TensorFlow, Keras).
+Framework \textbf{ONNX} je open-source framework pro hluboké učení. Modely vytvořené v~ONNX lze konvertovat do jiných frameworků (TensorFlow, Keras).
 
 \textbf{Caffe} je framework podporovaný napříč různými programovacími jazyky (C, C++, Python, MATLAB) a je vhodný pro konvoluční neuronové sítě. Umožňuje nastavit parametry sítě a natrénovat síť, není nutné ji přímo vytvářet.
 
@@ -497,10 +502,10 @@ V~rámci této práce jsou použity frameworky TensorFlow a Keras.
 \label{kapitola:kamery_a_systemy}
 Detekci obličejů s~využitím počítačových programů lze provádět nad snímkem 
 (fotografií, obrázkem), sadou snímků,
-videozáznamem nebo tzv. real\,--\,timově pomocí kamer a kamerových systémů.
+videozáznamem nebo tzv. real-timově pomocí kamer a kamerových systémů.
 V~této kapitole jsou popsány aktuálně využívané prostředky pro vytváření 
 obrázků k~detekci obličejů (kamery) a také dostupná řešení zabývající se 
-detekcí, a to jak placené komerční, tak neplacené open--source systémy.
+detekcí, a to jak placené komerční, tak neplacené open-source systémy.
 
 \section{Kamery}
 Nezbytnou součástí oboru detekce obličejů jsou kamery a kamerové systémy.
@@ -510,10 +515,10 @@ a kamery obyčejné, které pouze zprostředkovávají obraz dále ke zpracován
 Specializované kamery se používají například k~zabezpečení objektů nebo
 jako domovní videozvonky, kdy kamera (respektive její software) v~zachyceném
 obraze detekuje a rozpozná obličej, a následně může vykonat přiřazenou akci 
-(spustit alarm, poslat notifikaci, umožnit osobě vstup...) \cite{securityCamsWeb}.
+(spustit alarm, poslat notifikaci, umožnit osobě vstup,\dots) \cite{securityCamsWeb}.
 
 Další oblastí, kde se kamery s~detekcí a rozpoznáváním obličejů uplatní je
-bezesporu dohled ve veřejných prostorech (anglicky CCTV surveillance). 
+bezesporu dohled ve veřejných prostorech (anglicky \emph{CCTV surveillance}). 
 Detekce obličeje může sloužit k~hledání podezřelých osob v~záznamech z~dohledových
 kamer. Tyto záznamy jsou shromážďovány na serveru, pomocí detekce jsou
 z~obrazu vyřezány fragmenty s~obličeji lidí a poté jsou tyto fragmenty
@@ -522,14 +527,13 @@ dochází k~informování administrátora systému, který podnikne další krok
 \cite{suspectIdentification}. 
 
 Kamery tedy mají v~doméně detekce obličejů nezastupitelnou roli, na 
-jejich praktické využití v~systémech a řešení pro detekci se zaměřuje následujících
-podkapitola.
+jejich praktické využití v~systémech a řešení pro detekci se zaměřují následující odstavce.
 
 \section{Dostupná řešení}
 Řešení umožňující detekci (a často i rekognici) obličejů lze rozdělit do dvou kategorií: 
-komerční (placené, profesionální) a nekomerční (zdarma, open--source, amatérské).
+komerční (placené, profesionální) a nekomerční (zdarma, open-source, amatérské).
 V~následujících dvou podsekcích jsou popsány konkrétní systémy umožňující
-detekci obličejů včetně jejich výhod a nevýhod.
+detekci obličejů.
 
 \subsection*{Komerční}
 Komerčně využívaná zařízení pro detekci, případně rekognici lze běžně zakoupit 
@@ -540,39 +544,39 @@ patří například produkty firem Netatmo, Google, Nest \cite{securityCamsWeb2}
   \begin{center}
       \scalebox{0.5}{\includegraphics{obrazky-figures/nest-hello.png}}
   \label{nest}
-  \caption{Nest Hello \cite{securityCamsWeb2}}
+  \caption{Videozvonek Nest Hello \cite{securityCamsWeb2}. Příklad komerčního využití rozpoznávání obličejů v praxi.}
   \end{center}
 \end{figure}
 
 \subsection*{Nekomerční}
 Nekomerční řešení pro detekci obličejů zahrnují frameworky s~otevřeným zdrojovým
-kódem (open--source). Tyto frameworky a řešení využívají neuronové sítě, které jsou trénovány
+kódem (open-source). Tyto frameworky a řešení využívají neuronové sítě, které jsou trénovány
 pomocí datasetů a následně jsou využity k~detekci obličeje 
 \cite{faceRecognitionFrameworks}.
-Mezi open--source řešení patří například TinaFace \cite{TinaFace} nebo MTCNN \cite{MTCNN}, další volně použitelné frameworky popisuje sekce \ref{sekce:frameworky_pro_ns}.
+Mezi open-source řešení patří například TinaFace\footnote{\url{https://github.com/Media-Smart/vedadet/tree/main/configs/trainval/tinaface}} nebo MTCNN \cite{mtcnn}, další volně použitelné frameworky popisuje sekce \ref{sekce:frameworky_pro_ns}.
 
 
 \section{Akcelerace detekčních algoritmů}
 \label{sekce:akcelerace}
 
-S~rozmachem využívání strojového učení a neuronových sítí se objevila potřeba zrychlení těchto sítí. Proto byly vytvořeny specializované zařízení s~cílem urychlit výpočty a snížit energetickou náročnost výpočtů ve srovnání s~běžnými (univerzálními) výpočetním prostředky. Vznikly tak hardwarové akcelerátory neuronových sítí. Příkladem jsou Intel Neural Compute Stick 2 \cite{ncs2}, Coral \cite{coral} nebo Nvidia Jetson \cite{jetson}.
+S~rozmachem využívání strojového učení a neuronových sítí se objevila potřeba zrychlení těchto sítí. Proto byly vytvořeny specializované zařízení s~cílem urychlit výpočty a snížit energetickou náročnost výpočtů ve srovnání s~běžnými (univerzálními) výpočetními prostředky. Vznikly tak hardwarové akcelerátory neuronových sítí. Příkladem jsou Intel Neural Compute Stick 2 \cite{ncs2}, Coral\footnote{\url{https://coral.ai}} nebo Nvidia Jetson\footnote{\url{https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/}}.
 
 Existují různé typy architektur akcelerátorů \cite{acceleratorsSurvey}, mezi něž patří architektury popsané v~tomto odstavci.
-\textbf{NPU} (neural processing unit) -- k~provádění matematických operací využívají speciální NPU obsahující PE (processing engines). NPU používá hardwarové verze MLP (multi--layer perceptron), pro dosažení zrychlení obecného výpočtu (nejen neuronových sítí). Pokud je část programu určená ke zrychlení spouštěna často a jsou dobře známy vstupy a výstupy, lze tuto část programu zrychlit pomocí NPU. Příkladem algoritmu pro zrychlení je rychlá Fourierova transformace (FFT).
+\textbf{NPU} (\emph{neural processing unit}) -- k~provádění matematických operací využívají speciální NPU obsahující PE (\emph{processing engines}). NPU používá hardwarové verze MLP (\emph{multi-layer perceptron}), pro dosažení zrychlení obecného výpočtu (nejen neuronových sítí). Pokud je část programu určená ke zrychlení spouštěna často a jsou dobře známy vstupy a výstupy, lze tuto část programu zrychlit pomocí NPU. Příkladem algoritmu pro zrychlení je rychlá Fourierova transformace (FFT).
 
 Architektura \textbf{RENO} využívá memristory (ReRAM) -- speciální druh paměti jejíž struktura umožňuje urychlit maticové a vektorové násobení.
 
-Mezi další akcelerátory patří série akcelerátorů \textbf{DianNao} využívaná na akademické půdě. Tyto akcelerátory obsahují NFU (neural functional unit), vstupní, výstupní a synaptický buffer a kontrolní procesor.
+Mezi další akcelerátory patří série akcelerátorů \textbf{DianNao} využívaná na akademické půdě. Tyto akcelerátory obsahují NFU (\emph{neural functional unit}), vstupní, výstupní a synaptický buffer a kontrolní procesor.
 
-Průmyslovým akcelerátorem od Google je \textbf{TPU} (tensor processing unit). Je použitelný i přes cloud.
+Průmyslovým akcelerátorem od Google je \textbf{TPU} (\emph{tensor processing unit}). Je použitelný i přes cloud.
 
-Kromě ReRAM jsou v~akcelerátor používány i paměti typu HMC (hybrid memory cube). Obě paměti (ReRAM a HMC) umožňují tzv. \emph{processing--in--memory}, takže snižují čas výpočtu tím, že není nutno data přesouvat mezi procesorem a pamětí. Příklady akcelerátorů postavených na HMC je Neurocube \cite{neurocube} nebo Tetris \cite{tetris}.
+Kromě ReRAM jsou v~akcelerátor používány i paměti typu HMC (\emph{hybrid memory cube}). Obě paměti (ReRAM a HMC) umožňují tzv. \emph{processing-in-memory}, takže snižují čas výpočtu tím, že není nutno data přesouvat mezi procesorem a pamětí. Příklady akcelerátorů postavených na HMC jsou Neurocube \cite{neurocube} nebo Tetris \cite{tetris}.
 
-Většina akcelerátorů je zaměřena na výpočty s~již natrénovanou neuronovou sítí, jen pár jich podporuje učení neuronových sítí. V~některých případech (edge computing) se ke zrychlení neuronové sítě používají cloudové služby -- v~datacentrech provádějí náročné výpočty grafické karty a výsledky spolu s~nenáročnými výpočty jsou zpracovány například na IoT (Internet of Things -- internet věcí) nebo mobilních zařízeních.
+Většina akcelerátorů je zaměřena na výpočty s~již natrénovanou neuronovou sítí, jen pár jich podporuje učení neuronových sítí. V~některých případech (\emph{edge computing}) se ke zrychlení neuronové sítě používají cloudové služby -- v~datacentrech provádějí náročné výpočty grafické karty a výsledky spolu s~nenáročnými výpočty jsou zpracovány například na IoT (\emph{Internet of Things} -- internet věcí) nebo mobilních zařízeních.
 
 \subsection*{Intel Neural Compute Stick 2}
 
-Intel Neural Compute Stick 2 (NCS2) \cite{ncs2} (obrázek \ref{obrazek:ncs2}) je akcelerátor neuronových sítí zaměřený na počítačové vidění. Obsahuje VPU (vision processing unit) Intel Movidius X. Připojuje se k~počítači přes rozhraní USB 3.0 a umožňuje urychlení neuronové sítě bez použití cloudu a s~nízkými energetickými nároky (například v~kombinaci s~Raspberry Pi). Podporuje mj. frameworky TensorFlow, Caffe, PyTorch, Keras popsané v~sekci \ref{sekce:frameworky_pro_ns}. Pro práci s~NCS2 se používá knihovna/framework OpenVINO \cite{openvino}. 
+Intel Neural Compute Stick 2 (NCS2) \cite{ncs2} (obrázek \ref{obrazek:ncs2}) je akcelerátor neuronových sítí zaměřený na počítačové vidění. Obsahuje VPU (\emph{vision processing unit}) Intel Movidius X. Připojuje se k~počítači přes rozhraní USB 3.0 a umožňuje urychlení neuronové sítě bez použití cloudu a s~nízkými energetickými nároky (použití například v~kombinaci s~Raspberry Pi). Podporuje mj. frameworky TensorFlow, Caffe, PyTorch, Keras popsané v~sekci \ref{sekce:frameworky_pro_ns}. Pro práci s~NCS2 se používá knihovna/framework OpenVINO \cite{openvino}. 
 
 \begin{figure}[H]
   \begin{center}
@@ -582,33 +586,33 @@ Intel Neural Compute Stick 2 (NCS2) \cite{ncs2} (obrázek \ref{obrazek:ncs2}) je
   \end{center}
 \end{figure}
 
-Experimenty provedené v~\cite{ncs2testYolo} porovnávají výkonnost akcelerátorů Nvidia Jetson Nano, Nvidia Jetson Xavier NX a Raspberry Pi 4B s~NCS2. K~porovnání posloužily frameworky YOLOv3 popsaný v~sekci \ref{sekce:NSdetektory} a YOLOv3--tiny. Experimenty byly založeny na detekci objektů ve dvou videích.
+Experimenty provedené v~\cite{ncs2testYolo} porovnávají výkonnost akcelerátorů Nvidia Jetson Nano, Nvidia Jetson Xavier NX a Raspberry Pi 4B s~NCS2. K~porovnání posloužily frameworky YOLOv3 -- popsaný v~sekci \ref{sekce:NSdetektory} a YOLOv3-tiny. Experimenty byly založeny na detekci objektů ve dvou videích:
 \begin{itemize}
   \item \emph{Video1} -- rozlišení 768 $\times$ 436 pixelů, celkem 1596 framů
   \item \emph{Video2} -- rozlišení 1920 $\times$ 1080 pixelů, celkem 960 framů 
 \end{itemize}
 
-Naměřené výsledky zobrazuje obrázek \ref{obrazek:ncs2test}.
+\noindent Naměřené výsledky zobrazuje tabulka v obrázku \ref{obrazek:ncs2test}.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.5}{\includegraphics{obrazky-figures/ncs2test.png}}
   \label{obrazek:ncs2test}
-  \caption{Výsledky testu akcelerátorů neuronovýxh sítí s~modelem YOLOv3 a~YOLOv3-tiny \cite{ncs2testYolo}}
+  \caption{Výsledky testu akcelerátorů neuronových sítí s~modelem YOLOv3 a~YOLOv3-tiny \cite{ncs2testYolo}.}
   \end{center}
 \end{figure}
 
-Z~tabulky v~obrázku \ref{obrazek:ncs2test} můžeme vidět, že NCS2 dosahuje podobných výsledků detekce ve \emph{Videu1} jako Jetson Nano a zároveň nejméně zatěžuje procesor. U~\emph{Videa2} má NCS2 nejlepší výsledky detekce. Využití paměti s~větším vstupem roste, stále je však mezi konkurenty nejnižší, to samé lze řící o~spotřebě energie. S~dostatečně dobrým modelem neuronové sítě je tak NCS2 úsporným akcelerátorem s~vysokou úspěšností detekce.
+Z~tabulky v~obrázku \ref{obrazek:ncs2test} můžeme vidět, že NCS2 dosahuje podobných výsledků detekce ve \emph{Videu1} jako Jetson Nano a zároveň nejméně zatěžuje procesor. U \emph{Videa2} má NCS2 nejlepší výsledky detekce. Využití paměti s~větším vstupem roste, stále je však mezi konkurenty nejnižší, to samé lze řící o~spotřebě energie. S~dostatečně dobrým modelem neuronové sítě je tak NCS2 úsporným akcelerátorem s~vysokou úspěšností detekce.
 
 
 \subsection*{OpenVINO}
-Framework/knihovna OpenVINO se stará o~konverzi a optimalizaci natrénovaného modelu neuronové sítě v~jednom z~podporovaných frameworků (viz obrázek \ref{obrazek:ovchart}) pro použití na NCS2 nebo jiném zařízení (procesory, grafické karty). OpenVINO se nezaměřuje pouze na oblast počítačového vidění, ale na neuronové sítě obecně.
+Framework/knihovna OpenVINO se stará o~konverzi a optimalizaci natrénovaného modelu neuronové sítě v~jednom z~podporovaných frameworků (viz obrázek \ref{obrazek:ovchart}) pro použití na NCS2 nebo jiném zařízení (procesory, grafické karty). OpenVINO se nezaměřuje pouze na oblast počítačového vidění, ale na neuronové sítě obecně. Knihovna a její použití je detailněji popsáno v dalších kapitolách.
 
 \begin{figure}[H]
   \begin{center}
-      \scalebox{0.22}{\includegraphics{obrazky-figures/ovchart.png}}
+      \scalebox{0.18}{\includegraphics{obrazky-figures/ovchart.png}}
   \label{obrazek:ovchart}
-  \caption{Využití frameworku OpenVINO \cite{openvino}}
+  \caption{Možnosti použití frameworku OpenVINO \cite{openvino}.}
   \end{center}
 \end{figure}
 
@@ -616,11 +620,12 @@ Framework/knihovna OpenVINO se stará o~konverzi a optimalizaci natrénovaného 
 %       KAPITOLA Návrh
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Návrh řešení}
-Tato kapitola popisuje jak nástroje a postupy použité při realizaci řešení, tak také způsob získávání dat pro natrénování detekční neuronové sítě. Dále se kapitola zabývá návrhem této konvoluční neuronové sítě a návrhem způsobu získávání výsledků detekčních experimentů. V kapitole také nalezneme popis plán funkcí uživatelského rozhraní detektoru a přiblížení metody Mirnet.
+\label{kapitola:navrh}
+Tato kapitola popisuje jak nástroje a postupy použité při realizaci řešení, tak také způsob získávání dat pro natrénování detekční neuronové sítě. Dále se kapitola zabývá návrhem této konvoluční neuronové sítě a návrhem způsobu získávání výsledků detekčních experimentů. V kapitole také nalezneme popis funkcí uživatelského rozhraní detektoru a přiblížení metody Mirnet.
 
 \section{Použité nástroje}
 \label{sekce:pouzite_nastroje}
-K programování, akceleraci a vizualizaci výsledků detekce s využitím neuronových sítí je potřeba zvolit vhodný programovací jazyk, vhodné knihovny a frameworky. Mezi nejpoužívanější jazyky k tomuto účelu patří C++ a Python. Ze zadání byl vybrán jazyk Python. Tvorba neuronových sítí je usnadněna, pomocí k tomu určených knihoven jako jsou TensorFlow, PyTorch nebo ONNX. Akceleraci neuronových sítí na zařízeních značky Intel (tedy i NCS2) se věnuje knihovna OpenVINO. Aby bylo možné ověřit funkčnost detektoru, je potřeba grafické rozhraní pro zobrazování detekce. K tomuto účelu lze využít knihoven pro grafická uživatelská rozhraní jako jsou Tkinter nebo PyQt. Tato část vystihuje soubor zvolených nástrojů k vytvoření detektoru obličejů a možnostem jeho použití.
+K programování, akceleraci a vizualizaci výsledků detekce s využitím neuronových sítí je potřeba zvolit vhodný programovací jazyk, vhodné knihovny a frameworky. Mezi nejpoužívanější jazyky k tomuto účelu patří C++ a Python. Ze zadání byl vybrán jazyk \textbf{Python}. Vytváření neuronových sítí je usnadněno, pomocí k tomu určených knihoven jako jsou TensorFlow, PyTorch nebo ONNX. Akceleraci neuronových sítí na zařízeních značky Intel (tedy i Neural Compute Stick 2 -- NCS2) se věnuje knihovna \textbf{OpenVINO}. Aby bylo možné ověřit funkčnost detektoru, je potřeba grafické rozhraní pro zobrazování detekce. K tomuto účelu lze využít knihoven pro grafická uživatelská rozhraní jako jsou Tkinter nebo \textbf{PyQt}. Tato část vystihuje soubor zvolených nástrojů k vytvoření detektoru obličejů a možnostem jeho použití.
 
 \subsection*{TensorFlow}
 Framework \textbf{TensorFlow}, částečně popsaný v sekci \ref{sekce:frameworky_pro_ns}, slouží k programování aplikací strojového učení. Využívá knihovnu \textbf{Keras} a umožňuje vytvářet nebo používat existující modely neuronových sítí. Tvorba neuronových sítí je realizována spojováním různých vrstev sítě a nastavováním aktivačních funkcí, filtrů apod.
@@ -632,7 +637,7 @@ V rámci frameworku TensorFlow je integrován program TensorBoard umožňující
 Teoreticky je tato knihovna popsána v předcházející kapitole. Praktické použití knihovny spočívá ve využití části nazvané \textbf{Model Optimizer} sloužící k optimalizování modelu neuronové sítě pro dosažení nižší latence při zpracování obrázku při detekci. Model může být dále akcelerován pomocí kvantování hodnot vah jednotlivých vrstev neuronů. Knihovna zároveň funguje jako programové rozhraní pro práci s Intel Neural Compute Stick 2 a dalšími akcelerátory značky Intel.
 
 \subsection*{PyQt6}
-Knihovna PyQt6 je Python knihovna vycházející z C++ implementace grafické knihovy Qt6. Používá se k návrhu grafického uživatelského rozhraní aplikací napsaných v jazyce Python, pracuje se signály a sloty (události a jejich obsluha). Knihovna poskytuje rozhraní a třídy pro práci s více vlákny, umožňuje používat dialogová okna a je snadná na používání.
+Knihovna PyQt6\footnote{\url{https://pypi.org/project/PyQt6/}} je Python knihovna vycházející z C++ implementace grafické knihovy Qt6. Používá se k návrhu grafického uživatelského rozhraní aplikací napsaných v jazyce Python, pracuje se signály a sloty (události a jejich obsluha). Knihovna poskytuje rozhraní a třídy pro práci s více vlákny, umožňuje používat dialogová okna a je snadná na používání.
 
 
 \section{Data}
@@ -640,37 +645,41 @@ Knihovna PyQt6 je Python knihovna vycházející z C++ implementace grafické kn
 Pro trénování neuronových sítí je potřeba mít dostatek trénovacích dat. Detektory obličejů jsou trénovány na obrázcích z datasetů, které musejí mít přidruženy anotační soubory se souřadnicemi poloh obličejů. V této sekci je popsán návrh vhodného datasetu a možnosti jeho rozšíření pomocí augmentace.
 
 \subsection*{Datasety}
-Mezi existujícími datasety obličejů lze v jednoduchosti nalézt dva druhy dat. Jedním druhem jsou takové datasety, které obsahují fotografie obličejů v poměru jeden obličej na jednu fotografii. Příkladem takového datasetu mohou být datasety \textbf{DigiFace1M} nebo \textbf{UTKFace} popsané v sekci \ref{sekce:datasety}. Tyto datasety mohou sloužit jako datasety k detekci obličejů, ale hodí se spíše na klasifikaci/rozpoznávání. Anotační soubory buď existují a obsahují souřadnice hranic obličeje na snímku, nebo úplně chybí a obrázek tak obsahuje pouze obličej -- souřadnice odpovídají rozměrům obrázku.
+Mezi existujícími datasety obličejů lze v jednoduchosti nalézt dva druhy dat. Jedním druhem jsou takové datasety, které obsahují fotografie obličejů v poměru jeden obličej na jednu fotografii. Příkladem takového datasetu mohou být datasety \textbf{DigiFace1M} nebo \textbf{UTKFace} popsané v sekci \ref{sekce:datasety}. Tyto datasety mohou sloužit jako datasety k trénování detektorů obličejů, ale jejich použití je vhodné spíše na klasifikaci/rozpoznávání. Anotační soubory buď existují a obsahují souřadnice hranic obličeje na snímku, nebo úplně chybí a obrázek tak obsahuje pouze obličej -- souřadnice odpovídají rozměrům obrázku.
 
-Druhou možností jsou datasety, kde je na jedné fotografii větší množství obličejů (případně je zde jen jeden obličej, ale nezabírá celou plochu obrázku). Tyto datasety mívají k daným obrázkům přidruženy anotační soubory, obsahující minimálně koordináty tváří, v případě některých (například \textbf{WIDER FACE}, zmíněný v sekci \ref{sekce:datasety}) jsou doplněny informace o rozmazání, póze, zastínění anebo zakrytí daného obličeje. Takovéto datasety jsou vhodné pro trénování detekčních neuronových sítí.
+Druhou možností jsou datasety, kde je na jedné fotografii větší množství obličejů (případně je zde jen jeden obličej, ale nezabírá celou plochu obrázku). Tyto datasety mívají k daným obrázkům přidruženy anotační soubory, obsahující minimálně koordináty tváří, v případě některých (například \textbf{WIDER FACE}, popsaný v sekci \ref{sekce:datasety}) jsou doplněny informace o rozmazání, póze, zastínění anebo zakrytí daného obličeje. Takovéto datasety jsou dobré pro trénování detekčních neuronových sítí.
 
 Body, udávající takzvané ohraničující boxy (anglicky \emph{bounding boxes}) v nichž se vyskytují tváře je možné zapsat v různých tvarech. Základní dělení je na tři typy zápisu těchto souřadnic: \textbf{Pascal VOC}, \textbf{COCO} a \textbf{YOLO} \cite{annotace_formaty}.
 
-\textbf{PascalVOC} anotuje obličeje ve tvaru $x_{min}, y_{min}, x_{max}, y_{max}$, kde $x_{min}, y_{min}$ jsou souřadnice levého horního rohu a $x_{max}, y_{max}$ jsou souřadnice pravého dolního rohu ohraničení. Formát \textbf{COCO} využívá stejně jako PascalVOC hodnoty $x_{min}, y_{min}$ a přidává k nim údaje $width$ a $height$, odpovídající šířce a výšce hraničního obdélníku. Třetí z nejpoužívanějších stylů značení, \textbf{YOLO}, nahrazuje hodnoty $x_{min}, y_{min}$ hodnotami $x_{center}, y_{center}$, které značí střed ohraničení. Tento formát navíc stejně jako COCO poskytuje hodnoty $width$ a $height$, aby bylo možné určit celou plochu ohraničení. Graficky tyto formáty zobrazuje obrázek \ref{obrazek:annotace_formaty}.
+\textbf{PascalVOC} anotuje obličeje ve tvaru $x_{min}, y_{min}, x_{max}, y_{max}$, kde $x_{min}, y_{min}$ jsou souřadnice levého horního rohu a $x_{max}, y_{max}$ jsou souřadnice pravého dolního rohu ohraničení. 
+
+Formát \textbf{COCO} využívá stejně jako PascalVOC hodnoty $x_{min}, y_{min}$ a přidává k nim údaje $width$ a $height$, odpovídající šířce a výšce hraničního obdélníku. 
+
+Třetí z nejpoužívanějších stylů značení, \textbf{YOLO}, nahrazuje hodnoty $x_{min}, y_{min}$ hodnotami $x_{center}, y_{center}$, které značí střed ohraničení. Tento formát navíc stejně jako COCO poskytuje hodnoty $width$ a $height$, aby bylo možné určit celou plochu ohraničení. Graficky tyto formáty zobrazuje obrázek \ref{obrazek:annotace_formaty}.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.33}{\includegraphics{obrazky-figures/annotation_formats.png}}
   \label{obrazek:annotace_formaty}
-  \caption{Zobrazení anotací pomocí různých formátů. Zleva PascalVOC, COCO a YOLO}
+  \caption{Anotace souřadnic obličejů pomocí různých anotačních formátů. Zleva: PascalVOC, COCO a YOLO.}
   \end{center}
 \end{figure}
  
 \subsection*{Augmentace}
-Dat z datasetů nemusí být vždy tolik, kolik je zapotřebí k natrénování dostatečně přesné neuronové sítě, nebo tyto data nemusejí přesně odpovídat zvolenému účelu a vytváření nových dat by bylo neefektivní. V těchto případech lze tento problém řešit augmentací.
+Dat z datasetů nemusí být vždy tolik, kolik je zapotřebí k natrénování dostatečně přesné neuronové sítě, nebo tyto data nemusejí přesně odpovídat zvolenému účelu a vytváření zcela nových dat by bylo neefektivní. V těchto případech lze tento problém řešit augmentací.
 
-Augmentace (s daty, jimiž jsou obrázky) spočívá v kopírování existujících dat s provedením různých úprav (jas, vystřižení části obrázu, otočení, kontrast, ISO, gamma, rozmazání, záměna barevných kanálů apod.). Takto nově vzniklá data pak lze použít jako dodatečná data k trénovacím obrázkům. Augmentaci lze provádět ručně, ale existují i specializované knihovny zajišťující, že v nově vzniklém obrázku budou automaticky vytvořeny anotační soubory se správně pozměněnými pozicemi obličejů.
+Augmentace (s daty, jimiž jsou obrázky) spočívá v kopírování existujících dat s provedením různých úprav (jas, vystřižení části obrázu, otočení, kontrast, ISO, gamma, rozmazání, záměna barevných kanálů apod.). Takto nově vzniklá data pak lze použít jako dodatečná data k trénovacím obrázkům. Augmentaci lze provádět ručně, ale existují i specializované knihovny zajišťující, že k nově vzniklém obrázku budou automaticky vytvořeny anotační soubory se správně pozměněnými pozicemi obličejů (pokud při augmentaci došlo k natočení, oříznutí nebo jiné podobné transformaci).
 
 \section{Detekční neuronová síť}
 \label{sekce:detekcni_sit_navrh}
-Neuronová síť pro detekci obličejů je, jak už bylo zmíněno výše, konvoluční neuronová síť, složená z několika různých vrstev (konvoluční vrstva, poolingová vrstva a další). Jelikož je detekční model často složen z velmi mnoha částí (např. generátor kotevních bodů/boxů -- anglicky \emph{anchor boxes}) a je náročné jej naprogramovat, poskytují frameworky pro práci s umělou inteligencí možnost využití API s předchystanými modely. Tyto modely pak je možno buď trénovat tzv. \uv{od nuly} nebo lze začít s trénováním částečně předtrénované sítě.
+Neuronová síť pro detekci obličejů je, jak už bylo zmíněno v kapitole \ref{kapitola:detekce_obliceje}, konvoluční neuronová síť, složená z několika různých vrstev (konvoluční vrstva, poolingová vrstva a další). Jelikož je detekční model často složen z velmi mnoha částí (např. generátor kotevních bodů/boxů -- anglicky \emph{anchor boxes}) a je náročné jej naprogramovat, poskytují frameworky pro práci s umělou inteligencí možnost využití API s předchystanými modely. Tyto modely pak je možno buď trénovat tzv. \uv{od nuly} nebo lze začít s trénováním částečně předtrénované sítě.
 
 Při detekci ve zhoršených světelných podmínkách je vhodné využít některou z metod vylepšení obrázku (viz metody v sekci \ref{sekce:NSdetektory}). Jednou z nejlepších takovýchto metod je metoda Mirnet, tvořená natrénovanou neuronovou sítí, převádějící tmavé a špatně osvětlené obrázky na obrázky s lepší viditelností.
 
 Tato sekce popisuje jak API pro detekci objektů z knihovny TensorFlow, tak detailně také metodu Mirnet.
 
 \subsection*{TensorFlow 2 Object Detection API}
-Framework TensorFlow poskytuje open\,--\,source API pro práci s modely pro detekci objektů\footnote{\url{https://github.com/tensorflow/models/tree/master/research/object_detection}} nebo například sledování (tracking) objektů. Toto API je podporováno TensorFlow verzí 1 i verzí 2 a umožňuje jednoduchým způsobem trénovat, validovat a testovat předpřipravené modely. Modely, které TensorFlow 2 Object Detection API (TF OD API) poskytuje jsou dostupné v tzv. TensorFlow 2 Detection Model Zoo. Tyto modely jsou předtrénovany na datasetu COCO 2017 a lze je tak využít na detekování jakýchkoliv objektů. Mezi nejznámější modely poskytované v rámci Detection Model Zoo patří \textbf{SSD ResNet50 V1 FPN} nebo \textbf{Faster R-CNN ResNet101}. Modely se liší mj. liší rozlišeními, s nimiž pracují, od 512 $\times$ 512 pixelů až po 1536 $\times$ 1536 pixelů.
+Framework TensorFlow poskytuje open-source API pro práci s modely pro detekci objektů\footnote{\url{https://github.com/tensorflow/models/tree/master/research/object_detection}} nebo například sledování (tracking) objektů. Toto API je podporováno TensorFlow verzí 1 i verzí 2 a umožňuje jednoduchým způsobem trénovat, validovat a testovat předpřipravené modely. Modely, které TensorFlow 2 Object Detection API (dále jen \textbf{TF OD API}) poskytuje jsou dostupné v tzv. TensorFlow 2 Detection Model Zoo. Tyto modely jsou předtrénovany na datasetu COCO 2017 a lze je tak využít na detekování jakýchkoliv objektů. Mezi nejznámější modely poskytované v rámci Detection Model Zoo patří \textbf{SSD ResNet50 V1 FPN} nebo \textbf{Faster R-CNN ResNet101}. Modely se liší mj. liší rozlišeními, s nimiž pracují, od 512 $\times$ 512 pixelů až po 1536 $\times$ 1536 pixelů.
 
 TF OD API ke každému předtrénovanému modelu poskytuje základní informace o rychlosti detekce, o přesnosti změřené na validačních datech z výše zmíněného COCO datasetu a také informaci o tvaru výstupu neuronové sítě (souřadnice/klíčové body). Souřadnicový systém ohraničujích obdélníků odpovídá formátu PascalVOC. 
 
@@ -696,7 +705,7 @@ Metoda Mirnet\cite{mirnet} je sofistikovaná metoda pro zlepšování kvality š
   \begin{center}
       \scalebox{0.45}{\includegraphics{obrazky-figures/mirnet_arch.png}}
   \label{obrazek:mirnet}
-  \caption{Architektura neuronové sítě metody Mirnet}
+  \caption{Architektura neuronové sítě metody pro vylepšení kvality obrázků Mirnet \cite{mirnet}.}
   \end{center}
 \end{figure}
 
@@ -705,7 +714,7 @@ Metoda Mirnet\cite{mirnet} je sofistikovaná metoda pro zlepšování kvality š
   \begin{center}
       \scalebox{0.35}{\includegraphics{obrazky-figures/loldataset.png}}
   \label{obrazek:loldataset}
-  \caption{Ukázka párového snímku z datasetu LoL (vlevo normální snímek, vpravo stejný snímek se zhoršenou viditelností.)}
+  \caption{Ukázka párového snímku z datasetu LoL (vlevo normální snímek, vpravo stejný snímek se zhoršenou viditelností).}
   \end{center}
 \end{figure}
  
@@ -736,7 +745,7 @@ WIDER FACE poskytuje k trénovacím a validačním obrázkům anotační soubory
   \begin{center}
       \scalebox{0.35}{\includegraphics{obrazky-figures/widerface_example.jpg}}
   \label{obrazek:widerfaceexample}
-  \caption{Ukázka snímku z datasetu WIDER FACE}
+  \caption{Ukázka snímku z trénovací části datasetu WIDER FACE.}
   \end{center}
 \end{figure}
 
@@ -746,7 +755,7 @@ DARK FACE dataset dává k dispozici 6000 anotovaných obrázků vyfocených v n
   \begin{center}
       \scalebox{0.35}{\includegraphics{obrazky-figures/darkfaceexample.png}}
   \label{obrazek:darkfaceexample}
-  \caption{Ukázka snímku z datasetu DARK FACE}
+  \caption{Ukázka snímku z datasetu DARK FACE.}
   \end{center}
 \end{figure}
 
@@ -771,7 +780,7 @@ Pro vytvořený augmentovaný obrázek (ukázka na obrázku \ref{obrazek:augment
   \begin{center}
       \scalebox{0.35}{\includegraphics{obrazky-figures/augmentedexample.jpg}}
   \label{obrazek:augmentovanyobrazek}
-  \caption{Ukázka augmentovaného snímku z datasetu WIDER FACE}
+  \caption{Ukázka augmentovaného snímku z datasetu WIDER FACE. Fotka je určena k trénování detektoru obličejů.}
   \end{center}
 \end{figure}
 
@@ -799,7 +808,7 @@ Z důvodu snazší manipulace s daty ve formátu tfrecord byly obrázky z datase
 Tato část pojednává o implementaci použitého detektoru obličejů. Zabývá se návrhem a tvorbou původního modelu pro detekci a následně i použitím konkrétních zvolených existujících modelů. V původním plánu byla snaha o vytvoření plně vlastního detektoru obličejů, od čehož bylo upuštěno pro příliš vysokou náročnost. Tomuto prvotnímu záměru se věnuje první část této sekce. Přirozeně pak následujícím krokem byl přechod na modely existující. K tomuto účel bylo vybráno TensorFlow Object Detection API (TF OD API) popsané v sekci \ref{sekce:detekcni_sit_navrh}. Výsledný detektor, respektive detektory tváří tak stojí na základech detektorů objektů. Explicitně využité modely neuronových sítí popisují další pasáže této sekce.
 
 \subsection*{Původní záměr}
-Jak již bylo avizováno výše, původní záměr spočíval ve vytvoření vlastní detekční sítě s využitím frameworků TensorFlow a Keras. Po několika pokusech se podařilo vytvořit a natrénovat model podobný neuronové síti VGG--16. Tento model zvládal detekovat pouze 1 obličej, protože se spíše než o detektor jednalo o klasifikátor (který klasifikoval v obrázku obličej a dokázal vrátit souřadnice ohraničení tváře). Následným testováním na obrázcích s více obličeji, kdy bylo vyzkoušeno oblast detekovaného obličeje v obrázku začernit a pokusit se o detekci znovu, bylo zjištěno, že metoda je neefektivní a nepříliš funkční.
+Jak již bylo avizováno výše, původní záměr spočíval ve vytvoření vlastní detekční sítě s využitím frameworků TensorFlow a Keras. Po několika pokusech se podařilo vytvořit a natrénovat model podobný neuronové síti VGG-16. Tento model zvládal detekovat pouze 1 obličej, protože se spíše než o detektor jednalo o klasifikátor (který klasifikoval v obrázku obličej a dokázal vrátit souřadnice ohraničení tváře). Následným testováním na obrázcích s více obličeji, kdy bylo vyzkoušeno oblast detekovaného obličeje v obrázku začernit a pokusit se o detekci znovu, bylo zjištěno, že metoda je neefektivní a nepříliš funkční.
 
 Novým způsobem, který bylo možné zkusit zrealizovat byla celková implementace SSD detektoru. Poměrně složité matematické operace s jednotlivými vrstvami výstupů detekční sítě se ukázaly být příliš náročné na implementaci. Bylo tak rozhodnuto, o využití existujícího řešení s implementací vlastní augmentace vstupních dat a vlastního natrénování. Při trénování muselo být využito dostupného předtrénovaného stavu sítě, protože kompletní trénování sítě tzv \uv{od nuly} by zabralo neúnosně mnoho výpočetního i reálného času.
 
@@ -808,12 +817,12 @@ Použité modely tak vycházejí z detektorů objektů a jsou přetrénovány ta
 \subsection*{SSD ResNet50 V1 FPN}
 Prvním zvoleným modelem z TensorFlow 2 Detection Model Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}} (TF DMZ) byl model SSD ResNet50 V1 FPN 640x640 (RetinaNet50). Jak název napovídá, jedná se o neuronovou síť ResNet50 spojenou s kaskádou SSD. Model má na vstupu preprocessingovou část, která se stará o změnu rozlišení vstupního obrázku na 640 $\times$ 640 pixelů. Dle stránek TF DMZ dosahuje ve výchozím předtrénovaném stavu model rychlosti detekce 46 ms a má průměrnou přesnost 34,3 \% na datasetu COCO 2017.
 
-SSD část tohoto modelu je popsána v sekci \ref{sekce:NSdetektory}. Síť ResNet50 (Residual Network) \cite{resnet} je konvoluční neuronová síť patřící mezi skupinu ResNet modelů, mající 50 vrstev. Vychází z původního 18, respektive 34 vrstvého ResNetu. Každá vrstva obsahuje konvoluční filtr 3 $\times$ 3. Konkurentem ResNetu je například síť VGG--16. Další verze ResNetu mají 101 nebo 152 konvolučních vrstev.
+SSD část tohoto modelu je popsána v sekci \ref{sekce:NSdetektory}. Síť ResNet50 (Residual Network) \cite{resnet} je konvoluční neuronová síť patřící mezi skupinu ResNet modelů, mající 50 vrstev. Vychází z původního 18, respektive 34 vrstvého ResNetu. Každá vrstva obsahuje konvoluční filtr 3 $\times$ 3. Konkurentem ResNetu je například síť VGG-16. Další verze ResNetu mají 101 nebo 152 konvolučních vrstev.
 
 Tento model byl natrénován na datasetech popsaných výše. Samotné trénování popisuje sekce \ref{sekce:trenovani}. Po natrénování byl model vyzkoušen při detekci. Bez konkrétního měření přesnosti (konkrétní hodnoty byly změřeny později a jsou zaznamenány v experimentech v kapitole \ref{kapitola:experimenty}) dosahoval model obstojných výsledků detekce obličejů, ovšem ukázalo se, že detekce je pomalá a nelze s ním detekovat tváře ve videu v reálném čase. Proto byl hledán jiný, rychlejší model a nakonec byl ustanoven model SSD MobileNet V2 FPNLite.
 
 \subsection*{SSD MobileNet V2 FPNLite}
-SSD MobileNet V2 FPNLite 640 $\times$ 640 je model složený z SSD části a neuronové sítě MobileNet. MobileNet \cite{mobilenet} je pro svou efektivitu a rychlost určen převážně pro mobilní zařízení (například v Android telefonech jej lze použít s TensorFlow Lite), ale může posloužit i jako real--time detektor na běžném počítači. MobileNet používá stejně jak ostatní  detekční sítě konvoluční vrstvy, ale konvoluce v něm je rozdělena na tzv \emph{depthwise} a \emph{pointwise} část. Depthwise konvoluce je aplikována na každý vstupní kanál a pointwise konvoluce pak na tento výstup aplikuje konvoluci s filtrem o velikosti 1 $\times$ 1. Velikost sítě v počtu vrstev je poloviční oproti ResNet50. Velikost na disku je v případě MobileNetu 10$\times$ nižší než v případě ResNet50.
+SSD MobileNet V2 FPNLite 640 $\times$ 640 je model složený z SSD části a neuronové sítě MobileNet. MobileNet \cite{mobilenet} je pro svou efektivitu a rychlost určen převážně pro mobilní zařízení (například v Android telefonech jej lze použít s TensorFlow Lite), ale může posloužit i jako real-time detektor na běžném počítači. MobileNet používá stejně jak ostatní  detekční sítě konvoluční vrstvy, ale konvoluce v něm je rozdělena na tzv \emph{depthwise} a \emph{pointwise} část. Depthwise konvoluce je aplikována na každý vstupní kanál a pointwise konvoluce pak na tento výstup aplikuje konvoluci s filtrem o velikosti 1 $\times$ 1. Velikost sítě v počtu vrstev je poloviční oproti ResNet50. Velikost na disku je v případě MobileNetu 10$\times$ nižší než v případě ResNet50.
 
 MobileNet podle dat z TF DMZ dosahuje rychlosti zpracování 1 obrázku za 39 ms a průměrná úspěšnost na datasetu COCO 2017 je 28,2 \%. Model stejně jako předcházející ResNet50 pracuje s rozlišením 640 $\times$ 640 pixelů. V práci byly nakonec použity oba modely a během experimentů byly porovnány mezi sebou.
 
@@ -834,7 +843,7 @@ Skript pro učení modelu automaticky každých 1000 provedených kroků uklád�
   \begin{center}
       \scalebox{0.7}{\includegraphics{obrazky-figures/trenink.png}}
   \label{obrazek:trenovani}
-  \caption{Výstup trénovacího skriptu během trénování}
+  \caption{Výstup trénovacího skriptu během trénování.}
   \end{center}
 \end{figure}
 
@@ -869,13 +878,13 @@ Teorie věnující se akceleraci neuronových sítí a akcelerační knihovně O
 Akcelerace provedená v rámci této práce stojí na dvou pilířích z knihovny OpenVINO -- Model Optimizer a kvantování. \textbf{Model Optimizer} je vstupním bodem v práci s knihovnou OpenVINO. Stará se o převedení uloženého TensorFlow modelu do formátů XML a BIN. Další možností ještě vyšší akcelerace je tzv. \textbf{kvantování}, které nemusí být dostupné a funkční na každém Intel zařízení. Kvantování však umožňuje razantní nárůst rychlosti se zanedbatelným vlivem na přesnost detekce. Obě tyto činnosti jsou shrnuty na následujících řádcích.
 
 \subsection*{Model Optimizer}
-Utilita \textbf{Model Optimizer}\footnote{\url{https://docs.openvino.ai/latest/openvino_docs_MO_DG_Deep_Learning_Model_Optimizer_DevGuide.html}} se stará o převod a přizpůsobení modelu pro práci s možnostmi knihovny OpenVINO. Optimizer je součástí knihovního balíčku a spouští se jako samostatný program v příkazovém řádku. Typický pracovní postup Model Optimizeru zachycuje obrázek \ref{obrazek:moworkflow}. Jak již bylo zmíněno, program vytváří 2 soubory -- XML a BIN. XML soubor uchovává topologii neuronové sítě a v BIN souboru jsou uloženy váhy a biasy natrénované sítě.
+Utilita \textbf{Model Optimizer}\cite{modeloptimizer} se stará o převod a přizpůsobení modelu pro práci s možnostmi knihovny OpenVINO. Optimizer je součástí knihovního balíčku a spouští se jako samostatný program v příkazovém řádku. Typický pracovní postup Model Optimizeru zachycuje obrázek \ref{obrazek:moworkflow}. Jak již bylo zmíněno, program vytváří 2 soubory -- XML a BIN. XML soubor uchovává topologii neuronové sítě a v BIN souboru jsou uloženy váhy a biasy natrénované sítě.
 
 \begin{figure}[H]
   \begin{center}
       \scalebox{0.5}{\includegraphics{obrazky-figures/moworkflow.png}}
   \label{obrazek:moworkflow}
-  \caption{Postup použití (workflow) Model Optimizeru}
+  \caption[]{Postup použití (workflow) Model Optimizeru \cite{modeloptimizer}.}
   \end{center}
 \end{figure}
 
@@ -916,7 +925,7 @@ Ve spodní části je umístěn posuvník pro pohyb ve videu, dále pak ukazatel
   \begin{center}
       \scalebox{0.54}{\includegraphics{obrazky-figures/gui.png}}
   \label{obrazek:gui}
-  \caption{Aplikace pro detekci obličejů ve zhoršených světelných podmínkách}
+  \caption{Aplikace pro detekci obličejů ve zhoršených světelných podmínkách.}
   \end{center}
 \end{figure}
 
@@ -960,7 +969,7 @@ Modely jsou v této práci porovnávány ve dvou kategoriích: \textbf{detekce v
   \begin{center}
       \scalebox{0.64}{\includegraphics{obrazky-figures/iou.png}}
   \label{obrazek:iou}
-  \caption{Výpočet IoU. Obrázek vychází z \cite{detekceMetriky}}
+  \caption{Výpočet IoU. Obrázek vychází z \cite{detekceMetriky}.}
   \end{center}
 \end{figure}
 
@@ -973,7 +982,7 @@ Hodnota IoU pak slouží k určení, zda byl překonán práh $t$ pro to, aby se
   \item True Negative (TN) -- objekt správně nebyl detekován.
 \end{itemize}
 
-Z těchto dat pak vychází 2 metriky, které se používají k měření úspěšnosti detekce. Přesnost detekce - poměr správných detekcí ke všem detekcím (dále jako \emph{precision}) a poměr správných detekcí ke všem \emph{ground truth} boxům (dále jako \emph{recall}). Tyto dvě čísla jsou vypočítána pomocí následujících rovnic:
+Z těchto dat pak vychází 2 metriky, které se používají k měření úspěšnosti detekce. Přesnost detekce -- poměr správných detekcí ke všem detekcím (dále jako \emph{precision}) a poměr správných detekcí ke všem \emph{ground truth} boxům (dále jako \emph{recall}). Tyto dvě čísla jsou vypočítána pomocí následujících rovnic:
 
 \begin{equation}
   precision = \frac{TP}{TP + FP}
@@ -1039,7 +1048,7 @@ Výsledká průměrná přesnost je vypočítána jako plocha pod křivkou. Tuto
   \begin{center}
       \scalebox{0.8}{\includegraphics{obrazky-figures/interpolace.png}}
   \label{obrazek:interpolace}
-  \caption{Graf interpolované přesnosti z příkladu}
+  \caption{Graf interpolované přesnosti z příkladu.}
   \end{center}
 \end{figure}
 
@@ -1097,7 +1106,7 @@ Vyběr obrázků s  $\le 100$ obličeji byl zvolen z toho důvodu, že evalučn�
   \begin{center}
       \scalebox{0.35}{\includegraphics{obrazky-figures/valdataset.jpg}}
   \label{obrazek:valdataset}
-  \caption{Snímek z validačního datasetu}
+  \caption{Snímek z augmentovaného validačního datasetu WIDER FACE.}
   \end{center}
 \end{figure}
 
@@ -1120,11 +1129,11 @@ První video (na obrázku \ref{obrazek:videa} vlevo) je 9 sekund dlouhé, sklád
   \begin{center}
       \scalebox{0.22}{\includegraphics{obrazky-figures/videa.png}}
   \label{obrazek:videa}
-  \caption{Snímky z obou testovacích videí}
+  \caption{Snímky z obou testovacích videí.}
   \end{center}
 \end{figure}
 
-Původním záměrem bylo real--timové využití Mirnetu pro detektory, které nebyly trénovány na datasetu DARK FACE. Tento úmysl se ovšem ukázal jako nerealizovatelný kvůli vysoké výpočetní a paměťové náročnosti převodu framu videa sítí Mirnet. Nebylo by tak možné dosáhnout únosné snímkové frekvence. Proto byly obě videa převedeny Mirnetem (výstupy viz obrázek \ref{obrazek:videamirnet}) separátně od GUI aplikace. Lze je samozřejmě spustit v aplikaci stejným způsobem jako originály, čímž je simulována detekce s použitím Mirnetu.
+Původním záměrem bylo real-timové využití Mirnetu pro detektory, které nebyly trénovány na datasetu DARK FACE. Tento úmysl se ovšem ukázal jako nerealizovatelný kvůli vysoké výpočetní a paměťové náročnosti převodu framu videa sítí Mirnet. Nebylo by tak možné dosáhnout únosné snímkové frekvence. Proto byly obě videa převedeny Mirnetem (výstupy viz obrázek \ref{obrazek:videamirnet}) separátně od GUI aplikace. Lze je samozřejmě spustit v aplikaci stejným způsobem jako originály, čímž je simulována detekce s použitím Mirnetu.
 
 \begin{figure}[H] 
   \begin{center}
@@ -1138,7 +1147,7 @@ Původním záměrem bylo real--timové využití Mirnetu pro detektory, které 
 V prvním experimentu byly porovnány natrénované TensorFlow modely s jejich akcelerovanými verzemi. První část testování proběhla na validačním datasetu, druhá na obou testovacích videích ve verzi bez Mirnet vylepšení.
 
 \subsection*{Testování na datasetu}
-Tabulky \ref{tabulka:dfmdataset}, \ref{tabulka:dfrdataset}, \ref{tabulka:wfmdataset} a \ref{tabulka:wfrdataset} ukazují přesnost (AP) a poměr správných detekcí (recall) pro jednotlivé modely a jejich akcelerované varianty. Měření optimalizovaných modelů pomocí knihovny OpenVINO probíhalo na 3 různých zařízeních: \textbf{CPU} -- Intel Core i7--1165G7, \textbf{integrované GPU} -- Intel Iris Xe a \textbf{VPU} -- Intel Neural Compute Stick 2. Výkony výchozích TensorFlow detektorů byly v tomto testu měřeny na grafické kartě (\textbf{GPU}) nVidia MX 450. Hodnoty v tabulkách jsou udány v procentech.
+Tabulky \ref{tabulka:dfmdataset}, \ref{tabulka:dfrdataset}, \ref{tabulka:wfmdataset} a \ref{tabulka:wfrdataset} ukazují přesnost (AP) a poměr správných detekcí (recall) pro jednotlivé modely a jejich akcelerované varianty. Měření optimalizovaných modelů pomocí knihovny OpenVINO probíhalo na 3 různých zařízeních: \textbf{CPU} -- Intel Core i7-1165G7, \textbf{integrované GPU} -- Intel Iris Xe a \textbf{VPU} -- Intel Neural Compute Stick 2. Výkony výchozích TensorFlow detektorů byly v tomto testu měřeny na grafické kartě (\textbf{GPU}) nVidia MX 450. Hodnoty v tabulkách jsou udány v procentech.
 
 \begin{table}[H]
   \begin{tabular}{|
@@ -1218,7 +1227,47 @@ Změna trénovacích dat přinesla kýžený efekt v podobě výrazného zlepše
 
 Nahrazení MobileNetu ResNetem50 přineslo zvýšení přesnosti o 10 procentních bodů. Hodnota 47,1 \% AP@0.5 je vůbec nejvyšší naměřená přesnost ze všech měření na validačním datasetu. S akcelerací modelu a kvantováním, se rapidně snížila velikost modelu, ale došlo jen k nepatrnému snížení přesnosti a hodnoty \emph{recall} v řádech procent.
 
-Nejlepším natrénovaným modelem se tak ukázal být model SSD ResNet50 ve verzi WIDER FACE, který byl dále porovnán s existujícimi řešeními v rámci testů na validačním datasetu.
+Nejlepším natrénovaným modelem se tak ukázal být model SSD ResNet50 ve verzi WIDER FACE, který byl dále porovnán s existujícimi řešeními v rámci testů na validačním datasetu. 
+
+Z validačního datasetu byly vybrány 2 snímky jako ukázkové výstupy detekce.
+Na obrázcích \ref{obrazek:test1gt} a \ref{obrazek:test2gt} jsou tyto snímky znázorněny (včetně vyznačení obličejů dle anotačních souborů).
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.245}{\includegraphics{obrazky-figures/test1gt.jpg}}
+  \label{obrazek:test1gt}
+  \caption{První vybraný ukázkový snímek z validačního datasetu. Vlevo je augmentovaný originál, vpravo jsou zeleně zobrazeny hraniční obdélníky jednotlivých obličejů.}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.28}{\includegraphics{obrazky-figures/test2gt.jpg}}
+  \label{obrazek:test2gt}
+  \caption{Druhý vybraný ukázkový snímek z validačního datasetu. Vlevo je augmentovaný originál, vpravo jsou zeleně zobrazeny hraniční obdélníky jednotlivých obličejů.}
+  \end{center}
+\end{figure}
+
+První ukázka na obrázku \ref{obrazek:test1} obsahuje výstupy 4 různých detektorů (výše zmíněný, nově vytvořený WIDER FACE ResNet50, YOLOv7-face, MTCNN a Viola-Jones), které jsou podrobněji srovnány v sekcích \ref{sekce:yolov7}, \ref{sekce:vj} a \ref{sekce:mtcnn}. Z výsledků je zřejmé, že jak nový detektor nedokázal detekovat 2 obličeje, zatímco YOLOv7-face pouze jeden. YOLOv7-face ovšem detekovalo i jeden obličej nesprávně. Obě detekční sítě však zcela jasně překonaly jak MTCNN, tak i Viola-Jones detektor.
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.245}{\includegraphics{obrazky-figures/test1.jpg}}
+  \label{obrazek:test1}
+  \caption{Výsledky detekce ve snímku číslo 1. Detektory nahoře zleva: nově natrénovaný WIDER FACE ResNet50, YOLOv7-face. Detektory dole zleva: MTCNN, Viola-Jones.}
+  \end{center}
+\end{figure}
+
+Na druhém snímku (obrázek \ref{obrazek:test2}) je vidět, problém detektorů MTCNN a Viola-Jones detekovat tváře ve špatně osvětleném prostředí (levý horní roh fotografií). Naměřené výsledky detektorů YOLOv7-face i WIDER FACE ResNet50 jsou téměř stejné. Ačkoliv tedy výstupy COCO metriky pro  hodnoty \emph{precision} a \emph{recall} z tabulek v této sekci nedosahují hodnot obvyklých v jiných pracích (80+ \%), je zřejmé, že nový detektor je schopen detekovat obličeje poměrně dobře. Výsledná hodnota AP@0.50 = 47,1 \% tak nutně neznamená špatný detektor.
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.36}{\includegraphics{obrazky-figures/test2.jpg}}
+  \label{obrazek:test2}
+  \caption{Výsledky detekce ve snímku číslo 2. Detektory nahoře zleva: nově natrénovaný WIDER FACE ResNet50, YOLOv7-face. Detektory dole zleva: MTCNN, Viola-Jones.}
+  \end{center}
+\end{figure}
 
 \subsection*{Testování ve videích}
 K experimentům a měření metrik ve videích bylo využito vytvořené GUI rozhraní. Jak již bylo zmíněno v sekci \ref{sekce:nastroje_pro_experimenty}, posuzovány byly tyto ukazatele: \textbf{průměrné FPS}, \textbf{průměrná přesnost mezi snímky -- APF} a \textbf{průměrné IoU mezi snímky}. Následující tabulky obsahují naměřené informace. Jednotkou každého čísla u APF a IoU je \%, u FPS je to počet snímků za sekundu. Měření probíhalo s prahem jistoty detekce (\emph{confidence}) $c = 0.3$. Pro hodnotu FPS je určující čas mezi začátkem detekce a vykreslením hraničních obdélníků. Tento čas je počítán i s vykreslením, aby simuloval detektor v reálném čase.
@@ -1312,10 +1361,28 @@ Model WIDER FACE ResNet50 (jehož výsledky shrnuje tabulka \ref{tabulka:wfrvide
 
 V situaci kdy porovnáme výsledky přesnosti mezi modely u druhého testovacího videa, je nejlepší modelem MobileNet, který dosahuje 8,97 \% APF. Nízké hodnoty přesnosti jsou dány charakterem videa číslo 2, které je velmi tmavé a obsahuje i velmi malé obličeje.
 
+Na obrázcích \ref{obrazek:video1} a \ref{obrazek:video2} jsou zobrazeny detekce v náhodných snímcích z videí 1 a 2. Detekce probíhala detektorem WIDER FACE ResNet50.
 
-\section{Porovnání s YOLOv7--face}
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.3}{\includegraphics{obrazky-figures/video1.jpg}}
+  \label{obrazek:video1}
+  \caption{Detekce v testovacím videu číslo 1 s detektorem WIDER FACE ResNet50.}
+  \end{center}
+\end{figure}
+
+\begin{figure}[H] 
+  \begin{center}
+      \scalebox{0.3}{\includegraphics{obrazky-figures/video2.jpg}}
+  \label{obrazek:video2}
+  \caption{Detekce v testovacím videu číslo 2 s detektorem WIDER FACE ResNet50.}
+  \end{center}
+\end{figure}
+
+
+\section{Porovnání s YOLOv7-face}
 \label{sekce:yolov7}
-Prvním existujícím řešením, s nímž byly nově vytvořené modely srovnány je YOLOv7--face\footnote{\url{https://github.com/derronqi/yolov7-face}}. YOLOv7--face vychází z detektoru YOLOv7 \cite{yolov7}. YOLOv7 je nový detektor objektů dosahující přesnoti 51,4 \% na COCO datasetu. Jeho přetrénovaním na detekci obličejů vznikl detektor YOLOv7--face. Detektor je dostupný v podobě GitHub repozitáře a je postaven na frameworku PyTorch.
+Prvním existujícím řešením, s nímž byly nově vytvořené modely srovnány je YOLOv7-face\footnote{\url{https://github.com/derronqi/yolov7-face}}. YOLOv7-face vychází z detektoru YOLOv7 \cite{yolov7}. YOLOv7 je nový detektor objektů dosahující přesnoti 51,4 \% na COCO datasetu. Jeho přetrénovaním na detekci obličejů vznikl detektor YOLOv7-face. Detektor je dostupný v podobě GitHub repozitáře a je postaven na frameworku PyTorch.
 
 \subsection*{Testování na datasetu}
 Repozitář obsahuje skript \texttt{detect.py} s jehož pomocí je možné spustit detekci v obrázcích nebo ve videu. Skript tak byl spuštěn nad validačním datasetem a výstupní souřadnice obličejů byly převedeny do výsledného COCO formátu. Následně bylo provedeno vyhodnocení jako u všech ostatních modelů a byly naměřeny výsledky, které ukazuje tabulka \ref{tabulka:yolov7face} (všechny čísla mají jako jednotku \%, práh jistoty $c=0.25$). K měření posloužila stejná grafická karta nVidia MX 450.
@@ -1329,19 +1396,19 @@ Repozitář obsahuje skript \texttt{detect.py} s jehož pomocí je možné spust
     \cellcolor[HTML]{E0DBDB}YOLOv7-face & 21,4        & 42,8            & 19,6             & 5,6              & 20,8              & 30,7               \\ \hline
     \end{tabular}
     \label{tabulka:yolov7face}
-    \caption{Model YOLOv7--face -- výsledky detekce na validačním datasetu}
+    \caption{Model YOLOv7-face -- výsledky detekce na validačním datasetu}
   \end{center}
 \end{table}
 
-Z výsledků lze vypozorovat, že průměrná přesnost je nižší než u nejlepšího natrénovaného modelu (SSD ResNet50 s přesností AP@0.50 47,1 \% -- viz tabulka \ref{tabulka:wfrdataset}). O něco hůře vychází ze srovnání YOLOv7--face také v případě hodnoty \emph{recall}, která je nižší o 2,7 \% (5,6 \% $\times$ 8,7 \%) až 7,4 \% (30,7 \% $\times$ 38,1 \%). 
+Z výsledků lze vypozorovat, že průměrná přesnost je nižší než u nejlepšího natrénovaného modelu (SSD ResNet50 s přesností AP@0.50 47,1 \% -- viz tabulka \ref{tabulka:wfrdataset}). O něco hůře vychází ze srovnání YOLOv7-face také v případě hodnoty \emph{recall}, která je nižší o 2,7 \% (5,6 \% $\times$ 8,7 \%) až 7,4 \% (30,7 \% $\times$ 38,1 \%). 
 
-V porovnání s architekturou MobileNet + SSD (tabulka \ref{tabulka:wfmdataset} -- verze akcelerovaná na NCS2) je YOLOv7--face detektor o 6,5 procentního bodu přesnější (v kategorii AP@0.50).
+V porovnání s architekturou MobileNet + SSD (tabulka \ref{tabulka:wfmdataset} -- verze akcelerovaná na NCS2) je YOLOv7-face detektor o 6,5 procentního bodu přesnější (v kategorii AP@0.50).
 
 
 \subsection*{Testování ve videích}
-Model YOLOv7--face nebylo možné importovat do GUI aplikace z důvodu nekompatibility některých knihoven mezi PyTorch a TF OD API. Proto byla spuštěna detekce v obou testovacích videích pomocí skriptu \texttt{detect.py}. Skript na konci běhu vypisuje dobu zpracovávání detekce. Tento čas byl u videa 1 roven 42,789 s, u videa 2 pak 115,998 s. Ze známosti času a frekvence videí (25 FPS a 29 FPS) bylo vypočteno průměrné FPS, které je zapsáno v tabulce \ref{tabulka:yolov7facevidea}. 
+Model YOLOv7-face nebylo možné importovat do GUI aplikace z důvodu nekompatibility některých knihoven mezi PyTorch a TF OD API. Proto byla spuštěna detekce v obou testovacích videích pomocí skriptu \texttt{detect.py}. Skript na konci běhu vypisuje dobu zpracovávání detekce. Tento čas byl u videa 1 roven 42,789 s, u videa 2 pak 115,998 s. Ze známosti času a frekvence videí (25 FPS a 29 FPS) bylo vypočteno průměrné FPS, které je zapsáno v tabulce \ref{tabulka:yolov7facevidea}. 
 
-Z dalších naměřených výsledků je patrné, že přesnost detekce v prvním videu je podobná přesnosti modelu WIDER FACE ResNet50 (tabulka \ref{tabulka:wfrvidea}). U druhého videa pak YOLOv7--face předčilo v přesnosti detekce (11,76 \%) všechny testovaná existující i nová řešení. Rychlost okolo 6 FPS v obou nahrávkách je zhruba poloviční ve srovnání s kvantovaným modelem WIDER FACE ResNet50.
+Z dalších naměřených výsledků je patrné, že přesnost detekce v prvním videu je podobná přesnosti modelu WIDER FACE ResNet50 (tabulka \ref{tabulka:wfrvidea}). U druhého videa pak YOLOv7-face předčilo v přesnosti detekce (11,76 \%) všechny testovaná existující i nová řešení. Rychlost okolo 6 FPS v obou nahrávkách je zhruba poloviční ve srovnání s kvantovaným modelem WIDER FACE ResNet50.
 
 
 
@@ -1355,14 +1422,14 @@ Z dalších naměřených výsledků je patrné, že přesnost detekce v prvním
   \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}YOLOv7-face}    & \multicolumn{1}{c|}{5,632}                                  & \multicolumn{1}{c|}{28,46}                                  & 43,68          & \multicolumn{1}{c|}{6,034}                                  & \multicolumn{1}{c|}{11,76}                                  & 39,29          \\ \hline
   \end{tabular}
   \label{tabulka:yolov7facevidea}
-  \caption{Model YOLOv7--face -- výsledky detekce na testovacích videích}
+  \caption{Model YOLOv7-face -- výsledky detekce na testovacích videích}
 \end{table}
 
-\section{Porovnání s Viola--Jones}
+\section{Porovnání s Viola-Jones}
 \label{sekce:vj}
-Další zvoleným existujícím řešením je klasický algoritmus \textbf{Viola--Jones/Haar Cascades}. Tato část se zaměřuje na porovnání vytvořených detektorů s tímto detektorem. Detektor Viola--Jones, který byl použit k testování je obsažen v knihovně OpenCV\footnote{\url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}}. Pomocí příkazu \texttt{cv2.CascadeClassifier()} je možné vytvořit objekt detektoru. Detektor ke správnému fungování potřebuje speciální XML soubor\footnote{\url{https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_alt.xml}}. Po načtení souboru je možné funkcí \texttt{detectMultiScale()} detekovat obličeje v černobílé verzi vstupního obrázku.
+Další zvoleným existujícím řešením je klasický algoritmus \textbf{Viola-Jones/Haar Cascades}. Tato část se zaměřuje na porovnání vytvořených detektorů s tímto detektorem. Detektor Viola-Jones, který byl použit k testování je obsažen v knihovně OpenCV\footnote{\url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}}. Pomocí příkazu \texttt{cv2.CascadeClassifier()} je možné vytvořit objekt detektoru. Detektor ke správnému fungování potřebuje speciální XML soubor\footnote{\url{https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_frontalface_alt.xml}}. Po načtení souboru je možné funkcí \texttt{detectMultiScale()} detekovat obličeje v černobílé verzi vstupního obrázku.
 
-Detekce byla opět provedena jak na validačním datasetu, tak ve videích, kdy byl detektor Viola--Jones přímo zabudován do GUI aplikace. Lze tak v libovolném mp4 videu spustit detekci tímto detektorem. Následující oddíly se věnují pokusům s detektorem.
+Detekce byla opět provedena jak na validačním datasetu, tak ve videích, kdy byl detektor Viola-Jones přímo zabudován do GUI aplikace. Lze tak v libovolném mp4 videu spustit detekci tímto detektorem. Následující oddíly se věnují pokusům s detektorem.
 
 \subsection*{Testování na datasetu}
 Výsledky měření (viz tabulka \ref{tabulka:violajones}) ukazují velmi nízkou úspěšnost detekce. Ta je dána jak zastaralostí a nedokonalostí této technologie, tak také omezením detekce podle specifického XML souboru. Použitý soubor (\emph{haarcascade\_frontalface\_alt.xml}) se zaměřuje na detekci tváří, které jsou v přímém pohledu do kamery/fotoaparátu, což je značně limitní. 
@@ -1383,7 +1450,7 @@ Přesnost detekce i poměr správných detekcí zhruba odpovídají vytvořeném
 \end{table}
 
 \subsection*{Testování ve videích}
-Detektor překvapil vysokou úspěšností detekce v 1. testovacím videu (22,54 \% průměrná přesnost mezi snímky). Rychlostně byl detektor pomalejší než výše zmíněné YOLOv7--face i většina natrénovaných detektorů. Ve druhé nahrávce nedetekoval model téměř nic a ukázal se tak velmi nevhodný pro detekci ve zhoršených světelných podmínkách. Všechny naměřené metriky v obou záznamech zobrazuje tabulka \ref{tabulka:violajonesvidea}.
+Detektor překvapil vysokou úspěšností detekce v 1. testovacím videu (22,54 \% průměrná přesnost mezi snímky). Rychlostně byl detektor pomalejší než výše zmíněné YOLOv7-face i většina natrénovaných detektorů. Ve druhé nahrávce nedetekoval model téměř nic a ukázal se tak velmi nevhodný pro detekci ve zhoršených světelných podmínkách. Všechny naměřené metriky v obou záznamech zobrazuje tabulka \ref{tabulka:violajonesvidea}.
 
 \begin{table}[H]
   \centering
@@ -1395,17 +1462,17 @@ Detektor překvapil vysokou úspěšností detekce v 1. testovacím videu (22,54
   \multicolumn{1}{|c|}{\cellcolor[HTML]{E0DBDB}Viola-Jones}    & \multicolumn{1}{c|}{3,141}                                  & \multicolumn{1}{c|}{22,54}                                  & 42,95          & \multicolumn{1}{c|}{5,182}                                  & \multicolumn{1}{c|}{0,23}                                   & 1,44           \\ \hline
   \end{tabular}
   \label{tabulka:violajonesvidea}
-  \caption{Model Viola--Jones -- výsledky detekce na testovacích videích}
+  \caption{Model Viola-Jones -- výsledky detekce na testovacích videích}
 \end{table}
 
 \section{Porovnání s MTCNN}
 \label{sekce:mtcnn}
-Detektor MTCNN (Multi-task Cascaded Convolutional Network) \cite{mtcnn, mtcnnpaper} byl vybrán jako poslední existující řešení ke srovnání úspěšnosti detekce. Jedná se o kaskádu neuronových síť, která se používá k detekci a zarovnání obličejů. Není příliš rychlá, ovšem dle \cite{mtcnnpaper} dosahuje dobrých výsledků detekce v základním neupraveném datasetu WIDER FACE.
+Detektor MTCNN (Multi-Task Cascaded Convolutional Network) \cite{mtcnn, mtcnnpaper} byl vybrán jako poslední existující řešení ke srovnání úspěšnosti detekce. Jedná se o kaskádu neuronových síť, která se používá k detekci a zarovnání obličejů. Není příliš rychlá, ovšem dle \cite{mtcnnpaper} dosahuje dobrých výsledků detekce v základním neupraveném datasetu WIDER FACE.
 
-V práci byla síť testována opět jak na validačním datasetu, tak v testovacích videích. Díky tomu, že lze síť stáhnout jako Python balíček v prostředí pip, bylo možné ji implementovat do GUI aplikace. Měření ve videích tak probíhá ve stejném prostředí jako v případě natrénovaných modelů a v případě detektoru Viola--Jones. Pro provedení detekce v datasetu byl vytvořen speciální Python skript.
+V práci byla síť testována opět jak na validačním datasetu, tak v testovacích videích. Díky tomu, že lze síť stáhnout jako Python balíček v prostředí pip, bylo možné ji implementovat do GUI aplikace. Měření ve videích tak probíhá ve stejném prostředí jako v případě natrénovaných modelů a v případě detektoru Viola-Jones. Pro provedení detekce v datasetu byl vytvořen speciální Python skript.
 
 \subsection*{Testování na datasetu}
-Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti jako téměr poloviční oproti detektoru WIDER FACE ResNet50. Hodnota \emph{recall} ovšem dopadla pro MTCNN výrazně hůře (14,8 \% $\times$ 38,1 \%). Výsledky jsou horší i v případě srovnání s YOLOv7--face, ze srovnání se starým algoritmem Viola--Jones pak vychází MTCNN o poznání lépe. Největším problémem MTCNN je však rychlost zpracování obrázku, což demonstruje následující text.
+Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti jako téměr poloviční oproti detektoru WIDER FACE ResNet50. Hodnota \emph{recall} ovšem dopadla pro MTCNN výrazně hůře (14,8 \% $\times$ 38,1 \%). Výsledky jsou horší i v případě srovnání s YOLOv7-face, ze srovnání se starým algoritmem Viola-Jones pak vychází MTCNN o poznání lépe. Největším problémem MTCNN je však rychlost zpracování obrázku, což demonstruje následující text.
 
 \begin{table}[H]
   \begin{center}
@@ -1421,7 +1488,7 @@ Proběhlé měření (tabulka \ref{tabulka:mtcnn}) ukázalo výsledky přesnosti
 \end{table}
 
 \subsection*{Testování ve videích}
-MTCNN z měření vyšlo jako jeden z nejpomalejších detektorů, kdy naměřené hodnoty průměrné snímkové frekvence nepřekročily ani v jednom případě hranici 1,5 FPS. Podobně jako detektor Viola--Jones, byl model schopen detekovat obličeje jen v 1. záznamu (APF 15,40 \%). Výsledek je podobný jako v případě detektoru DARK FACE MobileNet (tabulka \ref{tabulka:dfmvidea}), který je však díky architektuře MobileNetu výrazně rychlejší.
+MTCNN z měření vyšlo jako jeden z nejpomalejších detektorů, kdy naměřené hodnoty průměrné snímkové frekvence nepřekročily ani v jednom případě hranici 1,5 FPS. Podobně jako detektor Viola-Jones, byl model schopen detekovat obličeje jen v 1. záznamu (APF 15,40 \%). Výsledek je podobný jako v případě detektoru DARK FACE MobileNet (tabulka \ref{tabulka:dfmvidea}), který je však díky architektuře MobileNetu výrazně rychlejší.
 
 \begin{table}[H]
   \centering
@@ -1438,7 +1505,7 @@ MTCNN z měření vyšlo jako jeden z nejpomalejších detektorů, kdy naměřen
 
 \section{Detekce s metodou Mirnet}
 \label{sekce:mirnetexperimenty}
-V tomto testu byly vybrané modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření přináší tabulka \ref{tabulka:mirnet}. Všechny měření kromě YOLOv7--face byly opět provedeny pomocí GUI aplikace. Pro model YOLOv7--face byl výpočet FPS proveden stejným způsobem, který byl popsán sekci \ref{sekce:yolov7} (časy jednotlivých detekcí jsou 46,008 s a 128,909 s).
+V tomto testu byly vybrané modely otestovány na testovacích videích, které byly upraveny metodou Mirnet. Výsledky měření přináší tabulka \ref{tabulka:mirnet}. Všechny měření kromě YOLOv7-face byly opět provedeny pomocí GUI aplikace. Pro model YOLOv7-face byl výpočet FPS proveden stejným způsobem, který byl popsán sekci \ref{sekce:yolov7} (časy jednotlivých detekcí jsou 46,008 s a 128,909 s).
 
 \begin{table}[H]
   \centering
@@ -1462,17 +1529,23 @@ V tomto testu byly vybrané modely otestovány na testovacích videích, které 
 
 K měření byly vybrány všechny existující řešení a modely natrénované na datasetu WIDER FACE (základní TF verze a kvantovaná verze). Změřené rychlosti detekce se příliš neliší od hodnot naměřených na originálních videích. 
 
-Výsledky přesnosti u videa číslo 1 jsou, až na jednu výjimku (Viola--Jones), horší než při měření originálu. To je dáno tím, že toto video není dostatečně špatně osvětlené, tak aby se projevil účinek sítě Mirnet. 
+Výsledky přesnosti u videa číslo 1 jsou, až na jednu výjimku (Viola-Jones), horší než při měření originálu. To je dáno tím, že toto video není dostatečně špatně osvětlené, tak aby se projevil účinek sítě Mirnet. 
 
 V případě druhého videa, je patrné zlepšení přesnosti všech modelů. Model MobileNet dokázal detekovat obličeje s průměrnou přesností 6,5 \% bez použití Mirnetu, s Mirnetem pak s přesností 9,38 \% v TensorFlow verzi. Kvantovaná verze dosahuje téměř stejného výsledku (8,97 \% $\times$ 9,54 \%). Dvojnásobný nárůst APF zaznamenalo použití Mirnetu u detektoru SSD + ResNet50, kdy bez použití metody byla APF 5,10 \% pro TensorFlow verzi a 4,68 \% pro kvantovanou verzi modelu. S Mirnetem se průměrná přesnost TensorFlow varianty zvedla na 11,80 \% a na 11,77 \% v případě kvantované verze.
 
-Pro detektor YOLOv7--face pak došlo k nárůstu o cca 2 procentní body (11,76 \% $\times$ 13,66 \%). Viola--Jones i MTCNN zaznamenaly APF na hranici 10 \%, přičemž bez použití Mirnetu měly oba detektory (téměř) nulovou průměrnou přesnost.
+Pro detektor YOLOv7-face pak došlo k nárůstu o cca 2 procentní body (11,76 \% $\times$ 13,66 \%). Viola-Jones i MTCNN zaznamenaly APF na hranici 10 \%, přičemž bez použití Mirnetu měly oba detektory (téměř) nulovou průměrnou přesnost.
 
 
 \section{Zhodnocení experimentů}
 \label{sekce:shnutiexperimentu}
 
-TODO
+Byly provedeny experimenty, s cílem porovnat reálné schopnosti detektorů obličejů ve zhoršených světelných podmínkách. Z nových řešení vyšel nejlépe model WIDER FACE ResNet50, který byl nejlepším modelem v kategorii přesnosti při detekci obličejů ve snímcích z validačního datasetu (47,1 \% AP@0.50 -- TensorFlow verze). Při detekci ve videu číslo 1 byl tento model opět nejlepší ze všech (APF 29,03 \% -- optimalizovaná verze běžící na CPU).
+
+Detekce ve druhém testovacím videu byla nejlepší z nových řešení s modelem WIDER FACE MobileNet (APF 8,97 \% -- kvantovaná verze spuštěná na integrované grafické kartě). Nejlepšího výsledku ovšem dosáhl detektor YOLOv7-face, a to jak ve variantě bez Mirnetu, tak i s touto metodou, který tak prokázal všestranost detekce (APF 11,76 \% a AP 13,66 \%).
+
+V rychlosti byly bezkonkurenční modely založené na architektuře MobileNet, jejichž kvantované verze vždy překonaly hranici 40 FPS při průměrné snímkové frekvence. Pro co nejlepší detekci je tak vhodný model WIDER FACE ResNet50 či existující model YOLOv7-face, při požadavku na real-timovou detekci je relevantní modelem WIDER FACE MobileNet.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %       KAPITOLA ZÁVĚR
@@ -1480,8 +1553,14 @@ TODO
 \chapter{Závěr}
 \label{kapitola:zaver}
 
-TODO
+V~rámci této práce byla představena problematika detekce obličejů v~reálných podmínkách, dále byly popsány problémy omezující detekci a~klasické algoritmy detekce obličejů. V~samostatných kapitolách a~sekcích byly popsány neuronové sítě (obecně, konvoluční) a~algortimy pro detekci založené na neuronových sítích. Dále pak existující komerční a~nekomerční řešení, systémy detekce a možnosti akcelerace neuronových sítí specializovaným hardawarem (Intel Neural Compute Stick 2).
 
-V~rámci tohoto textu byla představena problematika detekce obličejů v~reálných podmínkách, dále byly popsány problémy omezující detekci a~klasické algoritmy detekce obličejů. V~samostatných kapitolách a~sekcích byly popsány neuronové sítě (obecně, konvoluční) a~algortimy pro detekci založené na neuronových sítích. Dále pak existující komerční a~nekomerční řešení, systémy detekce a možnosti akcelerace neuronových sítí specializovaným hardawarem.
+Následovaly kapitoly zaměřené na návrh a implementaci detekčních modelů pro detekci obličejů ve zhoršených světelných podmínkách, návrh grafické aplikace pro uživatele a nástrojů k vyhodnocování experimentů. V těchto kapitolách bylo představeno TensorFlow Object Detection API, na němž jsou nově vzniklé modely postaveny. Poté byly prezentovány postupy trénování, tvorby datasetu, byly zvoleny vyhodnocovací metriky a modely byly akcelerovány pomocí knihovny OpenVINO. Jako jedna z možností zlepšení detekce byla představena a použita metoda pro vylepšení kvality obrázku Mirnet.
 
-V~této práci bude pokračováno návrhem neuronové sítě pro detekci ve špatných světelných podmínkách, návrhem Python aplikace, její implementací a provedením experimentů s~vytvořeným řešením a existujícími řešeními.
+Nakonec byly provedeny testy za účelem porovnání výkonnosti (rychlosti) a přesnosti detektorů ve zhoršených světelných podmínkách. Testy byly složeny ze dvou částí: detekce ve fotografiích z datasetu a detekce v testovacích videích.
+
+Podařilo se natrénovat detektor dosahující v některých aplikacích vyšší přesnosti detekce než \emph{state-of-the-art} řešení YOLOv7-face. Proces kvantování modelů pomocí knihovny OpenVINO dokázal výrazně zrychlit detekci při zachování téměr stejné přesnosti modelů.
+Důležitým výsledkem je naměřená rychlost modelů využívajících MobileNet, které dosahovaly při měřeních stabilně rychlosti přes 40 FPS a jsou tak vhodné pro real-timovou detekci.
+Byla také vytvořena grafická aplikace umožňující vyzkoušet detekci v libovolném mp4 videu. 
+
+Jelikož je detekce obličejů vstupním bodem pro mnoho dalších aplikací, mohla by práce být dále rozšířena o rozpoznávání tváří, sledování (trackování) osob nebo vytváření teplotních map podle výskytu obličejů.
