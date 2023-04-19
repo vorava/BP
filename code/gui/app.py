@@ -319,7 +319,7 @@ class JobRunner(QRunnable):
                     faces = face_cascade.detectMultiScale(frame_gray)
 
                     for (x,y,w,h) in faces:
-                        image = cv2.rectangle(image, (x,y), (x+w,y+h), (255,0,0), 2)
+                        image = cv2.rectangle(image, (x,y), (x+w,y+h), (0,0,255), 2)
                         out_bboxes.append([x,y,w,h])
                     end = time.time()
                     nof_detections = len(faces)
@@ -330,7 +330,7 @@ class JobRunner(QRunnable):
                     res = mtcnn_detector.detect_faces(image)
                     for r in res:
                         box = r["box"]
-                        image = cv2.rectangle(image, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (255,0,0), 2)
+                        image = cv2.rectangle(image, (box[0], box[1]), (box[0]+box[2], box[1]+box[3]), (0,0,255), 2)
                         out_bboxes.append([box[0], box[1], box[2], box[3]])
                     
                     end = time.time()
@@ -681,12 +681,14 @@ class MainWindow(QWidget):
             self.mtcnn_state = False
             self.ov_checkbox.setEnabled(False)
             self.qz_checkbox.setEnabled(False)
+            self.device_cb.setEnabled(False)
             
         elif model_list[idx] == "MTCNN":
             self.vj_state = False
             self.mtcnn_state = True
             self.ov_checkbox.setEnabled(False)
             self.qz_checkbox.setEnabled(False)
+            self.device_cb.setEnabled(False)
             
         else:
             self.ov_checkbox.setEnabled(True)
@@ -695,6 +697,7 @@ class MainWindow(QWidget):
             self.mtcnn_state = False
             # openvino
             if self.ov_checkbox.isChecked():
+                self.device_cb.setEnabled(True)
                 if self.qz_checkbox.isChecked(): # kvantovani on/off
                     path = f"models/{model_list[idx]}/quantized/saved_model.xml"
                 else:
@@ -718,7 +721,16 @@ class MainWindow(QWidget):
         global compiled_model
         global model
         device_list = get_devices()
+        
+        if device_list[idx]["type"] == "MYRIAD":
+            self.qz_checkbox.setChecked(False)
+            self.qz_checkbox.setEnabled(False)
+        else:
+            self.qz_checkbox.setEnabled(True)
+        
         compiled_model = ie.compile_model(model=model, device_name=device_list[idx]["type"])   
+        
+        
            
         
     def capture(self):
@@ -792,9 +804,10 @@ class MainWindow(QWidget):
     def closeEvent(self, event):
         
         if self.ov_checkbox.isEnabled() == False:
-            self.runner.signals.disconnect()
-            self.runner.kill()
-            self.threadpool.releaseThread()
+            if self.runner is not None:
+                self.runner.signals.disconnect()
+                self.runner.kill()
+                self.threadpool.releaseThread()
         
         if self.fps_csv != None:
             self.fps_csv.close()

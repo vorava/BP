@@ -1,0 +1,1516 @@
+frame - 0
+0
+frame - 1
+0
+frame - 2
+0
+frame - 3
+0
+frame - 4
+0
+frame - 5
+0
+frame - 6
+0
+frame - 7
+0
+frame - 8
+0
+frame - 9
+0
+frame - 10
+0
+frame - 11
+0
+frame - 12
+0
+frame - 13
+1
+482 449 50 50
+frame - 14
+0
+frame - 15
+0
+frame - 16
+0
+frame - 17
+1
+1159 508 44 44
+frame - 18
+0
+frame - 19
+0
+frame - 20
+0
+frame - 21
+0
+frame - 22
+0
+frame - 23
+0
+frame - 24
+0
+frame - 25
+0
+frame - 26
+0
+frame - 27
+0
+frame - 28
+1
+254 642 46 46
+frame - 29
+0
+frame - 30
+1
+254 641 45 45
+frame - 31
+1
+251 640 48 48
+frame - 32
+0
+frame - 33
+0
+frame - 34
+1
+1151 587 45 45
+frame - 35
+0
+frame - 36
+0
+frame - 37
+0
+frame - 38
+0
+frame - 39
+0
+frame - 40
+0
+frame - 41
+0
+frame - 42
+0
+frame - 43
+0
+frame - 44
+0
+frame - 45
+0
+frame - 46
+0
+frame - 47
+0
+frame - 48
+0
+frame - 49
+0
+frame - 50
+1
+690 416 22 22
+frame - 51
+0
+frame - 52
+0
+frame - 53
+0
+frame - 54
+0
+frame - 55
+0
+frame - 56
+0
+frame - 57
+0
+frame - 58
+0
+frame - 59
+0
+frame - 60
+2
+557 442 22 22
+690 415 23 23
+frame - 61
+0
+frame - 62
+0
+frame - 63
+0
+frame - 64
+0
+frame - 65
+0
+frame - 66
+0
+frame - 67
+0
+frame - 68
+1
+1137 545 53 53
+frame - 69
+0
+frame - 70
+0
+frame - 71
+0
+frame - 72
+0
+frame - 73
+0
+frame - 74
+0
+frame - 75
+0
+frame - 76
+0
+frame - 77
+0
+frame - 78
+0
+frame - 79
+0
+frame - 80
+0
+frame - 81
+0
+frame - 82
+0
+frame - 83
+0
+frame - 84
+0
+frame - 85
+0
+frame - 86
+0
+frame - 87
+0
+frame - 88
+0
+frame - 89
+0
+frame - 90
+0
+frame - 91
+0
+frame - 92
+0
+frame - 93
+0
+frame - 94
+0
+frame - 95
+1
+570 443 24 24
+frame - 96
+0
+frame - 97
+0
+frame - 98
+1
+572 443 23 23
+frame - 99
+0
+frame - 100
+0
+frame - 101
+1
+573 443 24 24
+frame - 102
+0
+frame - 103
+0
+frame - 104
+0
+frame - 105
+0
+frame - 106
+0
+frame - 107
+0
+frame - 108
+0
+frame - 109
+0
+frame - 110
+0
+frame - 111
+0
+frame - 112
+0
+frame - 113
+0
+frame - 114
+0
+frame - 115
+0
+frame - 116
+0
+frame - 117
+0
+frame - 118
+0
+frame - 119
+0
+frame - 120
+0
+frame - 121
+0
+frame - 122
+0
+frame - 123
+0
+frame - 124
+0
+frame - 125
+0
+frame - 126
+0
+frame - 127
+0
+frame - 128
+0
+frame - 129
+0
+frame - 130
+0
+frame - 131
+0
+frame - 132
+0
+frame - 133
+0
+frame - 134
+0
+frame - 135
+0
+frame - 136
+0
+frame - 137
+0
+frame - 138
+1
+1135 662 46 46
+frame - 139
+1
+1135 661 48 48
+frame - 140
+1
+1137 661 46 46
+frame - 141
+0
+frame - 142
+1
+1140 662 45 45
+frame - 143
+1
+1140 663 42 42
+frame - 144
+1
+591 440 26 26
+frame - 145
+1
+590 440 25 25
+frame - 146
+1
+592 440 25 25
+frame - 147
+0
+frame - 148
+1
+592 440 25 25
+frame - 149
+1
+592 440 25 25
+frame - 150
+1
+593 440 24 24
+frame - 151
+1
+593 440 26 26
+frame - 152
+1
+593 440 26 26
+frame - 153
+1
+594 440 24 24
+frame - 154
+1
+593 440 26 26
+frame - 155
+0
+frame - 156
+0
+frame - 157
+0
+frame - 158
+0
+frame - 159
+1
+598 441 23 23
+frame - 160
+1
+598 440 25 25
+frame - 161
+1
+597 439 27 27
+frame - 162
+2
+598 441 25 25
+448 547 25 25
+frame - 163
+1
+598 440 26 26
+frame - 164
+0
+frame - 165
+1
+599 441 26 26
+frame - 166
+1
+600 442 24 24
+frame - 167
+1
+600 441 26 26
+frame - 168
+0
+frame - 169
+0
+frame - 170
+0
+frame - 171
+1
+601 441 27 27
+frame - 172
+0
+frame - 173
+1
+604 442 24 24
+frame - 174
+1
+604 442 24 24
+frame - 175
+1
+603 442 26 26
+frame - 176
+1
+605 443 24 24
+frame - 177
+1
+604 443 24 24
+frame - 178
+1
+604 444 25 25
+frame - 179
+1
+605 444 24 24
+frame - 180
+0
+frame - 181
+0
+frame - 182
+0
+frame - 183
+0
+frame - 184
+0
+frame - 185
+0
+frame - 186
+0
+frame - 187
+1
+42 514 90 90
+frame - 188
+0
+frame - 189
+1
+610 447 24 24
+frame - 190
+0
+frame - 191
+0
+frame - 192
+0
+frame - 193
+1
+610 447 25 25
+frame - 194
+0
+frame - 195
+1
+610 447 26 26
+frame - 196
+0
+frame - 197
+0
+frame - 198
+0
+frame - 199
+0
+frame - 200
+0
+frame - 201
+1
+20 516 87 87
+frame - 202
+0
+frame - 203
+0
+frame - 204
+0
+frame - 205
+0
+frame - 206
+0
+frame - 207
+1
+899 456 64 64
+frame - 208
+0
+frame - 209
+0
+frame - 210
+0
+frame - 211
+0
+frame - 212
+0
+frame - 213
+0
+frame - 214
+0
+frame - 215
+0
+frame - 216
+0
+frame - 217
+0
+frame - 218
+0
+frame - 219
+0
+frame - 220
+0
+frame - 221
+0
+frame - 222
+0
+frame - 223
+0
+frame - 224
+0
+frame - 225
+0
+frame - 226
+0
+frame - 227
+0
+frame - 228
+0
+frame - 229
+0
+frame - 230
+0
+frame - 231
+0
+frame - 232
+0
+frame - 233
+0
+frame - 234
+0
+frame - 235
+0
+frame - 236
+0
+frame - 237
+0
+frame - 238
+0
+frame - 239
+0
+frame - 240
+0
+frame - 241
+0
+frame - 242
+0
+frame - 243
+0
+frame - 244
+0
+frame - 245
+0
+frame - 246
+0
+frame - 247
+0
+frame - 248
+0
+frame - 249
+0
+frame - 250
+0
+frame - 251
+0
+frame - 252
+0
+frame - 253
+0
+frame - 254
+0
+frame - 255
+0
+frame - 256
+0
+frame - 257
+0
+frame - 258
+0
+frame - 259
+0
+frame - 260
+0
+frame - 261
+0
+frame - 262
+0
+frame - 263
+0
+frame - 264
+0
+frame - 265
+1
+652 451 28 28
+frame - 266
+0
+frame - 267
+0
+frame - 268
+0
+frame - 269
+0
+frame - 270
+0
+frame - 271
+0
+frame - 272
+0
+frame - 273
+0
+frame - 274
+0
+frame - 275
+0
+frame - 276
+0
+frame - 277
+0
+frame - 278
+0
+frame - 279
+0
+frame - 280
+0
+frame - 281
+0
+frame - 282
+0
+frame - 283
+0
+frame - 284
+0
+frame - 285
+0
+frame - 286
+0
+frame - 287
+0
+frame - 288
+0
+frame - 289
+0
+frame - 290
+0
+frame - 291
+0
+frame - 292
+0
+frame - 293
+0
+frame - 294
+0
+frame - 295
+0
+frame - 296
+0
+frame - 297
+0
+frame - 298
+0
+frame - 299
+0
+frame - 300
+0
+frame - 301
+0
+frame - 302
+0
+frame - 303
+0
+frame - 304
+0
+frame - 305
+0
+frame - 306
+0
+frame - 307
+0
+frame - 308
+0
+frame - 309
+0
+frame - 310
+0
+frame - 311
+0
+frame - 312
+0
+frame - 313
+0
+frame - 314
+0
+frame - 315
+0
+frame - 316
+0
+frame - 317
+1
+77 509 57 57
+frame - 318
+1
+72 507 60 60
+frame - 319
+0
+frame - 320
+0
+frame - 321
+0
+frame - 322
+0
+frame - 323
+0
+frame - 324
+0
+frame - 325
+0
+frame - 326
+0
+frame - 327
+0
+frame - 328
+0
+frame - 329
+0
+frame - 330
+0
+frame - 331
+0
+frame - 332
+0
+frame - 333
+0
+frame - 334
+0
+frame - 335
+0
+frame - 336
+0
+frame - 337
+0
+frame - 338
+0
+frame - 339
+0
+frame - 340
+0
+frame - 341
+0
+frame - 342
+0
+frame - 343
+0
+frame - 344
+0
+frame - 345
+0
+frame - 346
+0
+frame - 347
+0
+frame - 348
+0
+frame - 349
+0
+frame - 350
+0
+frame - 351
+0
+frame - 352
+0
+frame - 353
+0
+frame - 354
+0
+frame - 355
+0
+frame - 356
+0
+frame - 357
+0
+frame - 358
+0
+frame - 359
+0
+frame - 360
+1
+687 462 29 29
+frame - 361
+1
+687 462 29 29
+frame - 362
+0
+frame - 363
+1
+687 462 30 30
+frame - 364
+0
+frame - 365
+0
+frame - 366
+0
+frame - 367
+0
+frame - 368
+0
+frame - 369
+1
+1106 318 23 23
+frame - 370
+1
+1107 319 23 23
+frame - 371
+0
+frame - 372
+0
+frame - 373
+0
+frame - 374
+0
+frame - 375
+0
+frame - 376
+0
+frame - 377
+0
+frame - 378
+0
+frame - 379
+0
+frame - 380
+0
+frame - 381
+0
+frame - 382
+0
+frame - 383
+0
+frame - 384
+0
+frame - 385
+0
+frame - 386
+0
+frame - 387
+0
+frame - 388
+0
+frame - 389
+0
+frame - 390
+0
+frame - 391
+0
+frame - 392
+0
+frame - 393
+0
+frame - 394
+0
+frame - 395
+0
+frame - 396
+0
+frame - 397
+0
+frame - 398
+1
+714 470 31 31
+frame - 399
+0
+frame - 400
+0
+frame - 401
+0
+frame - 402
+0
+frame - 403
+0
+frame - 404
+0
+frame - 405
+0
+frame - 406
+0
+frame - 407
+0
+frame - 408
+0
+frame - 409
+0
+frame - 410
+0
+frame - 411
+0
+frame - 412
+0
+frame - 413
+0
+frame - 414
+0
+frame - 415
+0
+frame - 416
+0
+frame - 417
+0
+frame - 418
+0
+frame - 419
+0
+frame - 420
+0
+frame - 421
+0
+frame - 422
+0
+frame - 423
+0
+frame - 424
+1
+744 470 34 34
+frame - 425
+0
+frame - 426
+0
+frame - 427
+0
+frame - 428
+0
+frame - 429
+0
+frame - 430
+0
+frame - 431
+0
+frame - 432
+0
+frame - 433
+0
+frame - 434
+0
+frame - 435
+0
+frame - 436
+0
+frame - 437
+0
+frame - 438
+0
+frame - 439
+0
+frame - 440
+0
+frame - 441
+0
+frame - 442
+0
+frame - 443
+0
+frame - 444
+0
+frame - 445
+0
+frame - 446
+0
+frame - 447
+0
+frame - 448
+0
+frame - 449
+0
+frame - 450
+0
+frame - 451
+0
+frame - 452
+0
+frame - 453
+0
+frame - 454
+0
+frame - 455
+1
+772 466 37 37
+frame - 456
+0
+frame - 457
+0
+frame - 458
+0
+frame - 459
+0
+frame - 460
+1
+778 468 35 35
+frame - 461
+1
+778 469 34 34
+frame - 462
+0
+frame - 463
+0
+frame - 464
+0
+frame - 465
+0
+frame - 466
+0
+frame - 467
+0
+frame - 468
+0
+frame - 469
+0
+frame - 470
+0
+frame - 471
+0
+frame - 472
+0
+frame - 473
+1
+786 473 36 36
+frame - 474
+1
+785 474 38 38
+frame - 475
+0
+frame - 476
+0
+frame - 477
+0
+frame - 478
+0
+frame - 479
+0
+frame - 480
+1
+792 477 37 37
+frame - 481
+1
+791 478 38 38
+frame - 482
+0
+frame - 483
+0
+frame - 484
+0
+frame - 485
+1
+793 480 38 38
+frame - 486
+1
+793 480 38 38
+frame - 487
+0
+frame - 488
+0
+frame - 489
+0
+frame - 490
+1
+794 482 39 39
+frame - 491
+1
+796 484 38 38
+frame - 492
+0
+frame - 493
+0
+frame - 494
+0
+frame - 495
+0
+frame - 496
+0
+frame - 497
+1
+801 484 41 41
+frame - 498
+0
+frame - 499
+0
+frame - 500
+0
+frame - 501
+1
+802 487 40 40
+frame - 502
+0
+frame - 503
+1
+805 484 40 40
+frame - 504
+1
+805 487 39 39
+frame - 505
+2
+806 487 39 39
+160 434 43 43
+frame - 506
+0
+frame - 507
+1
+158 432 45 45
+frame - 508
+0
+frame - 509
+1
+806 485 43 43
+frame - 510
+0
+frame - 511
+0
+frame - 512
+0
+frame - 513
+1
+160 433 44 44
+frame - 514
+1
+636 658 44 44
+frame - 515
+1
+813 484 41 41
+frame - 516
+0
+frame - 517
+0
+frame - 518
+0
+frame - 519
+0
+frame - 520
+0
+frame - 521
+0
+frame - 522
+0
+frame - 523
+0
+frame - 524
+0
+frame - 525
+0
+frame - 526
+0
+frame - 527
+0
+frame - 528
+0
+frame - 529
+0
+frame - 530
+0
+frame - 531
+0
+frame - 532
+0
+frame - 533
+0
+frame - 534
+0
+frame - 535
+0
+frame - 536
+0
+frame - 537
+1
+130 477 56 56
+frame - 538
+1
+129 476 55 55
+frame - 539
+0
+frame - 540
+0
+frame - 541
+1
+842 489 43 43
+frame - 542
+0
+frame - 543
+0
+frame - 544
+0
+frame - 545
+0
+frame - 546
+0
+frame - 547
+0
+frame - 548
+0
+frame - 549
+0
+frame - 550
+0
+frame - 551
+0
+frame - 552
+1
+857 493 44 44
+frame - 553
+1
+728 537 67 67
+frame - 554
+0
+frame - 555
+0
+frame - 556
+0
+frame - 557
+0
+frame - 558
+0
+frame - 559
+0
+frame - 560
+0
+frame - 561
+0
+frame - 562
+0
+frame - 563
+0
+frame - 564
+1
+875 502 44 44
+frame - 565
+0
+frame - 566
+0
+frame - 567
+0
+frame - 568
+0
+frame - 569
+0
+frame - 570
+1
+885 504 45 45
+frame - 571
+0
+frame - 572
+0
+frame - 573
+0
+frame - 574
+0
+frame - 575
+0
+frame - 576
+1
+896 506 47 47
+frame - 577
+1
+898 507 45 45
+frame - 578
+1
+900 506 46 46
+frame - 579
+1
+900 507 47 47
+frame - 580
+1
+902 508 47 47
+frame - 581
+1
+904 508 47 47
+frame - 582
+0
+frame - 583
+0
+frame - 584
+1
+911 508 47 47
+frame - 585
+1
+912 507 49 49
+frame - 586
+0
+frame - 587
+1
+916 509 48 48
+frame - 588
+0
+frame - 589
+0
+frame - 590
+0
+frame - 591
+1
+318 368 47 47
+frame - 592
+1
+926 510 47 47
+frame - 593
+0
+frame - 594
+0
+frame - 595
+0
+frame - 596
+0
+frame - 597
+0
+frame - 598
+0
+frame - 599
+1
+942 512 46 46
+frame - 600
+0
+frame - 601
+0
+frame - 602
+0
+frame - 603
+0
+frame - 604
+0
+frame - 605
+0
+frame - 606
+0
+frame - 607
+0
+frame - 608
+0
+frame - 609
+0
+frame - 610
+0
+frame - 611
+0
+frame - 612
+0
+frame - 613
+0
+frame - 614
+0
+frame - 615
+0
+frame - 616
+0
+frame - 617
+0
+frame - 618
+0
+frame - 619
+0
+frame - 620
+0
+frame - 621
+0
+frame - 622
+0
+frame - 623
+0
+frame - 624
+0
+frame - 625
+0
+frame - 626
+0
+frame - 627
+0
+frame - 628
+0
+frame - 629
+0
+frame - 630
+1
+1002 529 49 49
+frame - 631
+1
+1005 529 50 50
+frame - 632
+1
+1007 531 48 48
+frame - 633
+0
+frame - 634
+1
+1009 532 52 52
+frame - 635
+1
+1008 530 55 55
+frame - 636
+1
+1015 534 48 48
+frame - 637
+1
+1015 534 50 50
+frame - 638
+1
+1019 534 51 51
+frame - 639
+0
+frame - 640
+0
+frame - 641
+0
+frame - 642
+1
+1025 538 50 50
+frame - 643
+0
+frame - 644
+1
+1028 537 52 52
+frame - 645
+0
+frame - 646
+0
+frame - 647
+0
+frame - 648
+0
+frame - 649
+0
+frame - 650
+0
+frame - 651
+0
+frame - 652
+0
+frame - 653
+0
+frame - 654
+0
+frame - 655
+0
+frame - 656
+0
+frame - 657
+0
+frame - 658
+0
+frame - 659
+0
+frame - 660
+0
+frame - 661
+0
+frame - 662
+0
+frame - 663
+0
+frame - 664
+0
+frame - 665
+0
+frame - 666
+0
+frame - 667
+0
+frame - 668
+0
+frame - 669
+0
+frame - 670
+0
+frame - 671
+0
+frame - 672
+0
+frame - 673
+0
+frame - 674
+0
+frame - 675
+0
+frame - 676
+0
+frame - 677
+0
+frame - 678
+0
+frame - 679
+0
+frame - 680
+0
+frame - 681
+0
+frame - 682
+0
+frame - 683
+0
+frame - 684
+0
+frame - 685
+0
+frame - 686
+0
+frame - 687
+0
+frame - 688
+0
+frame - 689
+0
+frame - 690
+0
+frame - 691
+0
+frame - 692
+0
+frame - 693
+0
+frame - 694
+1
+1148 565 69 69
+frame - 695
+1
+1156 567 62 62
+frame - 696
+0
+frame - 697
+1
+1161 570 63 63
+frame - 698
+1
+477 675 37 37
+frame - 699
+0
