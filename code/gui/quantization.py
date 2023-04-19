@@ -1,6 +1,6 @@
 # quantization.py
-# Vojtech Orava (xorava02)
-# BP 2022/2023 FIT VUT
+# Vojtech Orava (xorava02), vedouci Ing. Tomas Goldmann
+# BP 2022/2023, FIT VUT Brno
 import openvino.runtime as ov
 import tensorflow as tf
 import argparse

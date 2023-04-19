@@ -1,6 +1,6 @@
-# app.py 
-# Vojtech Orava (xorava02)
-# BP 2022/2023 FIT VUT
+# app.py
+# Vojtech Orava (xorava02), vedouci Ing. Tomas Goldmann
+# BP 2022/2023, FIT VUT Brno
 
 # importy pro GUI
 from PyQt6.QtWidgets import *
